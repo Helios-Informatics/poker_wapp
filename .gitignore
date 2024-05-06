@@ -7,3 +7,15 @@ target
 /.project
 /.settings
 /RUNNING_PID
+.metals/.reports/metals/2024-05-06/r_scala-toplevel-mtags_18-46-53-134.md
+.metals/.reports/metals/2024-05-06/r_scala-toplevel-mtags_18-46-53-270.md
+.metals/.reports/metals/2024-05-06/r_scala-toplevel-mtags_18-46-53-273.md
+.metals/metals.lock.db
+.metals/metals.log
+.metals/metals.mv.db
+project/metals.sbt
+project/project/metals.sbt
+project/project/project/metals.sbt
+.metals/metals.lock.db
+.metals/metals.log
+.metals/metals.mv.db
