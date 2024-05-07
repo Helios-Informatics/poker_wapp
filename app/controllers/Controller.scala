@@ -16,7 +16,8 @@ class Controller(var gameState: GameState) extends Observable {
     additionally, for some actions like bet, call and fold it first has to be checked wether new community cards need to be revealed.
    */
 
-  def createGame(     playerNameList: List[String],
+  def createGame(
+      playerNameList: List[String],
       smallBlind: String,
       bigBlind: String
   ): Boolean = {

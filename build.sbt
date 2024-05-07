@@ -5,10 +5,11 @@ version := "1.0-SNAPSHOT"
 
 lazy val root = (project in file(".")).enablePlugins(PlayScala)
 
-scalaVersion := "2.13.14"
+scalaVersion := "3.3.1"
 
 libraryDependencies += guice
 libraryDependencies += "org.scalatestplus.play" %% "scalatestplus-play" % "7.0.0" % Test
+libraryDependencies += "org.scalafx" %% "scalafx" % "21.0.0-R32"
 
 // Adds additional packages into Twirl
 //TwirlKeys.templateImports += "HTWG Konstanz.controllers._"

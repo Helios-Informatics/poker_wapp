@@ -16,3 +16,4 @@ project/project/project/metals.sbt
 /.metals
 /.bloop
 .scalafmt.conf
+/project/.bloop
