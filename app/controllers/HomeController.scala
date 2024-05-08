@@ -13,6 +13,7 @@ import de.htwg.poker.controller.Controller
 class HomeController @Inject() (val controllerComponents: ControllerComponents) extends BaseController {
 
   val gameController = new Controller()
+  def pokerAsText = gameController.toString()
 
 
   def index() = Action { implicit request: Request[AnyContent] =>
@@ -22,6 +23,6 @@ class HomeController @Inject() (val controllerComponents: ControllerComponents) 
   def newGame() = Action { implicit request: Request[AnyContent] =>
     val players = List("Player1", "Player2", "Player3", "Player4")
     gameController.createGame(players,10,20)
-    Ok(views.html.index())
+    Ok(views.html.index(pokerAsText))
   }
 }
