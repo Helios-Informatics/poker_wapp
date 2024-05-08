@@ -13,6 +13,7 @@ GET / controllers.HomeController.index()
 # Game interaction routes
 
 GET /newGame controllers.HomeController.newGame()
+GET /bet/:x    controllers.HomeController.bet(x: Int)
 
 # Map static resources from the /public folder to the /assets URL path
 

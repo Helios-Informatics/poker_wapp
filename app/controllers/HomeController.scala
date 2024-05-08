@@ -28,4 +28,9 @@ class HomeController @Inject() (val controllerComponents: ControllerComponents) 
     gameController.createGame(players,"10","20")
     Ok(pokerAsText)
   }
+
+  def bet(amount: Int) = Action { implicit request: Request[AnyContent] =>
+    gameController.bet(amount)
+    Ok(pokerAsText)
+  }
 }
