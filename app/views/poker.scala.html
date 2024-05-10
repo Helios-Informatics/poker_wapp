@@ -6,40 +6,18 @@
 @pot = @{ gameState.getPot }
 
 
+
 @main("HTWG Poker") {
+<link rel="stylesheet" href='@routes.Assets.versioned("stylesheets/main.css")' />
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@@1.11.3/font/bootstrap-icons.min.css">
 <!DOCTYPE html>
-<html lang="de">
 
-<head>
-    <meta charset="UTF-8">
-    <title>Poker</title>
-</head>
-
-<body>
-    <!-- Erste drei Spieler -->
-    <table>
-        <tr>
-            @for(currentPlayer <- indexedPlayers.take(3)) { @player(currentPlayer, playerAtTurn, true) } </tr>
-    </table>
-
-    <!-- Pot -->
-    <h4>
-        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp&nbsp;&nbsp;&nbsp;&nbsp;&nbsp&nbsp;&nbsp;&nbsp;&nbsp;&nbsp&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(@pot
-        $)
-    </h4>
-
-    <!-- Gemeinschaftskarten -->
-    <div>
-        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp&nbsp;&nbsp;
-        @for(card <- board) { <span>@card.toString()</span>
-            }
-    </div>
-
-    <!-- Nächste drei Spieler -->
-    <table>
-        <tr>
-            @for(currentPlayer <- indexedPlayers.drop(3).take(3)) { @player(currentPlayer, playerAtTurn, false) } </tr>
-    </table>
+<body class="backgroundGrey ">
+    <div class="table"></div>
+    <button class="red">
+        <div class="bi-x-circle buttonText buttonTextRed"></div>
+        <h2 class="buttonText buttonTextRed">FOLD</h2>
+    </button>
 </body>
 
 </html>
