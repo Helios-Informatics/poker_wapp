@@ -18,6 +18,7 @@ class HomeController @Inject() (val controllerComponents: ControllerComponents)
     new GameState(Nil, None, None, 0, 0, Nil, 0, 0, 0, 0)
   )
   def pokerAsText = gameController.toString()
+  def gameState = gameController.gameState
 
   def index() = Action { implicit request: Request[AnyContent] =>
     Ok(views.html.index())
@@ -27,36 +28,36 @@ class HomeController @Inject() (val controllerComponents: ControllerComponents)
     val players =
       List("Player1", "Player2", "Player3", "Player4", "Player5", "Player6")
     gameController.createGame(players, "10", "20")
-    Ok(pokerAsText)
+    Ok(views.html.poker(gameState))
   }
 
   def bet(amount: Int) = Action { implicit request: Request[AnyContent] =>
     gameController.bet(amount)
-    Ok(pokerAsText)
+    Ok(views.html.poker(gameState))
   }
 
   def allIn() = Action { implicit request: Request[AnyContent] =>
     gameController.allIn()
-    Ok(pokerAsText)
+    Ok(views.html.poker(gameState))
   }
 
   def fold() = Action { implicit request: Request[AnyContent] =>
     gameController.fold
-    Ok(pokerAsText)
+    Ok(views.html.poker(gameState))
   }
 
   def call() = Action { implicit request: Request[AnyContent] =>
     gameController.call
-    Ok(pokerAsText)
+    Ok(views.html.poker(gameState))
   }
 
   def check() = Action { implicit request: Request[AnyContent] =>
     gameController.check
-    Ok(pokerAsText)
+    Ok(views.html.poker(gameState))
   }
 
   def restartGame = Action { implicit request: Request[AnyContent] =>
     gameController.restartGame
-    Ok(pokerAsText)
+    Ok(views.html.poker(gameState))
   }
 }

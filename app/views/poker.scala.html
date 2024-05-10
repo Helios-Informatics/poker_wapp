@@ -1,19 +1,71 @@
-@(gameState:de.htwg.poker.model.GameState)
+@(gameState: de.htwg.poker.model.GameState)
 
-@playersAndBalances= @{ gameState.playersAndBalances }
-@players= @{ gameState.players}
-@deck= @{ gameState.deck}
-@playerAtTurn= @{ gameState.playerAtTurn}
-@currentHighestBetSize= @{ gameState.currentHighestBetSize}
-@board= @{ gameState.board}
-@pot= @{ gameState.pot}
-@smallBlind= @{ gameState.smallBlind}
-@bigBlind= @{ gameState.bigBlind}
-@smallBlindPointer= @{ gameState.smallBlindPointer}
+@indexedPlayers = @{ gameState.getPlayers.zipWithIndex }
+@playerAtTurn = @{ gameState.getPlayerAtTurn }
+@board = @{ gameState.getBoard }
+@pot = @{ gameState.getPot }
 
+@main("HTWG Poker") {
+<!DOCTYPE html>
+<html lang="de">
 
-@main("HTWG Sudoku") {
-<div class="gamecontainer">
+<head>
+    <meta charset="UTF-8">
+    <title>Poker</title>
+</head>
 
-</div>
+<body>
+    <!-- Erste drei Spieler -->
+    <table>
+        <tr>
+            @for(player <- indexedPlayers.take(3)) { <td>
+                <p>@player._1.balanceToString</p>
+                <!-- Unterscheidung playerAtTurn -->
+                @if(player._2 == playerAtTurn) {
+                <h3>&gt@player._1.playername&lt</h3>
+                } else {
+                <h3>@player._1.playername</h3>
+                }
+                <p>@player._1.card1.toString() @player._1.card2.toString()</p>
+                <p>@player._1.currentAmountBetted</p>
+                </td>
+                <td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td>
+                }
+        </tr>
+    </table>
+
+    <!-- Pot -->
+    <h4>
+        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp&nbsp;&nbsp;&nbsp;&nbsp;&nbsp&nbsp;&nbsp;&nbsp;&nbsp;&nbsp&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(@pot
+        $)
+    </h4>
+
+    <!-- Gemeinschaftskarten -->
+    <div>
+        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp&nbsp;&nbsp;
+        @for(card <- board) { <span>@card.toString()</span>
+            }
+    </div>
+
+    <!-- Nächste drei Spieler -->
+    <table>
+        <tr>
+            @for(player <- indexedPlayers.drop(3).take(3)) { <td>
+                <!-- Unterscheidung playerAtTurn -->
+                <p>@player._1.currentAmountBetted</p>
+                <p>@player._1.card1.toString() @player._1.card2.toString()</p>
+                @if(player._2 == playerAtTurn) {
+                <h3>&gt@player._1.playername&lt</h3>
+                } else {
+                <h3>@player._1.playername</h3>
+                }
+                <p>@player._1.balanceToString</p>
+                </td>
+                <td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td>
+                }
+        </tr>
+    </table>
+</body>
+
+</html>
 }
