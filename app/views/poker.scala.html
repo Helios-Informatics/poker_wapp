@@ -5,6 +5,7 @@
 @board = @{ gameState.getBoard }
 @pot = @{ gameState.getPot }
 
+
 @main("HTWG Poker") {
 <!DOCTYPE html>
 <html lang="de">
@@ -18,20 +19,7 @@
     <!-- Erste drei Spieler -->
     <table>
         <tr>
-            @for(player <- indexedPlayers.take(3)) { <td>
-                <p>@player._1.balanceToString</p>
-                <!-- Unterscheidung playerAtTurn -->
-                @if(player._2 == playerAtTurn) {
-                <h3>&gt@player._1.playername&lt</h3>
-                } else {
-                <h3>@player._1.playername</h3>
-                }
-                <p>@player._1.card1.toString() @player._1.card2.toString()</p>
-                <p>@player._1.currentAmountBetted</p>
-                </td>
-                <td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td>
-                }
-        </tr>
+            @for(currentPlayer <- indexedPlayers.drop(3).take(3)) { @player(currentPlayer, playerAtTurn) } </tr>
     </table>
 
     <!-- Pot -->
@@ -50,20 +38,7 @@
     <!-- Nächste drei Spieler -->
     <table>
         <tr>
-            @for(player <- indexedPlayers.drop(3).take(3)) { <td>
-                <!-- Unterscheidung playerAtTurn -->
-                <p>@player._1.currentAmountBetted</p>
-                <p>@player._1.card1.toString() @player._1.card2.toString()</p>
-                @if(player._2 == playerAtTurn) {
-                <h3>&gt@player._1.playername&lt</h3>
-                } else {
-                <h3>@player._1.playername</h3>
-                }
-                <p>@player._1.balanceToString</p>
-                </td>
-                <td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td>
-                }
-        </tr>
+            @for(currentPlayer <- indexedPlayers.drop(3).take(3)) { @player(currentPlayer, playerAtTurn) } </tr>
     </table>
 </body>
 

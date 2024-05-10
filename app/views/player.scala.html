@@ -1,0 +1,14 @@
+@(player: (de.htwg.poker.model.Player, Int), playerAtTurn: Int)
+
+<td>
+    <p>@player._1.balanceToString</p>
+    <!-- Unterscheidung playerAtTurn -->
+    @if(player._2 == playerAtTurn) {
+    <h3>&gt@player._1.playername&lt</h3>
+    } else {
+    <h3>@player._1.playername</h3>
+    }
+    <p>@player._1.card1.toString() @player._1.card2.toString()</p>
+    <p>@player._1.currentAmountBetted</p>
+</td>
+<td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td>
