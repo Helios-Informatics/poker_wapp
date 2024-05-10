@@ -19,7 +19,7 @@
     <!-- Erste drei Spieler -->
     <table>
         <tr>
-            @for(currentPlayer <- indexedPlayers.drop(3).take(3)) { @player(currentPlayer, playerAtTurn) } </tr>
+            @for(currentPlayer <- indexedPlayers.take(3)) { @player(currentPlayer, playerAtTurn) } </tr>
     </table>
 
     <!-- Pot -->
