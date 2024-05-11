@@ -7,26 +7,18 @@ body {
     align-items: center;
     padding: 0;
     margin: 0;
+    overflow: hidden;
 }
 
 .table {
     width: 700px;
     height: 342px;
     flex-shrink: 0;
-    flex-shrink: 0;
     border-radius: 270px;
     border: 12px solid #2DD4BF;
     background: var(--Color, #0D9488);
-    box-shadow: 40px 40px 32px 0px rgba(0, 0, 0, 0.25), 8px 12px 1px 2px rgba(0, 0, 0, 0.25) inset;
-}
+    box-shadow: 8px 12px 1px 2px rgba(0, 0, 0, 0.25) inset;
 
-
-.dropshadow {
-    width: 1066.354px;
-    height: 797.579px;
-    transform: rotate(45deg);
-    flex-shrink: 0;
-    background: linear-gradient(90deg, rgba(0, 0, 0, 0.25) -0.13%, rgba(41, 51, 66, 0.00) 93.99%);
 }
 
 button {
@@ -66,4 +58,18 @@ button {
 
 .grey {
     background: #404040;
+}
+
+.container {
+    position: relative;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.second-div {
+    position: absolute;
+    top: 54px;
+    left: 25px;
+    z-index: -1;
 }
