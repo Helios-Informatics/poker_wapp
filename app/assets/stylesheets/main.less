@@ -1,4 +1,4 @@
-body {
+.body {
     background: #293342;
     width: 100vw;
     height: 100vh;
@@ -10,16 +10,7 @@ body {
     overflow: hidden;
 }
 
-.table {
-    width: 700px;
-    height: 342px;
-    flex-shrink: 0;
-    border-radius: 270px;
-    border: 12px solid #2DD4BF;
-    background: var(--Color, #0D9488);
-    box-shadow: 8px 12px 1px 2px rgba(0, 0, 0, 0.25) inset;
-
-}
+// buttons
 
 button {
     width: 160px;
@@ -60,14 +51,80 @@ button {
     background: #404040;
 }
 
-.container {
+//player
+.player {
+    display: flex-row;
+    justify-content: center;
+    align-items: center;
+}
+
+.player-circle {
+    width: 90px;
+    height: 90px;
+    flex-shrink: 0;
+    border-radius: 304px;
+    background: #4B5563;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.player-balance {
+    margin-top: 8px;
+    width: 102px;
+    height: 30px;
+    flex-shrink: 0;
+    border-radius: 300px;
+    background: #D2D2D2;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: #4B5563;
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 20px;
+    font-style: normal;
+    font-weight: 500;
+    line-height: normal;
+}
+
+.player-icon {
+    font-size: 50px;
+    font-style: normal;
+    font-weight: 500;
+    color: white;
+}
+
+.player-shadow {
+    width: 1261.371px;
+    height: 88.588px;
+    transform: rotate(45deg);
+    flex-shrink: 0;
+    background: rgba(0, 0, 0, 0.10);
+    position: absolute;
+    top: 580px;
+    left: 800px;
+    z-index: -1;
+}
+
+//table
+.table-container {
     position: relative;
     display: flex;
     justify-content: center;
     align-items: center;
 }
 
-.second-div {
+.table {
+    width: 700px;
+    height: 342px;
+    flex-shrink: 0;
+    border-radius: 270px;
+    border: 12px solid #2DD4BF;
+    background: var(--Color, #0D9488);
+    box-shadow: 8px 12px 1px 2px rgba(0, 0, 0, 0.25) inset;
+}
+
+.table-shadow-placement {
     position: absolute;
     top: 54px;
     left: 25px;
