@@ -4,7 +4,7 @@
 @playerAtTurn = @{ gameState.getPlayerAtTurn }
 @board = @{ gameState.getBoard }
 @pot = @{ gameState.getPot }
-
+@coins2 = @{ Seq(("#FFFFFF", "#1E5FBF" ), ("#FFFFFF", "#B15D5D" ),("#FFFFFF", "#242424" ),("#FFFFFF", "#286343" ) ) }
 
 
 @main("HTWG Poker") {
@@ -34,10 +34,7 @@
                     xmlns="http://www.w3.org/2000/svg">
                     <path d="M0 222.635L644 0.634621L1666.23 1011.59L1240.89 1436.93L0 222.635Z" fill="#252E3A" />
                 </svg>
-                @coin("#FFFFFF", "#1E5FBF",50,50)
-                @coin("#FFFFFF", "#B15D5D",50,50)
-                @coin("#FFFFFF", "#242424",50,50)
-                @coin("#FFFFFF", "#286343",50,50)
+                @coins(coins2)
             </div>
         </div>
         @player("$ 2500", "right-player")
