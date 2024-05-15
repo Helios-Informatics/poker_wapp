@@ -1,29 +1,9 @@
-@(player: (de.htwg.poker.model.Player, Int), playerAtTurn: Int, isTop: Boolean)
+@(balance : String, position : String)
 
-@if(isTop) {
-<td>
-    <p>@player._1.balanceToString</p>
-    <!-- Unterscheidung playerAtTurn -->
-    @if(player._2 == playerAtTurn) {
-    <h3>&gt@player._1.playername&lt</h3>
-    } else {
-    <h3>@player._1.playername</h3>
-    }
-    <p>@player._1.card1.toString() @player._1.card2.toString()</p>
-    <p>@player._1.currentAmountBetted</p>
-</td>
-<td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td>
-} else {
-<td>
-    <p>@player._1.currentAmountBetted</p>
-    <p>@player._1.card1.toString() @player._1.card2.toString()</p>
-    <!-- Unterscheidung playerAtTurn -->
-    @if(player._2 == playerAtTurn) {
-    <h3>&gt@player._1.playername&lt</h3>
-    } else {
-    <h3>@player._1.playername</h3>
-    }
-    <p>@player._1.balanceToString</p>
-<td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td>
-</td>
-}
+<div class="player @position">
+    <div class="player-circle">
+        <div class="bi-person-fill player-icon"></div>
+        <div class="player-shadow"></div>
+    </div>
+    <div class="player-balance">@balance</div>
+</div>
