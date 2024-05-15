@@ -21,17 +21,25 @@
             <div class="button-text transparent-button-text">LEAVE</div>
         </button>
     </div>
-    @coin("#FFFFFF", "#1E5FBF",75,75)
-    @coin("#FFFFFF", "#B15D5D",75,75)
-    @coin("#FFFFFF", "#242424",75,75)
-    @coin("#FFFFFF", "#286343",75,75)
+
     <div class="top-player-row">
         @player("$ 2500", "top-left-player")
         @player("$ 2500", "top-right-player")
     </div>
     <div class="table-row">
         @player("$ 2500", "left-player")
-        @table()
+        <div class="table-container">
+            <div class="table ">
+                <svg class="table-shadow-placement" width="1667" height="868" viewBox="0 0 1667 868" fill="none"
+                    xmlns="http://www.w3.org/2000/svg">
+                    <path d="M0 222.635L644 0.634621L1666.23 1011.59L1240.89 1436.93L0 222.635Z" fill="#252E3A" />
+                </svg>
+                @coin("#FFFFFF", "#1E5FBF",75,75)
+                @coin("#FFFFFF", "#B15D5D",75,75)
+                @coin("#FFFFFF", "#242424",75,75)
+                @coin("#FFFFFF", "#286343",75,75)
+            </div>
+        </div>
         @player("$ 2500", "right-player")
     </div>
     <div class="bottom-player-row">
