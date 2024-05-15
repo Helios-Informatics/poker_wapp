@@ -35,8 +35,14 @@
                     <path d="M0 222.635L644 0.634621L1666.23 1011.59L1240.89 1436.93L0 222.635Z" fill="#252E3A" />
                 </svg>
                 <div class="table-top-row">
-                    @coins(coins2)
-                    @coins(coins2)
+                    <div class="player-items">
+                        @coins(coins2)
+                        @hiddencard()
+                    </div>
+                    <div class="player-items">
+                        @coins(coins2)
+                        @hiddencard()
+                    </div>
                 </div>
                 <div class="table-middle-row">
                     <div class="player-items">
@@ -44,11 +50,11 @@
                         @coins(coins2)
                     </div>
                     <div class="card-row">
-                        @card("A", "bi-suit-spade-fill","black-text")
-                        @card("10", "bi-suit-heart-fill","red-text")
-                        @card("4", "bi-suit-spade-fill","black-text")
-                        @card("K", "bi-suit-diamond-fill","red-text")
-                        @card("6", "bi-suit-club-fill","black-text")
+                        @boardcard("A", "bi-suit-spade-fill","black-text")
+                        @boardcard("10", "bi-suit-heart-fill","red-text")
+                        @boardcard("4", "bi-suit-spade-fill","black-text")
+                        @boardcard("K", "bi-suit-diamond-fill","red-text")
+                        @boardcard("6", "bi-suit-club-fill","black-text")
                     </div>
                     <div class="player-items">
                         @coins(coins2)
@@ -56,8 +62,15 @@
                     </div>
                 </div>
                 <div class="table-bottom-row">
-                    @coins(coins2)
-                    @coins(coins2)
+                    <div class="player-items lol">
+                        @coins(coins2)
+                        @playercard("A", "bi-suit-club-fill","black-text")
+                        @playercard("A", "bi-suit-heart-fill","red-text")
+                    </div>
+                    <div class="player-items">
+                        @coins(coins2)
+                        @hiddencard()
+                    </div>
                 </div>
             </div>
         </div>
