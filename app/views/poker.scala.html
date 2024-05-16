@@ -39,15 +39,21 @@
                     @coins(coins2)
                 </div>
                 <div class="table-middle-row">
-                    @coins(coins2)
+                    <div class="player-items">
+                        @hiddencard()
+                        @coins(coins2)
+                    </div>
                     <div class="card-row">
                         @card("A", "bi-suit-spade-fill","black-text")
                         @card("10", "bi-suit-heart-fill","red-text")
                         @card("4", "bi-suit-spade-fill","black-text")
                         @card("K", "bi-suit-diamond-fill","red-text")
+                        @card("6", "bi-suit-club-fill","black-text")
+                    </div>
+                    <div class="player-items">
+                        @coins(coins2)
                         @hiddencard()
                     </div>
-                    @coins(coins2)
                 </div>
                 <div class="table-bottom-row">
                     @coins(coins2)
