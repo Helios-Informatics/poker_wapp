@@ -228,9 +228,8 @@ button {
 
 .amount {
     font-size: 18px;
-    position: absolute;
+    position: relative;
     top: 22px;
-    left: 360px;
 }
 
 //table
@@ -245,7 +244,7 @@ button {
     width: 700px;
     height: 342px;
     flex-shrink: 0;
-    display: flex;
+    display: flex-column;
     align-items: center;
     justify-content: center;
     border-radius: 270px;
@@ -260,6 +259,35 @@ button {
     left: 25px;
     z-index: -1;
 }
+
+.table-top-row {
+    display: flex;
+    justify-content: space-around;
+    align-items: start;
+    height: 114px;
+}
+
+.table-middle-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    height: 114px;
+}
+
+.table-bottom-row {
+    display: flex;
+    justify-content: space-around;
+    align-items: end;
+    height: 114px;
+}
+
+.card-row {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+
 
 //rows
 .top-button-row {
