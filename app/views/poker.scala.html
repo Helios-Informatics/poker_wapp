@@ -82,9 +82,22 @@
     </div>
 
     <div class="button-row">
-        <button class="round-button reveal-chat-button">
-            <div class="button-text  bi-chevron-up"></div>
-        </button>
+        <div class="dropup-center dropup">
+            <button class="btn btn-secondary round-button" type="button" data-bs-toggle="dropdown"
+                aria-expanded="false">
+                <div class="button-text  bi-chevron-up"></div>
+            </button>
+            <ul class="dropdown-menu">
+                <div class="dropdown-item">
+                    <div class="input-group">
+                        <input type="text" class="form-control">
+                        <button type="button" class="btn btn-outline-secondary">Send</button>
+                    </div>
+                </div>
+            </ul>
+        </div>
+
+
         @actionButton("fold-button", "FOLD", "bi-x-circle")
         @actionButton("call-button", "CALL", "bi-arrow-up-circle")
         @actionButton("raise-button", "RAISE", "bi-plus-circle")
