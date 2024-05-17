@@ -2,9 +2,6 @@
     background: #293342;
     width: 100vw;
     height: 100vh;
-    display: flex-column;
-    justify-content: center;
-    align-items: center;
     overflow: hidden;
 }
 
@@ -348,4 +345,11 @@ button {
     display: flex;
     justify-content: end;
     align-items: center;
+}
+
+//range-styling
+
+input[type="range"][orient="vertical"] {
+    position: absolute;
+    transform: rotate(270deg);
 }

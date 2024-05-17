@@ -13,96 +13,102 @@
 <!DOCTYPE html>
 
 <body class="body">
-    <div class="top-button-row">
-        <div class="logo bi-suit-spade">
-        </div>
-        <button class="leave-button">
-            <div class="button-text transparent-button-text bi-box-arrow-left"></div>
-            <div class="button-text transparent-button-text">LEAVE</div>
-        </button>
-    </div>
+    <div class="d-flex w-100 h-100">
+        <div class="d-flex flex-column">
+            <div class="top-button-row">
+                <div class="logo bi-suit-spade">
+                </div>
+                <button class="leave-button">
+                    <div class="button-text transparent-button-text bi-box-arrow-left"></div>
+                    <div class="button-text transparent-button-text">LEAVE</div>
+                </button>
+            </div>
 
-    <div class="top-player-row">
-        @player("$ 2500", "top-left-player")
-        @player("$ 2500", "top-right-player")
-    </div>
-    <div class="table-row">
-        @player("$ 2500", "left-player")
-        <div class="table-container">
-            <div class="table ">
-                <svg class="table-shadow-placement" width="1667" height="868" viewBox="0 0 1667 868" fill="none"
-                    xmlns="http://www.w3.org/2000/svg">
-                    <path d="M0 222.635L644 0.634621L1666.23 1011.59L1240.89 1436.93L0 222.635Z" fill="#252E3A" />
-                </svg>
-                <div class="table-top-row">
-                    <div class="player-items">
-                        @coins(coins2)
-                        @hiddencard()
-                    </div>
-                    <div class="player-items">
-                        @coins(coins2)
-                        @hiddencard()
+            <div class="top-player-row">
+                @player("$ 2500", "top-left-player")
+                @player("$ 2500", "top-right-player")
+            </div>
+            <div class="table-row">
+                @player("$ 2500", "left-player")
+                <div class="table-container">
+                    <div class="table ">
+                        <svg class="table-shadow-placement" width="1667" height="868" viewBox="0 0 1667 868" fill="none"
+                            xmlns="http://www.w3.org/2000/svg">
+                            <path d="M0 222.635L644 0.634621L1666.23 1011.59L1240.89 1436.93L0 222.635Z"
+                                fill="#252E3A" />
+                        </svg>
+                        <div class="table-top-row">
+                            <div class="player-items">
+                                @coins(coins2)
+                                @hiddencard()
+                            </div>
+                            <div class="player-items">
+                                @coins(coins2)
+                                @hiddencard()
+                            </div>
+                        </div>
+                        <div class="table-middle-row">
+                            <div class="player-items">
+                                @hiddencard()
+                                @coins(coins2)
+                            </div>
+                            <div class="card-row">
+                                @boardcard("A", "bi-suit-spade-fill","black-text")
+                                @boardcard("10", "bi-suit-heart-fill","red-text")
+                                @boardcard("4", "bi-suit-spade-fill","black-text")
+                                @boardcard("K", "bi-suit-diamond-fill","red-text")
+                                @boardcard("6", "bi-suit-club-fill","black-text")
+                            </div>
+                            <div class="player-items">
+                                @coins(coins2)
+                                @hiddencard()
+                            </div>
+                        </div>
+                        <div class="table-bottom-row">
+                            <div class="player-items lol">
+                                @coins(coins2)
+                                @playercard("A", "bi-suit-club-fill","black-text")
+                                @playercard("A", "bi-suit-heart-fill","red-text")
+                            </div>
+                            <div class="player-items">
+                                @coins(coins2)
+                                @hiddencard()
+                            </div>
+                        </div>
                     </div>
                 </div>
-                <div class="table-middle-row">
-                    <div class="player-items">
-                        @hiddencard()
-                        @coins(coins2)
-                    </div>
-                    <div class="card-row">
-                        @boardcard("A", "bi-suit-spade-fill","black-text")
-                        @boardcard("10", "bi-suit-heart-fill","red-text")
-                        @boardcard("4", "bi-suit-spade-fill","black-text")
-                        @boardcard("K", "bi-suit-diamond-fill","red-text")
-                        @boardcard("6", "bi-suit-club-fill","black-text")
-                    </div>
-                    <div class="player-items">
-                        @coins(coins2)
-                        @hiddencard()
-                    </div>
+                @player("$ 2500", "right-player")
+            </div>
+            <div class="bottom-player-row">
+                @player("$ 2500", "top-left-player")
+                @player("$ 2500", "top-right-player")
+            </div>
+
+            <div class="button-row">
+                <div class="dropup-center dropup">
+                    <button class="btn btn-secondary round-button" type="button" data-bs-toggle="dropdown"
+                        aria-expanded="false">
+                        <div class="button-text  bi-chevron-up"></div>
+                    </button>
+                    <ul class="dropdown-menu">
+                        <div class="dropdown-item">
+                            <div class="input-group">
+                                <input type="text" class="form-control">
+                                <button type="button" class="btn btn-outline-secondary">Send</button>
+                            </div>
+                        </div>
+                    </ul>
                 </div>
-                <div class="table-bottom-row">
-                    <div class="player-items lol">
-                        @coins(coins2)
-                        @playercard("A", "bi-suit-club-fill","black-text")
-                        @playercard("A", "bi-suit-heart-fill","red-text")
-                    </div>
-                    <div class="player-items">
-                        @coins(coins2)
-                        @hiddencard()
-                    </div>
-                </div>
+                @actionButton("fold-button", "FOLD", "bi-x-circle")
+                @actionButton("call-button", "CALL", "bi-arrow-up-circle")
+                @actionButton("raise-button", "RAISE", "bi-plus-circle")
             </div>
         </div>
-        @player("$ 2500", "right-player")
-    </div>
-    <div class="bottom-player-row">
-        @player("$ 2500", "top-left-player")
-        @player("$ 2500", "top-right-player")
-    </div>
-
-    <div class="button-row">
-        <div class="dropup-center dropup">
-            <button class="btn btn-secondary round-button" type="button" data-bs-toggle="dropdown"
-                aria-expanded="false">
-                <div class="button-text  bi-chevron-up"></div>
-            </button>
-            <ul class="dropdown-menu">
-                <div class="dropdown-item">
-                    <div class="input-group">
-                        <input type="text" class="form-control">
-                        <button type="button" class="btn btn-outline-secondary">Send</button>
-                    </div>
-                </div>
-            </ul>
+        <div class="d-flex flex-column justify-content-end align-items-center" style="width: 300px">
+            <input type="range" class="form-range" style="width: 400px; margin-bottom: 220px;" orient="vertical" min="0"
+                max="100" step="5" id="customRange3">
         </div>
-
-
-        @actionButton("fold-button", "FOLD", "bi-x-circle")
-        @actionButton("call-button", "CALL", "bi-arrow-up-circle")
-        @actionButton("raise-button", "RAISE", "bi-plus-circle")
     </div>
-
 </body>
 
 </html>
