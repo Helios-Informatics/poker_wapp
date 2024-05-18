@@ -1,6 +1,6 @@
 @(coins: Seq[(String,String)])
 
-<div class="stack-amount-container">
+<div class="stack-amount-container bg-transparent">
     <div class="coin-stack">
         @for(((outlineColor, fillColor), index) <- coins.zipWithIndex) { <div class="coin" style="top: @{s" ${index *
             -7}px"};">
