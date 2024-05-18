@@ -19,8 +19,9 @@
                 <div class="d-flex align-items-center justify-space-around row">
                     <div class="logo bi-suit-spade col">
                     </div>
-                    <div class="col">
-                        <button type="button" class="btn btn-secondary rounded-pill">
+                    <div class="col d-flex justify-content-end">
+                        <button type="button"
+                            class="btn btn-secondary rounded-pill responsive-button d-flex align-items-center justify-content-center">
                             <h5>
                                 LEAVE
                             </h5>
@@ -37,12 +38,7 @@
                 <div class=" d-flex justify-content-center align-items-center">
                     @player("$ 2500", "left-player")
                     <div class="d-flex justify-content-center align-items-center">
-                        <div class="table ">
-                            <svg class="table-shadow-placement" width="1667" height="868" viewBox="0 0 1667 868"
-                                fill="none" xmlns="http://www.w3.org/2000/svg">
-                                <path d="M0 222.635L644 0.634621L1666.23 1011.59L1240.89 1436.93L0 222.635Z"
-                                    fill="#252E3A" />
-                            </svg>
+                        <div class="table responsive-table">
                             <div class="d-flex justify-content-around align-items-start" style="height: 114px;">
                                 <div class="d-flex justify-content-center align-items-center">
                                     @coins(coins2)
@@ -92,7 +88,7 @@
 
             </div>
             <div class="container-fluid ">
-                <div class="d-flex align-items-center justify-content-around row">
+                <div class="d-flex align-items-center justify-content-between row">
                     <div class="col dropup-center dropup ms-5">
                         <button class="btn btn-secondary round-button" type="button" data-bs-toggle="dropdown"
                             aria-expanded="false">
@@ -117,21 +113,21 @@
                             </li>
                         </ul>
                     </div>
-                    <div class="col d-flex gap-3 ">
+                    <div class="col d-flex gap-3 justify-content-end me-3">
                         <button type="button"
-                            class="btn btn-danger rounded-pill d-flex justify-content-center align-content-center">
+                            class="btn btn-danger rounded-pill d-flex justify-content-center align-content-center responsive-button">
                             <h5 class="mt-1">
                                 FOLD
                             </h5>
                         </button>
                         <button type="button"
-                            class="btn btn-success rounded-pill d-flex justify-content-center align-content-center">
+                            class="btn btn-success rounded-pill d-flex justify-content-center align-content-center responsive-button">
                             <h5 class="mt-1">
                                 CALL
                             </h5>
                         </button>
                         <button type="button"
-                            class="btn btn-primary rounded-pill d-flex justify-content-center align-content-center">
+                            class="btn btn-primary rounded-pill d-flex justify-content-center align-content-center responsive-button">
                             <h5 class="mt-1">
                                 RAISE
                             </h5>
@@ -141,8 +137,8 @@
             </div>
         </div>
         <div class="d-flex flex-column justify-content-end align-items-center" style="width: 100px">
-            <input type="range" class="form-range" style="width: 400px; margin-bottom: 230px;" orient="vertical" min="0"
-                max="100" step="5" id="customRange3">
+            <input type="range" class="form-range me-5" style="width: 400px; margin-bottom: 230px;" orient="vertical"
+                min="0" max="100" step="5" id="customRange3">
         </div>
     </div>
 </body>
