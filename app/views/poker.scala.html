@@ -13,18 +13,37 @@
 <!DOCTYPE html>
 
 <body class="body">
-    <div class="d-flex w-100 h-100">
-        <div class="d-flex flex-column">
-            <div class="top-button-row">
-                <div class="logo bi-suit-spade ms-5">
+    <div class="d-flex w-100 h-100 container">
+        <div class="d-flex flex-column container">
+            <div class="container">
+                <div class="row ">
+                    <div class="bg-warning col-6 d-flex justify-content-start">
+                        <div class="logo bi-suit-spade"></div>
+                    </div>
+                    <div class="col ">
+                        <button type="button" class="btn btn-secondary rounded-pill">
+                            <h5>
+                                LEAVE
+                            </h5>
+                        </button>
+                    </div>
                 </div>
-                <button type="button"
-                    class="btn btn-secondary rounded-pill d-flex justify-content-center align-content-center">
-                    <h5 class="mt-1">
-                        LEAVE
-                    </h5>
-                </button>
             </div>
+
+            <div class="container text-center">
+                <div class="row">
+                    <div class="col">
+                        Column
+                    </div>
+                    <div class="col">
+                        Column
+                    </div>
+                    <div class="col">
+                        Column
+                    </div>
+                </div>
+            </div>
+
 
             <div class="top-player-row">
                 @player("$ 2500", "top-left-player")
@@ -86,7 +105,7 @@
                 @player("$ 2500", "top-right-player")
             </div>
 
-            <div class="button-row">
+            <div class="container">
                 <div class="dropup-center dropup ms-5">
                     <button class="btn btn-secondary round-button" type="button" data-bs-toggle="dropdown"
                         aria-expanded="false">
