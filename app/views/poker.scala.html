@@ -13,14 +13,13 @@
 <!DOCTYPE html>
 
 <body class="body">
-    <div class="d-flex w-100 h-100 container">
-        <div class="d-flex flex-column container">
-            <div class="container">
-                <div class="row ">
-                    <div class="bg-warning col-6 d-flex justify-content-start">
-                        <div class="logo bi-suit-spade"></div>
+    <div class="d-flex w-100 h-100">
+        <div class="d-flex flex-column justify-content-around container-fluid">
+            <div class="container-fluid">
+                <div class="d-flex align-items-center justify-space-around row">
+                    <div class="logo bi-suit-spade col">
                     </div>
-                    <div class="col ">
+                    <div class="col">
                         <button type="button" class="btn btn-secondary rounded-pill">
                             <h5>
                                 LEAVE
@@ -29,127 +28,119 @@
                     </div>
                 </div>
             </div>
+            <div class="">
 
-            <div class="container text-center">
-                <div class="row">
-                    <div class="col">
-                        Column
-                    </div>
-                    <div class="col">
-                        Column
-                    </div>
-                    <div class="col">
-                        Column
-                    </div>
+                <div class=" d-flex justify-content-center align-items-center mb-3">
+                    @player("$ 2500", "top-left-player")
+                    @player("$ 2500", "top-right-player")
                 </div>
-            </div>
-
-
-            <div class="top-player-row">
-                @player("$ 2500", "top-left-player")
-                @player("$ 2500", "top-right-player")
-            </div>
-            <div class="table-row">
-                @player("$ 2500", "left-player")
-                <div class="table-container">
-                    <div class="table ">
-                        <svg class="table-shadow-placement" width="1667" height="868" viewBox="0 0 1667 868" fill="none"
-                            xmlns="http://www.w3.org/2000/svg">
-                            <path d="M0 222.635L644 0.634621L1666.23 1011.59L1240.89 1436.93L0 222.635Z"
-                                fill="#252E3A" />
-                        </svg>
-                        <div class="table-top-row">
-                            <div class="player-items">
-                                @coins(coins2)
-                                @hiddencard()
+                <div class=" d-flex justify-content-center align-items-center">
+                    @player("$ 2500", "left-player")
+                    <div class="d-flex justify-content-center align-items-center">
+                        <div class="table ">
+                            <svg class="table-shadow-placement" width="1667" height="868" viewBox="0 0 1667 868"
+                                fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M0 222.635L644 0.634621L1666.23 1011.59L1240.89 1436.93L0 222.635Z"
+                                    fill="#252E3A" />
+                            </svg>
+                            <div class="d-flex justify-content-around align-items-start" style="height: 114px;">
+                                <div class="d-flex justify-content-center align-items-center">
+                                    @coins(coins2)
+                                    @hiddencard()
+                                </div>
+                                <div class="d-flex justify-content-center align-items-center">
+                                    @coins(coins2)
+                                    @hiddencard()
+                                </div>
                             </div>
-                            <div class="player-items">
-                                @coins(coins2)
-                                @hiddencard()
+                            <div class="d-flex justify-content-between align-items-center" style="height: 114px;">
+                                <div class="d-flex justify-content-center align-items-center">
+                                    @hiddencard()
+                                    @coins(coins2)
+                                </div>
+                                <div class="d-flex justify-content-center align-items-center">
+                                    @card("A", "bi-suit-spade-fill","black-text")
+                                    @card("10", "bi-suit-heart-fill","red-text")
+                                    @card("4", "bi-suit-spade-fill","black-text")
+                                    @card("K", "bi-suit-diamond-fill","red-text")
+                                    @card("6", "bi-suit-club-fill","black-text")
+                                </div>
+                                <div class="d-flex justify-content-center align-items-center">
+                                    @coins(coins2)
+                                    @hiddencard()
+                                </div>
                             </div>
-                        </div>
-                        <div class="table-middle-row">
-                            <div class="player-items">
-                                @hiddencard()
-                                @coins(coins2)
-                            </div>
-                            <div class="card-row">
-                                @card("A", "bi-suit-spade-fill","black-text")
-                                @card("10", "bi-suit-heart-fill","red-text")
-                                @card("4", "bi-suit-spade-fill","black-text")
-                                @card("K", "bi-suit-diamond-fill","red-text")
-                                @card("6", "bi-suit-club-fill","black-text")
-                            </div>
-                            <div class="player-items">
-                                @coins(coins2)
-                                @hiddencard()
-                            </div>
-                        </div>
-                        <div class="table-bottom-row">
-                            <div class="player-items lol">
-                                @coins(coins2)
-                                @card("A", "bi-suit-club-fill","black-text")
-                                @card("A", "bi-suit-heart-fill","red-text")
-                            </div>
-                            <div class="player-items">
-                                @coins(coins2)
-                                @hiddencard()
+                            <div class="d-flex justify-content-around align-items-end" style="height: 114px;">
+                                <div class="d-flex justify-content-center align-items-center lol">
+                                    @coins(coins2)
+                                    @card("A", "bi-suit-club-fill","black-text")
+                                    @card("A", "bi-suit-heart-fill","red-text")
+                                </div>
+                                <div class="d-flex justify-content-center align-items-center">
+                                    @coins(coins2)
+                                    @hiddencard()
+                                </div>
                             </div>
                         </div>
                     </div>
+                    @player("$ 2500", "right-player")
                 </div>
-                @player("$ 2500", "right-player")
-            </div>
-            <div class="bottom-player-row">
-                @player("$ 2500", "top-left-player")
-                @player("$ 2500", "top-right-player")
-            </div>
+                <div class=" d-flex justify-content-center align-items-center mt-3">
+                    @player("$ 2500", "top-left-player")
+                    @player("$ 2500", "top-right-player")
+                </div>
 
-            <div class="container">
-                <div class="dropup-center dropup ms-5">
-                    <button class="btn btn-secondary round-button" type="button" data-bs-toggle="dropdown"
-                        aria-expanded="false">
-                        <div class="button-text  d-flex justify-content-center align-items-center"
-                            style="width: 50px; height: 50px;">
-                            <div class="bi-chevron-up"></div>
-                        </div>
-                    </button>
-                    <ul class="dropdown-menu ms-3 mb-3 " style="height: 400px; width: 340px;">
-                        <li class="dropdown-item border ms-3" style="height: 300px; width: 300px">
-                            <samp>
-                                user1234: hello!
-                            </samp>
-                        </li>
-                        <li class="dropdown-item">
-                            <div class="input-group d-flex flex-row mb-3">
-                                <input type="text" class="form-control" placeholder="enter text"
-                                    aria-label="Recipient's username" aria-describedby="button-addon2">
-                                <button class="btn btn-outline-secondary" type="button" id="button-addon2">Send</button>
+            </div>
+            <div class="container-fluid ">
+                <div class="d-flex align-items-center justify-content-around row">
+                    <div class="col dropup-center dropup ms-5">
+                        <button class="btn btn-secondary round-button" type="button" data-bs-toggle="dropdown"
+                            aria-expanded="false">
+                            <div class="button-text d-flex justify-content-center align-items-center"
+                                style="width: 50px; height: 50px;">
+                                <div class="bi-chevron-up"></div>
                             </div>
-                        </li>
-                    </ul>
-                </div>
-                <div class="d-flex gap-3">
-                    <button type="button"
-                        class="btn btn-danger rounded-pill d-flex justify-content-center align-content-center">
-                        <h5 class="mt-1">
-                            FOLD
-                        </h5>
+                        </button>
+                        <ul class="dropdown-menu ms-3 mb-3 " style="height: 400px; width: 340px;">
+                            <li class="dropdown-item border ms-3" style="height: 300px; width: 300px">
+                                <samp>
+                                    user1234: hello!
+                                </samp>
+                            </li>
+                            <li class="dropdown-item">
+                                <div class="input-group d-flex flex-row mb-3">
+                                    <input type="text" class="form-control" placeholder="enter text"
+                                        aria-label="Recipient's username" aria-describedby="button-addon2">
+                                    <button class="btn btn-outline-secondary" type="button"
+                                        id="button-addon2">Send</button>
+                                </div>
+                            </li>
+                        </ul>
+                    </div>
+                    <div class="col d-flex gap-3 ">
+                        <button type="button"
+                            class="btn btn-danger rounded-pill d-flex justify-content-center align-content-center">
+                            <h5 class="mt-1">
+                                FOLD
+                            </h5>
+                        </button>
                         <button type="button"
                             class="btn btn-success rounded-pill d-flex justify-content-center align-content-center">
                             <h5 class="mt-1">
                                 CALL
                             </h5>
-                            <button type="button"
-                                class="btn btn-primary rounded-pill d-flex justify-content-center align-content-center">
-                                <h5 class="mt-1">
-                                    RAISE
-                                </h5>
-                            </button>
+                        </button>
+                        <button type="button"
+                            class="btn btn-primary rounded-pill d-flex justify-content-center align-content-center">
+                            <h5 class="mt-1">
+                                RAISE
+                            </h5>
+                        </button>
+                    </div>
                 </div>
             </div>
         </div>
-        <div class="d-flex flex-column justify-content-end align-items-center" style="width: 300px">
+        <div class="d-flex flex-column justify-content-end align-items-center" style="width: 100px">
             <input type="range" class="form-range" style="width: 400px; margin-bottom: 230px;" orient="vertical" min="0"
                 max="100" step="5" id="customRange3">
         </div>
