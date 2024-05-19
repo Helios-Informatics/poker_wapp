@@ -3,8 +3,8 @@
 <div class="stack-amount-container bg-transparent">
     <div class="coin-stack">
         @for(((outlineColor, fillColor), index) <- coins.zipWithIndex) { <div class="coin" style="top: @{s" ${index *
-            -7}px"};">
-            <svg width="25" height="25" viewBox="0 0 281 281" fill="@fillColor" xmlns="http://www.w3.org/2000/svg">
+            -5}px"};">
+            <svg class="responsive-coins" viewBox="0 0 281 281" fill="@fillColor" xmlns="http://www.w3.org/2000/svg">
                 <g filter="url(#filter0_d_64_21)">
                     <circle cx="132.5" cy="132.5" r="128.5" fill="@fillColor" />
                 </g>
@@ -50,5 +50,5 @@
 
     }
 </div>
-<div class="amount"> $ 750</div>
+<div class="amount responsive-amount"> $ 750</div>
 </div>
