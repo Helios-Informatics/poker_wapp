@@ -9,6 +9,16 @@
 @media (min-width: 0px) {
     .responsive-button {
         width: 70px;
+        height: 35px;
+    }
+
+    .responsive-button-text {
+        font-size: 16px;
+    }
+
+    .responsive-round-button {
+        width: 35px;
+        height: 35px;
     }
 
     .responsive-player-circle {
@@ -68,12 +78,30 @@
     .responsive-slider-size {
         width: 280px;
     }
+
+    .responsive-table-middle-row-margin-top {
+        margin-top: -10px;
+    }
+
+    .responsive-table-lower-row-margin-top {
+        margin-top: -10px;
+    }
 }
 
 /* Small devices (landscape phones, less than 576px) */
 @media (min-width: 576px) {
     .responsive-button {
         width: 70px;
+        height: 35px;
+    }
+
+    .responsive-button-text {
+        font-size: 18px;
+    }
+
+    .responsive-round-button {
+        width: 35px;
+        height: 35px;
     }
 
     .responsive-player-circle {
@@ -133,13 +161,32 @@
     .responsive-slider-size {
         width: 280px;
     }
+
+    .responsive-table-middle-row-margin-top {
+        margin-top: -7px;
+    }
+
+    .responsive-table-lower-row-margin-top {
+        margin-top: -7px;
+    }
 }
 
 /* Medium devices (tablets, 768px and up) */
 @media (min-width: 768px) {
     .responsive-button {
         width: 100px;
+        height: 40px;
     }
+
+    .responsive-round-button {
+        width: 40px;
+        height: 40px;
+    }
+
+    .responsive-button-text {
+        font-size: 20px;
+    }
+
 
     .responsive-player-circle {
         width: 70px;
@@ -198,12 +245,30 @@
     .responsive-slider-size {
         width: 280px;
     }
+
+    .responsive-table-middle-row-margin-top {
+        margin-top: 0px;
+    }
+
+    .responsive-table-lower-row-margin-top {
+        margin-top: 0px;
+    }
 }
 
 /* Large devices (desktops, 992px and up) */
 @media (min-width: 992px) {
     .responsive-button {
         width: 120px;
+        height: 40px;
+    }
+
+    .responsive-round-button {
+        width: 40px;
+        height: 40px;
+    }
+
+    .responsive-button-text {
+        font-size: 20px;
     }
 
     .responsive-player-circle {
@@ -263,12 +328,34 @@
     .responsive-slider-size {
         width: 300px;
     }
+
+    .responsive-table-middle-row-margin-top {
+        margin-top: 10px;
+    }
+
+    .responsive-table-lower-row-margin-top {
+        margin-top: 10px;
+    }
+
+    .responsive-chat {
+        height: 400px;
+    }
 }
 
 /* Extra large devices (large desktops, 1200px and up) */
 @media (min-width: 1200px) {
     .responsive-button {
         width: 140px;
+        height: 50px;
+    }
+
+    .responsive-button-text {
+        font-size: 20px;
+    }
+
+    .responsive-round-button {
+        width: 50px;
+        height: 50px;
     }
 
     .responsive-player-circle {
@@ -327,11 +414,29 @@
     .responsive-slider-size {
         width: 400px;
     }
+
+    .responsive-table-middle-row-margin-top {
+        margin-top: 13px;
+    }
+
+    .responsive-table-lower-row-margin-top {
+        margin-top: 13px;
+    }
 }
 
 @media (min-width: 1400px) {
     .responsive-button {
         width: 160px;
+        height: 50px;
+    }
+
+    .responsive-round-button {
+        width: 50px;
+        height: 50px;
+    }
+
+    .responsive-button-text {
+        font-size: 20px;
     }
 
     .responsive-player-circle {
@@ -390,6 +495,14 @@
     .responsive-slider-size {
         width: 400px;
     }
+
+    .responsive-table-middle-row-margin-top {
+        margin-top: 13px;
+    }
+
+    .responsive-table-lower-row-margin-top {
+        margin-top: 13px;
+    }
 }
 
 
@@ -404,30 +517,26 @@
 // buttons 
 
 button {
-    height: 50px;
     flex-shrink: 0;
     border-radius: 200px;
     border: none;
     display: flex;
-    justify-content: space-evenly;
+    justify-content: center;
     align-items: center;
     box-shadow: 4px 4px 2px 2px rgba(0, 0, 0, 0.25)
 }
 
 .round-button {
-    width: 60px;
-    height: 60px;
     flex-shrink: 0;
     border-radius: 200px;
     border: none;
     display: flex;
-    justify-content: space-evenly;
+    justify-content: center;
     align-items: center;
     box-shadow: 4px 4px 2px 2px rgba(0, 0, 0, 0.25)
 }
 
 .button-text {
-    font-size: 25px;
     font-style: normal;
     font-weight: 500;
     line-height: normal;
@@ -587,7 +696,7 @@ button {
 .table {
     position: relative;
     flex-shrink: 0;
-    display: flex-column;
+    flex-direction: column;
     align-items: center;
     justify-content: center;
     border-radius: 270px;

@@ -17,20 +17,20 @@
         <div class="d-flex flex-column justify-content-around container-fluid">
             <div class="container-fluid">
                 <div class="d-flex align-items-center justify-space-around row">
-                    <div class="logo bi-suit-spade col">
+                    <div class="col text-white">
+                        your current hand: SET
                     </div>
                     <div class="col d-flex justify-content-end">
                         <button type="button"
                             class="btn btn-secondary rounded-pill responsive-button d-flex align-items-center justify-content-center">
-                            <h5>
+                            <h5 class="responsive-button-text">
                                 LEAVE
                             </h5>
                         </button>
                     </div>
                 </div>
             </div>
-            <div class="">
-
+            <div class="d-flex flex-column">
                 <div class=" d-flex justify-content-center align-items-center mb-2">
                     @player("$ 2500", "top-left-player")
                     @player("$ 2500", "top-right-player")
@@ -49,7 +49,8 @@
                                     @hiddencard()
                                 </div>
                             </div>
-                            <div class="d-flex justify-content-between align-items-center">
+                            <div
+                                class="d-flex justify-content-between align-items-center responsive-table-middle-row-margin-top">
                                 <div class="d-flex justify-content-center align-items-center">
                                     @hiddencard()
                                     @coins(coins2)
@@ -66,11 +67,12 @@
                                     @hiddencard()
                                 </div>
                             </div>
-                            <div class="d-flex justify-content-around align-items-end">
-                                <div class="d-flex justify-content-center align-items-center lol">
+                            <div
+                                class="d-flex justify-content-around align-items-center  responsive-table-lower-row-margin-top">
+                                <div class="d-flex justify-content-center align-items-center">
                                     @coins(coins2)
-                                    @card("A", "bi-suit-club-fill","black-text")
                                     @card("A", "bi-suit-heart-fill","red-text")
+                                    @card("A", "bi-suit-diamond-fill","red-text")
                                 </div>
                                 <div class="d-flex justify-content-center align-items-center">
                                     @coins(coins2)
@@ -90,14 +92,14 @@
             <div class="container-fluid ">
                 <div class="d-flex align-items-center justify-content-between row">
                     <div class="col dropup-center dropup ms-5">
-                        <button class="btn btn-secondary round-button" type="button" data-bs-toggle="dropdown"
-                            aria-expanded="false">
+                        <button class="btn btn-secondary round-button responsive-round-button" type="button"
+                            data-bs-toggle="dropdown" aria-expanded="false">
                             <div class="button-text d-flex justify-content-center align-items-center"
                                 style="width: 50px; height: 50px;">
-                                <div class="bi-chevron-up"></div>
+                                <div class="bi-chevron-up responsive-button-text"></div>
                             </div>
                         </button>
-                        <ul class="dropdown-menu ms-3 mb-3 " style="height: 400px; width: 340px;">
+                        <ul class="dropdown-menu ms-3 mb-3 " style="width: 340px;">
                             <li class="dropdown-item border ms-3" style="height: 300px; width: 300px">
                                 <samp>
                                     user1234: hello!
@@ -116,19 +118,19 @@
                     <div class="col d-flex gap-3 justify-content-end me-3">
                         <button type="button"
                             class="btn btn-danger rounded-pill d-flex justify-content-center align-content-center responsive-button">
-                            <h5 class="mt-1">
+                            <h5 class="mt-1 responsive-button-text">
                                 FOLD
                             </h5>
                         </button>
                         <button type="button"
                             class="btn btn-success rounded-pill d-flex justify-content-center align-content-center responsive-button">
-                            <h5 class="mt-1">
+                            <h5 class="mt-1 responsive-button-text">
                                 CALL
                             </h5>
                         </button>
                         <button type="button"
                             class="btn btn-primary rounded-pill d-flex justify-content-center align-content-center responsive-button">
-                            <h5 class="mt-1">
+                            <h5 class="mt-1 responsive-button-text">
                                 RAISE
                             </h5>
                         </button>
