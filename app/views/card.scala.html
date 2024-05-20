@@ -1,7 +1,10 @@
-@(suit: String,rank:String, color: String)
+@(rank: String,suitID: Int)
 
+@import de.htwg.poker.util.WappFunctions
+@suit: String = @{WappFunctions.getSuitStyle(suitID)._1}
+@color: String = @{WappFunctions.getSuitStyle(suitID)._2}
 
 <div class="card responsive-cards">
-    <div class="card-icon @rank @color  responsive-card-suit"></div>
-    <div class="card-text @color responsive-card-text">@suit</div>
+    <div class="card-icon @suit @color  responsive-card-suit"></div>
+    <div class="card-text @color responsive-card-text">@rank</div>
 </div>

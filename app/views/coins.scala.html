@@ -1,8 +1,11 @@
-@(coins: Seq[(String,String)])
+@(amount: Int)
+
+@import de.htwg.poker.util.WappFunctions
+@coins2: Seq[(String,String)] = @{WappFunctions.calculateCoins(amount)}
 
 <div class="stack-amount-container bg-transparent">
     <div class="coin-stack">
-        @for(((outlineColor, fillColor), index) <- coins.zipWithIndex) { <div class="coin" style="top: @{s" ${index *
+        @for(((outlineColor, fillColor), index) <- coins2.zipWithIndex) { <div class="coin" style="top: @{s" ${index *
             -5}px"};">
             <svg class="responsive-coins" viewBox="0 0 281 281" fill="@fillColor" xmlns="http://www.w3.org/2000/svg">
                 <g filter="url(#filter0_d_64_21)">
@@ -50,5 +53,5 @@
 
     }
 </div>
-<div class="amount responsive-amount"> $ 750</div>
+<div class="amount responsive-amount"> $ @amount</div>
 </div>

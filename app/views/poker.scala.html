@@ -1,12 +1,9 @@
 @(gameState: de.htwg.poker.model.GameState)
 
 @indexedPlayers = @{ gameState.getPlayers.zipWithIndex }
-
 @playerAtTurn = @{ gameState.getPlayerAtTurn }
 @board = @{ gameState.getBoard }
 @pot = @{ gameState.getPot }
-@coins2 = @{ Seq(("#FFFFFF", "#1E5FBF" ), ("#FFFFFF", "#B15D5D" ),("#FFFFFF", "#242424" ),("#FFFFFF", "#286343" ) ) }
-
 
 @main("HTWG Poker") {
 <link rel="stylesheet" href='@routes.Assets.versioned("stylesheets/main.css")' />
@@ -42,91 +39,89 @@
                         <div class="table responsive-table">
                             <div class="d-flex justify-content-around align-items-start">
                                 <div class="d-flex justify-content-center align-items-center">
-                                    @coins(coins2)
-                                    @hiddencard()
+                                    @coins(indexedPlayers(0)._1.currentAmountBetted)
+                                    @playercards(0, playerAtTurn, gameState)
                                 </div>
                                 <div class="d-flex justify-content-center align-items-center">
-                                    @coins(coins2)
-                                    @hiddencard()
+                                    @coins(indexedPlayers(1)._1.currentAmountBetted)
+                                    @playercards(1, playerAtTurn, gameState)
                                 </div>
                             </div>
                             <div
                                 class="d-flex justify-content-between align-items-center responsive-table-middle-row-margin-top">
                                 <div class="d-flex justify-content-center align-items-center">
-                                    @hiddencard()
-                                    @coins(coins2)
+                                    @playercards(5, playerAtTurn, gameState)
+                                    @coins(indexedPlayers(5)._1.currentAmountBetted)
                                 </div>
-                                <div class="d-flex justify-content-center align-items-center">
-                                    @card("A", "bi-suit-spade-fill","black-text")
-                                    @card("10", "bi-suit-heart-fill","red-text")
-                                    @card("4", "bi-suit-spade-fill","black-text")
-                                    @card("K", "bi-suit-diamond-fill","red-text")
-                                    @card("6", "bi-suit-club-fill","black-text")
+                                <div class="d-flex flex-column justify-content-center align-items-center">
+                                    <div class="pot responsive-pot">@pot</div>
+                                    <div class="d-flex justify-content-center align-items-center">
+                                        @for(boardCard <- board) { card(boardCard.rank.toString, boardCard.suit.id) }
+                                            </div>
+                                    </div>
+                                    <div class="d-flex justify-content-center align-items-center">
+                                        @coins(indexedPlayers(2)._1.currentAmountBetted)
+                                        @playercards(2, playerAtTurn, gameState)
+                                    </div>
                                 </div>
-                                <div class="d-flex justify-content-center align-items-center">
-                                    @coins(coins2)
-                                    @hiddencard()
-                                </div>
-                            </div>
-                            <div
-                                class="d-flex justify-content-around align-items-center  responsive-table-lower-row-margin-top">
-                                <div class="d-flex justify-content-center align-items-center">
-                                    @coins(coins2)
-                                    @card("A", "bi-suit-heart-fill","red-text")
-                                    @card("A", "bi-suit-diamond-fill","red-text")
-                                </div>
-                                <div class="d-flex justify-content-center align-items-center">
-                                    @coins(coins2)
-                                    @hiddencard()
+                                <div
+                                    class="d-flex justify-content-around align-items-center  responsive-table-lower-row-margin-top">
+                                    <div class="d-flex justify-content-center align-items-center">
+                                        @coins(indexedPlayers(4)._1.currentAmountBetted)
+                                        @playercards(4, playerAtTurn, gameState)
+                                    </div>
+                                    <div class="d-flex justify-content-center align-items-center">
+                                        @coins(indexedPlayers(3)._1.currentAmountBetted)
+                                        @playercards(3, playerAtTurn, gameState)
+                                    </div>
                                 </div>
                             </div>
                         </div>
+                        @player(indexedPlayers(2)._1.balance, "right-player")
                     </div>
-                    @player(indexedPlayers(2)._1.balance, "right-player")
-                </div>
-                <div class=" d-flex justify-content-center align-items-center mt-2">
-                    @player(indexedPlayers(4)._1.balance, "top-left-player")
-                    @player(indexedPlayers(3)._1.balance, "top-right-player")
-                </div>
+                    <div class=" d-flex justify-content-center align-items-center mt-2">
+                        @player(indexedPlayers(4)._1.balance, "top-left-player")
+                        @player(indexedPlayers(3)._1.balance, "top-right-player")
+                    </div>
 
-            </div>
-            <div>
-                <div class="container-fluid">
-                    <div class="col d-flex justify-content-end text-white me-4 mb-4 font fs-2" id="sliderValue">
-                        $0
-                    </div>
                 </div>
-                <div class="container-fluid">
-                    <div class="d-flex align-items-center justify-content-end row">
-                        <div class="col d-flex gap-3 justify-content-end me-3">
-                            <button type="button"
-                                class="btn btn-danger rounded-pill d-flex justify-content-center align-content-center responsive-button">
-                                <h5 class="mt-1 responsive-button-text">
-                                    FOLD
-                                </h5>
-                            </button>
-                            <button type="button"
-                                class="btn btn-success rounded-pill d-flex justify-content-center align-content-center responsive-button">
-                                <h5 class="mt-1 responsive-button-text">
-                                    CALL
-                                </h5>
-                            </button>
-                            <button type="button"
-                                class="btn btn-primary rounded-pill d-flex justify-content-center align-content-center responsive-button">
-                                <h5 class="mt-1 responsive-button-text">
-                                    RAISE
-                                </h5>
-                            </button>
+                <div>
+                    <div class="container-fluid">
+                        <div class="col d-flex justify-content-end text-white me-4 mb-4 font fs-2" id="sliderValue">
+                            $0
+                        </div>
+                    </div>
+                    <div class="container-fluid">
+                        <div class="d-flex align-items-center justify-content-end row">
+                            <div class="col d-flex gap-3 justify-content-end me-3">
+                                <button type="button"
+                                    class="btn btn-danger rounded-pill d-flex justify-content-center align-content-center responsive-button">
+                                    <h5 class="mt-1 responsive-button-text">
+                                        FOLD
+                                    </h5>
+                                </button>
+                                <button type="button"
+                                    class="btn btn-success rounded-pill d-flex justify-content-center align-content-center responsive-button">
+                                    <h5 class="mt-1 responsive-button-text">
+                                        CALL
+                                    </h5>
+                                </button>
+                                <button type="button"
+                                    class="btn btn-primary rounded-pill d-flex justify-content-center align-content-center responsive-button">
+                                    <h5 class="mt-1 responsive-button-text">
+                                        RAISE
+                                    </h5>
+                                </button>
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
+            <div class="d-flex flex-column justify-content-end align-items-center" style="width: 100px">
+                <input type="range" class="form-range me-5 responsive-slider-size" style="margin-bottom: 230px;"
+                    orient="vertical" min="0" max="1000" step="10" id="customRange3">
+            </div>
         </div>
-        <div class="d-flex flex-column justify-content-end align-items-center" style="width: 100px">
-            <input type="range" class="form-range me-5 responsive-slider-size" style="margin-bottom: 230px;"
-                orient="vertical" min="0" max="1000" step="10" id="customRange3">
-        </div>
-    </div>
 </body>
 
 </html>
