@@ -1,6 +1,7 @@
 @(gameState: de.htwg.poker.model.GameState)
 
 @indexedPlayers = @{ gameState.getPlayers.zipWithIndex }
+
 @playerAtTurn = @{ gameState.getPlayerAtTurn }
 @board = @{ gameState.getBoard }
 @pot = @{ gameState.getPot }
@@ -32,11 +33,11 @@
             </div>
             <div class="d-flex flex-column">
                 <div class=" d-flex justify-content-center align-items-center mb-2">
-                    @player("$ 2500", "top-left-player")
-                    @player("$ 2500", "top-right-player")
+                    @player(indexedPlayers(0)._1.balance, "top-left-player")
+                    @player(indexedPlayers(1)._1.balance, "top-right-player")
                 </div>
                 <div class=" d-flex justify-content-center align-items-center">
-                    @player("$ 2500", "left-player")
+                    @player(indexedPlayers(5)._1.balance, "left-player")
                     <div class="d-flex justify-content-center align-items-center">
                         <div class="table responsive-table">
                             <div class="d-flex justify-content-around align-items-start">
@@ -81,66 +82,49 @@
                             </div>
                         </div>
                     </div>
-                    @player("$ 2500", "right-player")
+                    @player(indexedPlayers(2)._1.balance, "right-player")
                 </div>
                 <div class=" d-flex justify-content-center align-items-center mt-2">
-                    @player("$ 2500", "top-left-player")
-                    @player("$ 2500", "top-right-player")
+                    @player(indexedPlayers(4)._1.balance, "top-left-player")
+                    @player(indexedPlayers(3)._1.balance, "top-right-player")
                 </div>
 
             </div>
-            <div class="container-fluid ">
-                <div class="d-flex align-items-center justify-content-between row">
-                    <div class="col dropup-center dropup ms-5">
-                        <button class="btn btn-secondary round-button responsive-round-button" type="button"
-                            data-bs-toggle="dropdown" aria-expanded="false">
-                            <div class="button-text d-flex justify-content-center align-items-center"
-                                style="width: 50px; height: 50px;">
-                                <div class="bi-chevron-up responsive-button-text"></div>
-                            </div>
-                        </button>
-                        <ul class="dropdown-menu ms-3 mb-3 " style="width: 340px;">
-                            <li class="dropdown-item border ms-3" style="height: 300px; width: 300px">
-                                <samp>
-                                    user1234: hello!
-                                </samp>
-                            </li>
-                            <li class="dropdown-item">
-                                <div class="input-group d-flex flex-row mb-3">
-                                    <input type="text" class="form-control" placeholder="enter text"
-                                        aria-label="Recipient's username" aria-describedby="button-addon2">
-                                    <button class="btn btn-outline-secondary" type="button"
-                                        id="button-addon2">Send</button>
-                                </div>
-                            </li>
-                        </ul>
+            <div>
+                <div class="container-fluid">
+                    <div class="col d-flex justify-content-end text-white me-4 mb-4 font fs-2" id="sliderValue">
+                        $0
                     </div>
-                    <div class="col d-flex gap-3 justify-content-end me-3">
-                        <button type="button"
-                            class="btn btn-danger rounded-pill d-flex justify-content-center align-content-center responsive-button">
-                            <h5 class="mt-1 responsive-button-text">
-                                FOLD
-                            </h5>
-                        </button>
-                        <button type="button"
-                            class="btn btn-success rounded-pill d-flex justify-content-center align-content-center responsive-button">
-                            <h5 class="mt-1 responsive-button-text">
-                                CALL
-                            </h5>
-                        </button>
-                        <button type="button"
-                            class="btn btn-primary rounded-pill d-flex justify-content-center align-content-center responsive-button">
-                            <h5 class="mt-1 responsive-button-text">
-                                RAISE
-                            </h5>
-                        </button>
+                </div>
+                <div class="container-fluid">
+                    <div class="d-flex align-items-center justify-content-end row">
+                        <div class="col d-flex gap-3 justify-content-end me-3">
+                            <button type="button"
+                                class="btn btn-danger rounded-pill d-flex justify-content-center align-content-center responsive-button">
+                                <h5 class="mt-1 responsive-button-text">
+                                    FOLD
+                                </h5>
+                            </button>
+                            <button type="button"
+                                class="btn btn-success rounded-pill d-flex justify-content-center align-content-center responsive-button">
+                                <h5 class="mt-1 responsive-button-text">
+                                    CALL
+                                </h5>
+                            </button>
+                            <button type="button"
+                                class="btn btn-primary rounded-pill d-flex justify-content-center align-content-center responsive-button">
+                                <h5 class="mt-1 responsive-button-text">
+                                    RAISE
+                                </h5>
+                            </button>
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
         <div class="d-flex flex-column justify-content-end align-items-center" style="width: 100px">
             <input type="range" class="form-range me-5 responsive-slider-size" style="margin-bottom: 230px;"
-                orient="vertical" min="0" max="100" step="5" id="customRange3">
+                orient="vertical" min="0" max="1000" step="10" id="customRange3">
         </div>
     </div>
 </body>
