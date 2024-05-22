@@ -1,9 +1,13 @@
 @(gameState: de.htwg.poker.model.GameState)
 
+@import de.htwg.poker.util.HandInfo
 @indexedPlayers = @{ gameState.getPlayers.zipWithIndex }
 @playerAtTurn = @{ gameState.getPlayerAtTurn }
 @board = @{ gameState.getBoard }
 @pot = @{ gameState.getPot }
+@handInfo = @{
+HandInfo.evaluate(List(gameState.getPlayers(playerAtTurn).card1,gameState.getPlayers(playerAtTurn).card2),
+gameState.getBoard).toUpperCase }
 
 @main("HTWG Poker") {
 <link rel="stylesheet" href='@routes.Assets.versioned("stylesheets/main.css")' />
@@ -16,11 +20,11 @@
             <div class="container-fluid">
                 <div class="d-flex align-items-center justify-space-around row">
                     <div class="col text-white">
-                        your current hand: SET
+                        your current hand: @handInfo
                     </div>
                     <div class="col d-flex justify-content-end">
                         <button type="button"
-                            class="btn btn-secondary rounded-pill responsive-button d-flex align-items-center justify-content-center">
+                            class="btn btn-secondary rounded-pill responsive-button d-flex align-items-center justify-content-center button">
                             <h5 class="responsive-button-text">
                                 LEAVE
                             </h5>
@@ -30,11 +34,11 @@
             </div>
             <div class="d-flex flex-column">
                 <div class=" d-flex justify-content-center align-items-center mb-2">
-                    @player(indexedPlayers(0)._1.balance, "top-left-player")
-                    @player(indexedPlayers(1)._1.balance, "top-right-player")
+                    @player(indexedPlayers(0)._1.playername,indexedPlayers(0)._1.balance, "top-left-player")
+                    @player(indexedPlayers(1)._1.playername,indexedPlayers(1)._1.balance, "top-right-player")
                 </div>
                 <div class=" d-flex justify-content-center align-items-center">
-                    @player(indexedPlayers(5)._1.balance, "left-player")
+                    @player(indexedPlayers(5)._1.playername,indexedPlayers(5)._1.balance, "left-player")
                     <div class="d-flex justify-content-center align-items-center">
                         <div class="table responsive-table">
                             <div class="d-flex justify-content-around align-items-start">
@@ -55,8 +59,8 @@
                                 </div>
                                 <div class="d-flex flex-column justify-content-center align-items-center">
                                     <div class="pot responsive-pot">@pot</div>
-                                    <div class="d-flex justify-content-center align-items-center">
-                                        @for(boardCard <- board) { card(boardCard.rank.toString, boardCard.suit.id) }
+                                    <div class="d-flex justify-content-center align-items-center bg-transparent">
+                                        @for(boardCard <- board) { @card(boardCard.rank.toString, boardCard.suit.id) }
                                             </div>
                                     </div>
                                     <div class="d-flex justify-content-center align-items-center">
@@ -77,11 +81,11 @@
                                 </div>
                             </div>
                         </div>
-                        @player(indexedPlayers(2)._1.balance, "right-player")
+                        @player(indexedPlayers(2)._1.playername,indexedPlayers(2)._1.balance, "right-player")
                     </div>
                     <div class=" d-flex justify-content-center align-items-center mt-2">
-                        @player(indexedPlayers(4)._1.balance, "top-left-player")
-                        @player(indexedPlayers(3)._1.balance, "top-right-player")
+                        @player(indexedPlayers(4)._1.playername,indexedPlayers(4)._1.balance, "top-left-player")
+                        @player(indexedPlayers(3)._1.playername,indexedPlayers(3)._1.balance, "top-right-player")
                     </div>
 
                 </div>
@@ -94,20 +98,20 @@
                     <div class="container-fluid">
                         <div class="d-flex align-items-center justify-content-end row">
                             <div class="col d-flex gap-3 justify-content-end me-3">
-                                <button type="button"
-                                    class="btn btn-danger rounded-pill d-flex justify-content-center align-content-center responsive-button">
+                                <button type="button" id="foldButton"
+                                    class=" button btn btn-danger rounded-pill d-flex justify-content-center align-content-center responsive-button">
                                     <h5 class="mt-1 responsive-button-text">
                                         FOLD
                                     </h5>
                                 </button>
-                                <button type="button"
-                                    class="btn btn-success rounded-pill d-flex justify-content-center align-content-center responsive-button">
+                                <button type="button" id="callButton"
+                                    class=" button btn btn-success rounded-pill d-flex justify-content-center align-content-center responsive-button">
                                     <h5 class="mt-1 responsive-button-text">
                                         CALL
                                     </h5>
                                 </button>
-                                <button type="button"
-                                    class="btn btn-primary rounded-pill d-flex justify-content-center align-content-center responsive-button">
+                                <button type="button" id="raiseButton"
+                                    class=" button btn btn-primary rounded-pill d-flex justify-content-center align-content-center responsive-button">
                                     <h5 class="mt-1 responsive-button-text">
                                         RAISE
                                     </h5>
