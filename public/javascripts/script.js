@@ -12,7 +12,6 @@ document.addEventListener('DOMContentLoaded', function () {
 
     //call functions on button clicks
     document.getElementById('callButton').addEventListener('click', function () {
-        animateRing();
         window.location.href = 'http://localhost:9000/call';
     });
 
@@ -29,5 +28,4 @@ document.addEventListener('DOMContentLoaded', function () {
         window.location.href = 'http://localhost:9000/check';
     });
 
-    
 });
