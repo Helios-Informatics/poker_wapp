@@ -10,6 +10,22 @@ document.addEventListener('DOMContentLoaded', function () {
     });
 
 
+    let progressBar = document.querySelector('.progress-bar');
+    let width = 100;
+    let interval = setInterval(function () {
+        if (width <= 0) {
+            clearInterval(interval);
+            if (document.getElementById('checkButton') !== null) {
+                document.getElementById('checkButton').click();
+            } else {
+                document.getElementById('foldButton').click();
+            }
+        } else {
+            width--;
+            progressBar.style.width = width + '%';
+        }
+    }, 100); // 100ms * 100 steps = 10 seconds
+
     //call functions on button clicks
     document.getElementById('callButton').addEventListener('click', function () {
         window.location.href = 'http://localhost:9000/call';
