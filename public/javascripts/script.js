@@ -24,12 +24,25 @@ document.addEventListener('DOMContentLoaded', function () {
             width--;
             progressBar.style.width = width + '%';
         }
-    }, 100); // 100ms * 100 steps = 10 seconds
+    }, 100); // 100ms * 100 steps = 10 second
+
 
     //call functions on button clicks
-    document.getElementById('callButton').addEventListener('click', function () {
-        window.location.href = 'http://localhost:9000/call';
-    });
+
+    var checkButton = document.getElementById('checkButton');
+    console.log(checkButton);
+    if (checkButton !== null) {
+        checkButton.addEventListener('click', function () {
+            window.location.href = 'http://localhost:9000/check';
+        });
+    }
+    else {
+        document.getElementById('callButton').addEventListener('click', function () {
+            window.location.href = 'http://localhost:9000/call';
+        });
+    }
+
+
 
     document.getElementById('foldButton').addEventListener('click', function () {
         window.location.href = 'http://localhost:9000/fold';
@@ -39,10 +52,13 @@ document.addEventListener('DOMContentLoaded', function () {
         var amount = document.getElementById('customRange3').value
         window.location.href = 'http://localhost:9000/bet/' + amount;
     });
+
+
 });
 
-document.addEventListener('DOMContentLoaded', function () {
-    document.getElementById('checkButton').addEventListener('click', function () {
-        window.location.href = 'http://localhost:9000/check';
-    });
-});
+//document.addEventListener('DOMContentLoaded', function () {
+//    document.getElementById('checkButton').addEventListener('click', function () {
+//        window.location.href = 'http://localhost:9000/check';
+//    });
+//});
+
