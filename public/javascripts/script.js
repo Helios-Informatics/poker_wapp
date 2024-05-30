@@ -23,9 +23,10 @@ document.addEventListener('DOMContentLoaded', function () {
         var amount = document.getElementById('customRange3').value
         window.location.href = 'http://localhost:9000/bet/' + amount;
     });
+});
 
+document.addEventListener('DOMContentLoaded', function () {
     document.getElementById('checkButton').addEventListener('click', function () {
         window.location.href = 'http://localhost:9000/check';
     });
-
 });
