@@ -6,12 +6,13 @@ import play.api.mvc._
 import de.htwg.poker.util.Evaluator
 import de.htwg.poker.controller.Controller
 import de.htwg.poker.model.GameState
+import play.api.libs.json._
 
 /** This controller creates an `Action` to handle HTTP requests to the
   * application's home page.
   */
 @Singleton
-class HomeController @Inject() (val controllerComponents: ControllerComponents)
+class PokerController @Inject() (val controllerComponents: ControllerComponents)
     extends BaseController {
 
   val gameController = new Controller(
@@ -59,5 +60,52 @@ class HomeController @Inject() (val controllerComponents: ControllerComponents)
   def restartGame = Action { implicit request: Request[AnyContent] =>
     gameController.restartGame
     Ok(views.html.poker(gameState))
+  }
+
+  def gameStateToJson() = {
+    Json.obj(
+      "gameState" -> Json.obj(
+        "players" -> gameState.getPlayers.map { player =>
+          Json.obj(
+            "Player" -> Json.obj(
+              "card1" -> Json.obj(
+                "rank" -> player.card1.rank.toString,
+                "suit" -> player.card1.suit.toString
+              ),
+              "card2" -> Json.obj(
+                "rank" -> player.card2.rank.toString,
+                "suit" -> player.card2.suit.toString
+              ),
+              "playername" -> player.playername,
+              "balance" -> player.balance,
+              "currentAmountBetted" -> player.currentAmountBetted,
+              "folded" -> player.folded
+            )
+          )
+        },
+        "deck" -> gameState.getDeck.map { card =>
+          Json.obj(
+            "card" -> Json.obj(
+              "rank" -> card.rank.toString,
+              "suit" -> card.suit.toString
+            )
+          )
+        },
+        "playerAtTurn" -> gameState.getPlayerAtTurn,
+        "currentHighestBetSize" -> gameState.getHighestBetSize,
+        "board" -> gameState.getBoard.map { card =>
+          Json.obj(
+            "card" -> Json.obj(
+              "rank" -> card.rank.toString,
+              "suit" -> card.suit.toString
+            )
+          )
+        },
+        "pot" -> gameState.getPot,
+        "smallBlind" -> gameState.getSmallBlind,
+        "bigBlind" -> gameState.getBigBlind,
+        "smallBlindPointer" -> gameState.getSmallBlindPointer
+      )
+    )
   }
 }

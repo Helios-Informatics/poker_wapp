@@ -1,15 +1,37 @@
 // display slider value
 document.addEventListener('DOMContentLoaded', function () {
-    var slider = document.getElementById('customRange3');
-    var output = document.getElementById('sliderValue');
 
-    output.innerText = "$ " + slider.value;
+    loadJson();
+    setupEventListeners();
+    setupRaiseSlider();
+    startActionTimer();
+});
 
-    slider.addEventListener('input', function () {
-        output.innerText = "$ " + slider.value;
+function setupEventListeners() {
+    var checkButton = document.getElementById('checkButton');
+
+    if (checkButton == null) {
+        document.getElementById('callButton').addEventListener('click', function () {
+            window.location.href = 'http://localhost:9000/call';
+        });
+    }
+    else {
+        checkButton.addEventListener('click', function () {
+            window.location.href = 'http://localhost:9000/check';
+        });
+    }
+
+    document.getElementById('foldButton').addEventListener('click', function () {
+        window.location.href = 'http://localhost:9000/fold';
     });
 
+    document.getElementById('raiseButton').addEventListener('click', function () {
+        var amount = document.getElementById('customRange3').value
+        window.location.href = 'http://localhost:9000/bet/' + amount;
+    });
+}
 
+function startActionTimer() {
     let progressBar = document.querySelector('.progress-bar');
     let width = 100;
     let interval = setInterval(function () {
@@ -24,41 +46,32 @@ document.addEventListener('DOMContentLoaded', function () {
             width--;
             progressBar.style.width = width + '%';
         }
-    }, 100); // 100ms * 100 steps = 10 second
+    }, 100);
+}
 
+function setupRaiseSlider() {
+    var slider = document.getElementById('customRange3');
+    var output = document.getElementById('sliderValue');
 
-    //call functions on button clicks
+    output.innerText = "$ " + slider.value;
 
-    var checkButton = document.getElementById('checkButton');
-    console.log(checkButton);
-    if (checkButton !== null) {
-        checkButton.addEventListener('click', function () {
-            window.location.href = 'http://localhost:9000/check';
-        });
-    }
-    else {
-        document.getElementById('callButton').addEventListener('click', function () {
-            window.location.href = 'http://localhost:9000/call';
-        });
-    }
-
-
-
-    document.getElementById('foldButton').addEventListener('click', function () {
-        window.location.href = 'http://localhost:9000/fold';
+    slider.addEventListener('input', function () {
+        output.innerText = "$ " + slider.value;
     });
+}
 
-    document.getElementById('raiseButton').addEventListener('click', function () {
-        var amount = document.getElementById('customRange3').value
-        window.location.href = 'http://localhost:9000/bet/' + amount;
+function loadJson() {
+    $.ajax({
+        method: "GET",
+        url: "/get",
+        dataType: "json",
+
+        success: function (json) {
+            updateGame(json)
+        }
     });
+}
 
+function updateGame(json) {
 
-});
-
-//document.addEventListener('DOMContentLoaded', function () {
-//    document.getElementById('checkButton').addEventListener('click', function () {
-//        window.location.href = 'http://localhost:9000/check';
-//    });
-//});
-
+}
