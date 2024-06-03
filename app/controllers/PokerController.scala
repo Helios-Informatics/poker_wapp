@@ -83,7 +83,6 @@ class PokerController @Inject() (val controllerComponents: ControllerComponents)
           )
         },
         "playerAtTurn" -> gameState.getPlayerAtTurn,
-        "currentHighestBetSize" -> gameState.getHighestBetSize,
         "board" -> gameState.getBoard.map { card =>
           Json.obj(
             "card" -> Json.obj(
@@ -93,9 +92,6 @@ class PokerController @Inject() (val controllerComponents: ControllerComponents)
           )
         },
         "pot" -> gameState.getPot,
-        "smallBlind" -> gameState.getSmallBlind,
-        "bigBlind" -> gameState.getBigBlind,
-        "smallBlindPointer" -> gameState.getSmallBlindPointer
       )
   }
 }

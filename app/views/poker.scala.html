@@ -78,7 +78,7 @@ gameState.getBoard).toUpperCase }
                             </div>
                         </div>
                         <div class="d-flex flex-column justify-content-center align-items-center">
-                            <div class="pot responsive-pot">@{"$ " + pot}</div>
+                            <div class="pot responsive-pot" id="pot">@{"$ " + pot}</div>
                             <div class="d-flex justify-content-center align-items-center bg-transparent" id="board">
                                 @for(boardCard <- board) { @card(boardCard.rank.toString, boardCard.suit.id) } </div>
                             </div>
