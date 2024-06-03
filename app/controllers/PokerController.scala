@@ -64,7 +64,6 @@ class PokerController @Inject() (val controllerComponents: ControllerComponents)
 
   def gameStateToJson() = {
     Json.obj(
-      "gameState" -> Json.obj(
         "players" -> gameState.getPlayers.map { player =>
           Json.obj(
             "Player" -> Json.obj(
@@ -83,14 +82,6 @@ class PokerController @Inject() (val controllerComponents: ControllerComponents)
             )
           )
         },
-        "deck" -> gameState.getDeck.map { card =>
-          Json.obj(
-            "card" -> Json.obj(
-              "rank" -> card.rank.toString,
-              "suit" -> card.suit.toString
-            )
-          )
-        },
         "playerAtTurn" -> gameState.getPlayerAtTurn,
         "currentHighestBetSize" -> gameState.getHighestBetSize,
         "board" -> gameState.getBoard.map { card =>
@@ -106,6 +97,5 @@ class PokerController @Inject() (val controllerComponents: ControllerComponents)
         "bigBlind" -> gameState.getBigBlind,
         "smallBlindPointer" -> gameState.getSmallBlindPointer
       )
-    )
   }
 }

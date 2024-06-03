@@ -1,6 +1,7 @@
 @(gameState: de.htwg.poker.model.GameState)
 
 @import de.htwg.poker.util.HandInfo
+
 @indexedPlayers = @{ gameState.getPlayers.zipWithIndex }
 @playerAtTurn = @{ gameState.getPlayerAtTurn }
 @board = @{ gameState.getBoard }
@@ -34,121 +35,154 @@ gameState.getBoard).toUpperCase }
             </div>
             <div class="d-flex flex-column">
                 <div class=" d-flex justify-content-center align-items-center mb-2">
-                    @player(indexedPlayers(0)._1.playername,indexedPlayers(0)._1.balance,indexedPlayers(0)._1.folded,
-                    "top-left-player")
-                    @player(indexedPlayers(1)._1.playername,indexedPlayers(1)._1.balance,indexedPlayers(1)._1.folded,
-                    "top-right-player")
+                    <div id="player-0">
+                        @player(indexedPlayers(0)._1.playername,indexedPlayers(0)._1.balance,indexedPlayers(0)._1.folded,
+                        "top-left-player")
+                    </div>
+                    <div id="player-1">
+                        @player(indexedPlayers(1)._1.playername,indexedPlayers(1)._1.balance,indexedPlayers(1)._1.folded,
+                        "top-right-player")
+                    </div>
                 </div>
                 <div class=" d-flex justify-content-center align-items-center">
-                    @player(indexedPlayers(5)._1.playername,indexedPlayers(5)._1.balance,indexedPlayers(5)._1.folded,
-                    "left-player")
+                    <div id="player-5">
+                        @player(indexedPlayers(5)._1.playername,indexedPlayers(5)._1.balance,indexedPlayers(5)._1.folded,
+                        "left-player")
+                    </div>
                     <div class="d-flex justify-content-center align-items-center">
                         <div class="table responsive-table">
                             <div class="d-flex justify-content-around align-items-center">
                                 <div class="d-flex justify-content-center align-items-center">
-                                    @coins(indexedPlayers(0)._1.currentAmountBetted)
-                                    @playercards(0, playerAtTurn, gameState)
+                                    <div id="playercoins-0">
+                                        @coins(indexedPlayers(0)._1.currentAmountBetted)
+                                    </div>
+                                    <div id="playercards-0">
+                                        @playercards(0, playerAtTurn, gameState)
+                                    </div>
                                 </div>
                                 <div class="d-flex justify-content-center align-items-center">
-                                    @coins(indexedPlayers(1)._1.currentAmountBetted)
+                                    <div id="playercoins-1">
+                                        @coins(indexedPlayers(1)._1.currentAmountBetted)
+                                    </div id="playercards-1">
                                     @playercards(1, playerAtTurn, gameState)
                                 </div>
                             </div>
                             <div
                                 class="d-flex justify-content-between align-items-center responsive-table-middle-row-margin-top">
                                 <div class="d-flex justify-content-center align-items-center">
-                                    @playercards(5, playerAtTurn, gameState)
-                                    @coins(indexedPlayers(5)._1.currentAmountBetted)
+                                </div id="playercards-5">
+                                @playercards(5, playerAtTurn, gameState)
+                            </div>
+                            <div id="playercoins-5">
+                                @coins(indexedPlayers(5)._1.currentAmountBetted)
+                            </div>
+                        </div>
+                        <div class="d-flex flex-column justify-content-center align-items-center">
+                            <div class="pot responsive-pot">@{"$ " + pot}</div>
+                            <div class="d-flex justify-content-center align-items-center bg-transparent" id="board">
+                                @for(boardCard <- board) { @card(boardCard.rank.toString, boardCard.suit.id) } </div>
+                            </div>
+                            <div class="d-flex justify-content-center align-items-center">
+                                <div id="playercoins-2">
+                                    @coins(indexedPlayers(2)._1.currentAmountBetted)
                                 </div>
-                                <div class="d-flex flex-column justify-content-center align-items-center">
-                                    <div class="pot responsive-pot">@{"$ " + pot}</div>
-                                    <div class="d-flex justify-content-center align-items-center bg-transparent">
-                                        @for(boardCard <- board) { @card(boardCard.rank.toString, boardCard.suit.id) }
-                                            </div>
-                                    </div>
-                                    <div class="d-flex justify-content-center align-items-center">
-                                        @coins(indexedPlayers(2)._1.currentAmountBetted)
-                                        @playercards(2, playerAtTurn, gameState)
-                                    </div>
-                                </div>
-                                <div
-                                    class="d-flex justify-content-around align-items-center  responsive-table-lower-row-margin-top">
-                                    <div class="d-flex justify-content-center align-items-center">
-                                        @coins(indexedPlayers(4)._1.currentAmountBetted)
-                                        @playercards(4, playerAtTurn, gameState)
-                                    </div>
-                                    <div class="d-flex justify-content-center align-items-center">
-                                        @coins(indexedPlayers(3)._1.currentAmountBetted)
-                                        @playercards(3, playerAtTurn, gameState)
-                                    </div>
+                                <div id="playercards-2">
+                                    @playercards(2, playerAtTurn, gameState)
                                 </div>
                             </div>
                         </div>
-                        @player(indexedPlayers(2)._1.playername,indexedPlayers(2)._1.balance,indexedPlayers(2)._1.folded,
-                        "right-player")
-                    </div>
-                    <div class=" d-flex justify-content-center align-items-center mt-2">
-                        @player(indexedPlayers(4)._1.playername,indexedPlayers(4)._1.balance,
-                        indexedPlayers(4)._1.folded,
-                        "top-left-player")
-                        @player(indexedPlayers(3)._1.playername,indexedPlayers(3)._1.balance,
-                        indexedPlayers(3)._1.folded,
-                        "top-right-player")
-                    </div>
-                    <div class="d-flex justify-content-center mt-5">
-                        <div class=" progress bg-black bg-opacity-25 responsive-progress-bar" style="height: 10px;">
-                            <div class="progress-bar bg-white" role="progressbar" style="width: 100%;" aria-valuenow="0"
-                                aria-valuemin="0" aria-valuemax="100"></div>
+                        <div
+                            class="d-flex justify-content-around align-items-center  responsive-table-lower-row-margin-top">
+                            <div class="d-flex justify-content-center align-items-center">
+                                <div id="playercoins-4">
+                                    @coins(indexedPlayers(4)._1.currentAmountBetted)
+                                </div>
+                                <div id="playercards-4">
+                                    @playercards(4, playerAtTurn, gameState)
+                                </div>
+                            </div>
+                            <div class="d-flex justify-content-center align-items-center">
+                                <div id="playercoins-3">
+                                    @coins(indexedPlayers(3)._1.currentAmountBetted)
+                                </div>
+                                <div id="playercards-3">
+                                    @playercards(3, playerAtTurn, gameState)
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
-                <div>
-
-                    <div class="container-fluid">
-                        <div class="col d-flex justify-content-end text-white me-4 mb-4 font fs-2" id="sliderValue">
-                            $0
-                        </div>
-                    </div>
-                    <div class="container-fluid">
-                        <div class="d-flex align-items-center justify-content-end row">
-                            <div class="col d-flex gap-3 justify-content-end me-3">
-                                <button type="button" id="foldButton"
-                                    class=" button btn btn-danger rounded-pill d-flex justify-content-center align-content-center responsive-button">
-                                    <h5 class="mt-1 responsive-button-text">
-                                        FOLD
-                                    </h5>
-                                </button>
-                                @if(gameState.getCurrentPlayer.currentAmountBetted == gameState.getHighestBetSize) {
-                                <button type="button" id="checkButton"
-                                    class=" button btn btn-success rounded-pill d-flex justify-content-center align-content-center responsive-button">
-                                    <h5 class="mt-1 responsive-button-text">
-                                        CHECK
-                                    </h5>
-                                </button>
-                                } else {
-                                <button type="button" id="callButton"
-                                    class=" button btn btn-success rounded-pill d-flex justify-content-center align-content-center responsive-button">
-                                    <h5 class="mt-1 responsive-button-text">
-                                        CALL
-                                    </h5>
-                                </button>
-                                }
-                                <button type="button" id="raiseButton"
-                                    class=" button btn btn-primary rounded-pill d-flex justify-content-center align-content-center responsive-button">
-                                    <h5 class="mt-1 responsive-button-text">
-                                        RAISE
-                                    </h5>
-                                </button>
-                            </div>
-                        </div>
-                    </div>
+                <div id="player-2">
+                    @player(indexedPlayers(2)._1.playername,indexedPlayers(2)._1.balance,indexedPlayers(2)._1.folded,
+                    "right-player")
                 </div>
             </div>
-            <div class="d-flex flex-column justify-content-end align-items-center" style="width: 100px">
-                <input type="range" class="form-range me-5 responsive-slider-size" style="margin-bottom: 230px;"
-                    orient="vertical" min="0" max="1000" step="10" id="customRange3">
+            <div class=" d-flex justify-content-center align-items-center mt-2">
+                <div id="player-4">
+                    @player(indexedPlayers(4)._1.playername,indexedPlayers(4)._1.balance,
+                    indexedPlayers(4)._1.folded,
+                    "top-left-player")
+                </div>
+                <div id="player-3">
+                    @player(indexedPlayers(3)._1.playername,indexedPlayers(3)._1.balance,
+                    indexedPlayers(3)._1.folded,
+                    "top-right-player")
+                </div>
+            </div>
+            <div class="d-flex justify-content-center mt-5">
+                <div class=" progress bg-black bg-opacity-25 responsive-progress-bar" style="height: 10px;">
+                    <div class="progress-bar bg-white" role="progressbar" style="width: 100%;" aria-valuenow="0"
+                        aria-valuemin="0" aria-valuemax="100"></div>
+                </div>
             </div>
         </div>
+        <div>
+
+            <div class="container-fluid">
+                <div class="col d-flex justify-content-end text-white me-4 mb-4 font fs-2" id="sliderValue">
+                    $0
+                </div>
+            </div>
+            <div class="container-fluid">
+                <div class="d-flex align-items-center justify-content-end row">
+                    <div class="col d-flex gap-3 justify-content-end me-3">
+                        <button type="button" id="foldButton"
+                            class=" button btn btn-danger rounded-pill d-flex justify-content-center align-content-center responsive-button">
+                            <h5 class="mt-1 responsive-button-text">
+                                FOLD
+                            </h5>
+                        </button>
+                        @if(gameState.getCurrentPlayer.currentAmountBetted == gameState.getHighestBetSize) {
+                        <button type="button" id="checkButton"
+                            class=" button btn btn-success rounded-pill d-flex justify-content-center align-content-center responsive-button">
+                            <h5 class="mt-1 responsive-button-text">
+                                CHECK
+                            </h5>
+                        </button>
+                        } else {
+                        <button type="button" id="callButton"
+                            class=" button btn btn-success rounded-pill d-flex justify-content-center align-content-center responsive-button">
+                            <h5 class="mt-1 responsive-button-text">
+                                CALL
+                            </h5>
+                        </button>
+                        }
+                        <button type="button" id="raiseButton"
+                            class=" button btn btn-primary rounded-pill d-flex justify-content-center align-content-center responsive-button">
+                            <h5 class="mt-1 responsive-button-text">
+                                RAISE
+                            </h5>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="d-flex flex-column justify-content-end align-items-center" style="width: 100px">
+        <input type="range" class="form-range me-5 responsive-slider-size" style="margin-bottom: 230px;"
+            orient="vertical" min="0" max="1000" step="10" id="customRange3">
+    </div>
+    </div>
 </body>
 
 </html>

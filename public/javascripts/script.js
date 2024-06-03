@@ -74,4 +74,44 @@ function loadJson() {
 
 function updateGame(json) {
 
+    let players = json.players;
+    let playerAtTurn = json.playerAtTurn;
+
+    updateBoard(json.board)
+
+}
+
+function updateBoard(board) {
+    let boardDiv = $("#board");
+    boardDiv.empty();
+
+    board.forEach(function (card) {
+        let color;
+        switch (card.suit) {
+            case "Clubs":
+            case "Spades":
+                color = "black-text";
+                break;
+            case "Hearts":
+            case "Diamonds":
+                color = "red-text";
+                break;
+        }
+
+        let cardHtml = `<div class="card responsive-cards">
+                        <div class="card-icon ${card.suit} ${color} responsive-card-suit"></div>
+                        <div class="card-text ${color} responsive-card-text">${card.rank}</div>
+                    </div>`;
+        boardDiv.append(cardHtml);
+    });
+}
+
+function updatePlayers(players) {
+    players.forEach(function (player, index) {
+        let playerDiv = $("#player-" + index);
+        let playercardsDiv = $("#playercards-" + index);
+        let playercoinsDiv = $("#playercoins-" + index);
+
+
+    });
 }
