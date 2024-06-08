@@ -1,6 +1,7 @@
 // display slider value
 document.addEventListener('DOMContentLoaded', function () {
 
+    connectWebSocket();
     loadJson();
     setupEventListeners();
     setupRaiseSlider();
@@ -174,4 +175,27 @@ function updatePot(pot) {
     let potDiv = $("#pot");
     potDiv.empty();
     potDiv.text("$ " + pot)
+}
+
+function connectWebSocket() {
+    const socket = new WebSocket("ws://localhost:9000/ws");
+
+    socket.onopen = function (e) {
+        console.log("[open] Connection established");
+    };
+    socket.onclose = function (event) {
+        if (event.wasClean) {
+            console.log(`[close] Connection closed cleanly, code=${event.code} reason=${event.reason}`);
+        } else {
+            console.log('[close] Connection died');
+        }
+    };
+    socket.onerror = function (error) {
+        console.log(`[error] ${error.message}`);
+    };
+
+    socket.onmessage = function (event) {
+        var json = JSON.parse(event.data);
+        updateGame(json);
+    };
 }
