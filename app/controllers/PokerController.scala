@@ -62,36 +62,40 @@ class PokerController @Inject() (val controllerComponents: ControllerComponents)
     Ok(views.html.poker(gameState))
   }
 
+  def getJson = Action {
+    Ok(gameStateToJson())
+  }
+
   def gameStateToJson() = {
     Json.obj(
-        "players" -> gameState.getPlayers.map { player =>
-          Json.obj(
-            "Player" -> Json.obj(
-              "card1" -> Json.obj(
-                "rank" -> player.card1.rank.toString,
-                "suit" -> player.card1.suit.toString
-              ),
-              "card2" -> Json.obj(
-                "rank" -> player.card2.rank.toString,
-                "suit" -> player.card2.suit.toString
-              ),
-              "playername" -> player.playername,
-              "balance" -> player.balance,
-              "currentAmountBetted" -> player.currentAmountBetted,
-              "folded" -> player.folded
-            )
+      "players" -> gameState.getPlayers.map { player =>
+        Json.obj(
+          "player" -> Json.obj(
+            "card1" -> Json.obj(
+              "rank" -> player.card1.rank.toString,
+              "suit" -> player.card1.suit.id
+            ),
+            "card2" -> Json.obj(
+              "rank" -> player.card2.rank.toString,
+              "suit" -> player.card2.suit.id
+            ),
+            "playername" -> player.playername,
+            "balance" -> player.balance,
+            "currentAmountBetted" -> player.currentAmountBetted,
+            "folded" -> player.folded
           )
-        },
-        "playerAtTurn" -> gameState.getPlayerAtTurn,
-        "board" -> gameState.getBoard.map { card =>
-          Json.obj(
-            "card" -> Json.obj(
-              "rank" -> card.rank.toString,
-              "suit" -> card.suit.toString
-            )
+        )
+      },
+      "playerAtTurn" -> gameState.getPlayerAtTurn,
+      "board" -> gameState.getBoard.map { card =>
+        Json.obj(
+          "card" -> Json.obj(
+            "rank" -> card.rank.toString,
+            "suit" -> card.suit.id
           )
-        },
-        "pot" -> gameState.getPot,
-      )
+        )
+      },
+      "pot" -> gameState.getPot
+    )
   }
 }

@@ -1,10 +1,12 @@
+import { calculateCoinsHtml } from './utils.js';
+import { getPlayerCardsHtml } from './utils.js';
+import { getPlayerHtml } from './utils.js';
+
 // display slider value
 document.addEventListener('DOMContentLoaded', function () {
-
-    loadJson();
     setupEventListeners();
     setupRaiseSlider();
-    startActionTimer();
+    // startActionTimer();
 });
 
 function setupEventListeners() {
@@ -61,12 +63,14 @@ function setupRaiseSlider() {
 }
 
 function loadJson() {
+    console.log("trying to load json");
     $.ajax({
         method: "GET",
         url: "/get",
         dataType: "json",
 
         success: function (json) {
+            console.log("successfully received json");
             updateGame(json)
         }
     });
@@ -77,6 +81,11 @@ function updateGame(json) {
     updatePlayers(json.players, json.playerAtTurn)
     updatePot(json.pot)
 }
+
+$(document).ready(function () {
+    console.log("Document is ready, filling Game");
+    loadJson();
+});
 
 function updateBoard(board) {
     let boardDiv = $("#board");
@@ -113,60 +122,13 @@ function updatePlayers(players, playerAtTurn) {
         playerCardsDiv.empty();
         playerCoinsDiv.empty();
 
-        let position;
-        switch (index) {
-            case 0: position = "top-left-player"
-            case 1: position = "top-right-player"
-            case 2: position = "right-player"
-            case 3: position = "bottom-right-player"
-            case 4: position = "bottom-left-player"
-            case 5: position = "left-player"
-        }
-
-        let playerHtml = player.folded ? `<div class="player ${position}">
-        <div class="text-secondary">${player.name}</div>
-        <div class="player-circle responsive-player-circle me-1 opacity-25">
-            <div class="bi-person-fill player-icon responsive-player-icon opacity-25"></div>
-        </div>
-        <div class="player-balance responsive-player-balance opacity-25">$ ${player.balance}</div>
-        </div>` : `<div class="player ${position}">
-        <div class="text-secondary">${player.name}</div>
-        <div class="player-circle responsive-player-circle me-1">
-        <div class="bi-person-fill player-icon responsive-player-icon"></div>
-        </div>
-        <div class="player-balance responsive-player-balance">$  ${player.balance}</div>
-        </div>`
-
-        let cardColor;
-        switch (card.suit) {
-            case "Clubs":
-            case "Spades":
-                cardColor = "black-text";
-                break;
-            case "Hearts":
-            case "Diamonds":
-                cardColor = "red-text";
-                break;
-        }
-
-        let playerCardsHtml = playerAtTurn == index ? `<div class="card responsive-cards">
-        <div class="card-icon ${player.card1.suit} ${cardColor} responsive-card-suit"></div>
-        <div class="card-text ${cardColor} responsive-card-text">${player.card1.rank}</div>
-        </div>
-        <div class="card responsive-cards">
-        <div class="card-icon ${player.card2.suit} ${cardColor} responsive-card-suit"></div>
-        <div class="card-text ${cardColor} responsive-card-text">${player.card2.rank}</div>
-        </div>` : `<div class="bg-transparent">
-        <svg class="responsive-hiddencard" viewBox="0 0 305 318" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <rect x="123.661" width="192" height="268" rx="25" transform="rotate(20 123.661 0)" fill="#2DD4BF" />
-            <path fill-rule="evenodd" clip-rule="evenodd"
-                d="M95.6109 33H25C11.1929 33 0 44.1929 0 58V276C0 289.807 11.1929 301 25 301H125.372L36.4511 268.635C23.4767 263.913 16.787 249.567 21.5093 236.593L95.6109 33Z"
-                fill="#2DD4BF" />
-        </svg>
-        </div>`
+        let playerHtml = getPlayerHtml(player.name, player.balance, index, player.folded)
+        let playerCardsHtml = getPlayerCardsHtml(index, playerAtTurn, player.rank1, player.rank2, player.card1.suit, player.card2.suit,)
+        let playerCoinsHtml = calculateCoinsHtml(player.currentAmountBetted)
 
         playerDiv.html(playerHtml)
         playerCardsDiv.html(playerCardsHtml)
+        playerCoinsDiv.html(playerCoinsHtml)
     });
 }
 

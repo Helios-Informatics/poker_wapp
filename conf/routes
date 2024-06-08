@@ -8,17 +8,18 @@
 
 # An example controller showing a sample home page
 
-GET / controllers.HomeController.index()
+GET / controllers.PokerController.index()
 
 # Game interaction routes
 
-GET /newGame controllers.HomeController.newGame()
-GET /bet/:x controllers.HomeController.bet(x: Int)
-GET /allIn controllers.HomeController.allIn()
-GET /fold controllers.HomeController.fold()
-GET /call controllers.HomeController.call()
-GET /check controllers.HomeController.check()
-GET /restartGame controllers.HomeController.restartGame()
+GET /newGame controllers.PokerController.newGame()
+GET /bet/:x controllers.PokerController.bet(x: Int)
+GET /allIn controllers.PokerController.allIn()
+GET /fold controllers.PokerController.fold()
+GET /call controllers.PokerController.call()
+GET /check controllers.PokerController.check()
+GET /restartGame controllers.PokerController.restartGame()
+GET /get controllers.PokerController.getJson()
 
 # Map static resources from the /public folder to the /assets URL path
 
