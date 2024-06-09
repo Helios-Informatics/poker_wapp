@@ -98,21 +98,32 @@ class PokerController @Inject() (val controllerComponents: ControllerComponents)
   def socket(): WebSocket = WebSocket.accept[String, String] { request =>
     ActorFlow.actorRef { out =>
       println("Connect received")
-      PokerWebSocketActorFactory.create(out, gameStateToJson)
+      PokerWebSocketActorFactory.create(out)
     }
   }
   object PokerWebSocketActorFactory {
-    def create(out: ActorRef, gameStateToJson: () => JsObject) =
-      Props(new PokerWebSocketActor(out, gameStateToJson))
+    def create(out: ActorRef) =
+      Props(new PokerWebSocketActor(out))
   }
 
-  class PokerWebSocketActor(out: ActorRef, gameStateToJson: () => JsObject)
+  class PokerWebSocketActor(out: ActorRef)
       extends Actor with Reactor {
+
+        listenTo(gameController)
 
         def receive: Receive = {
           case msg: String =>
-            out ! ("I received your message: " + msg)
-         
+            out ! gameStateToJson().toString()
+            println("Received: " + msg)
+        }
+
+        reactions += {
+          case event: _ =>
+            sendJsonToClient()
+        }
+
+        def sendJsonToClient() = {
+          out ! gameStateToJson().toString()
         }
 
 }
