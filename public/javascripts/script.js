@@ -2,11 +2,12 @@ import { calculateCoinsHtml } from './utils.js';
 import { getPlayerCardsHtml } from './utils.js';
 import { getPlayerHtml } from './utils.js';
 
-// display slider value
-document.addEventListener('DOMContentLoaded', function () {
-    setupEventListeners();
+$(document).ready(function () {
+    console.log("Document is ready, filling Game");
     setupRaiseSlider();
-    // startActionTimer();
+    setupEventListeners();
+
+    loadJson();
 });
 
 function setupEventListeners() {
@@ -14,41 +15,23 @@ function setupEventListeners() {
 
     if (checkButton == null) {
         document.getElementById('callButton').addEventListener('click', function () {
-            window.location.href = 'http://localhost:9000/call';
+            sendActionToServer("call")
         });
     }
     else {
         checkButton.addEventListener('click', function () {
-            window.location.href = 'http://localhost:9000/check';
+            sendActionToServer("check")
         });
     }
 
     document.getElementById('foldButton').addEventListener('click', function () {
-        window.location.href = 'http://localhost:9000/fold';
+        sendActionToServer("fold")
     });
 
     document.getElementById('raiseButton').addEventListener('click', function () {
         var amount = document.getElementById('customRange3').value
-        window.location.href = 'http://localhost:9000/bet/' + amount;
+        sendActionToServer("bet/" + amount);
     });
-}
-
-function startActionTimer() {
-    let progressBar = document.querySelector('.progress-bar');
-    let width = 100;
-    let interval = setInterval(function () {
-        if (width <= 0) {
-            clearInterval(interval);
-            if (document.getElementById('checkButton') !== null) {
-                document.getElementById('checkButton').click();
-            } else {
-                document.getElementById('foldButton').click();
-            }
-        } else {
-            width--;
-            progressBar.style.width = width + '%';
-        }
-    }, 100);
 }
 
 function setupRaiseSlider() {
@@ -60,6 +43,27 @@ function setupRaiseSlider() {
     slider.addEventListener('input', function () {
         output.innerText = "$ " + slider.value;
     });
+}
+
+function sendActionToServer(action) {
+    if (!(action == "call" || action == "check" || action == "fold" || action == "restartGame" || action == "allIn" || action.startsWith("bet"))) {
+        console.error(`action ${action} not supported`)
+    } else {
+        $.ajax({
+            type: "POST",
+            url: "/" + action,
+            contentType: 'application/json',
+            accept: "application/json",
+            success: function (json) {
+                setupEventListeners();
+                updateGame(json)
+                console.log("successfully loaded json and updatedGame");
+            },
+            error: function (_jqXHR, _textStatus, errorThrown) {
+                console.error(`Fehler bei der Anfrage für action "${action}":`, errorThrown);
+            },
+        });
+    }
 }
 
 function loadJson() {
@@ -82,11 +86,6 @@ function updateGame(json) {
     updatePot(json.pot)
 }
 
-$(document).ready(function () {
-    console.log("Document is ready, filling Game");
-    loadJson();
-});
-
 function updateBoard(board) {
     let boardDiv = $("#board");
     boardDiv.empty();
@@ -104,10 +103,10 @@ function updateBoard(board) {
                 break;
         }
 
-        let cardHtml = `<div class="card responsive-cards">
+        let cardHtml = `< div class= "card responsive-cards" >
                         <div class="card-icon ${card.suit} ${color} responsive-card-suit"></div>
                         <div class="card-text ${color} responsive-card-text">${card.rank}</div>
-                    </div>`;
+                    </div> `;
         boardDiv.append(cardHtml);
     });
 }
