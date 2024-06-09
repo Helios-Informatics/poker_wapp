@@ -70,8 +70,8 @@ function loadJson() {
         dataType: "json",
 
         success: function (json) {
-            console.log("successfully received json");
             updateGame(json)
+            console.log("successfully loaded json and updatedGame");
         }
     });
 }
@@ -122,9 +122,9 @@ function updatePlayers(players, playerAtTurn) {
         playerCardsDiv.empty();
         playerCoinsDiv.empty();
 
-        let playerHtml = getPlayerHtml(player.name, player.balance, index, player.folded)
-        let playerCardsHtml = getPlayerCardsHtml(index, playerAtTurn, player.rank1, player.rank2, player.card1.suit, player.card2.suit,)
-        let playerCoinsHtml = calculateCoinsHtml(player.currentAmountBetted)
+        let playerHtml = getPlayerHtml(player.player.playername, player.player.balance, index, player.player.folded)
+        let playerCardsHtml = getPlayerCardsHtml(index, playerAtTurn, player.player.card1rank, player.player.card2rank, player.player.card1suit, player.player.card2suit,)
+        let playerCoinsHtml = calculateCoinsHtml(player.player.currentAmountBetted)
 
         playerDiv.html(playerHtml)
         playerCardsDiv.html(playerCardsHtml)

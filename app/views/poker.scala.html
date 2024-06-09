@@ -34,11 +34,11 @@ gameState.getBoard).toUpperCase }
             </div>
             <div class="d-flex flex-column">
                 <div class=" d-flex justify-content-center align-items-center mb-2">
-                    <div id="player-0">
+                    <div class="top-left-player" id="player-0">
                         @player(indexedPlayers(0)._1.playername,indexedPlayers(0)._1.balance,indexedPlayers(0)._1.folded,
                         "top-left-player")
                     </div>
-                    <div id="player-1">
+                    <div class="top-right-player" id="player-1">
                         @player(indexedPlayers(1)._1.playername,indexedPlayers(1)._1.balance,indexedPlayers(1)._1.folded,
                         "top-right-player")
                     </div>
@@ -126,12 +126,12 @@ gameState.getBoard).toUpperCase }
                         </div>
                     </div>
                     <div class=" d-flex justify-content-center align-items-center mt-2">
-                        <div id="player-4">
+                        <div class="top-left-player" id="player-4">
                             @player(indexedPlayers(4)._1.playername,indexedPlayers(4)._1.balance,
                             indexedPlayers(4)._1.folded,
                             "top-left-player")
                         </div>
-                        <div id="player-3">
+                        <div class="top-right-player" id="player-3">
                             @player(indexedPlayers(3)._1.playername,indexedPlayers(3)._1.balance,
                             indexedPlayers(3)._1.folded,
                             "top-right-player")

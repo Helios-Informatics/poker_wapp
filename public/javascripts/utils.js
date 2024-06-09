@@ -1,23 +1,12 @@
 export function getPlayerHtml(name, balance, index, folded) {
 
-  let position;
-
-  switch (index) {
-    case 0: position = "top-left-player"
-    case 1: position = "top-right-player"
-    case 2: position = "right-player"
-    case 3: position = "bottom-right-player"
-    case 4: position = "bottom-left-player"
-    case 5: position = "left-player"
-  }
-
-  return folded ? `<div class="player ${position}">
+  return folded ? `<div class="player ">
         <div class="text-secondary">${name}</div>
         <div class="player-circle responsive-player-circle me-1 opacity-25">
             <div class="bi-person-fill player-icon responsive-player-icon opacity-25"></div>
         </div>
         <div class="player-balance responsive-player-balance opacity-25">$ ${balance}</div>
-        </div>` : `<div class="player ${position}">
+        </div>` : `<div class="player">
         <div class="text-secondary">${name}</div>
         <div class="player-circle responsive-player-circle me-1">
         <div class="bi-person-fill player-icon responsive-player-icon"></div>
@@ -97,24 +86,24 @@ export function calculateCoinsHtml(amount) {
 
     switch (coinValue) {
       case 1000:
-        outlineColor = "#5F5F5F";
-        fillColor = "#FFFFFF";
+        fillColor = "#5F5F5F";
+        outlineColor = "#FFFFFF";
         break;
       case 500:
-        outlineColor = "#763968";
-        fillColor = "#FFFFFF";
+        fillColor = "#763968";
+        outlineColor = "#FFFFFF";
         break;
       case 100:
-        outlineColor = "#242424";
-        fillColor = "#FFFFFF";
+        fillColor = "#242424";
+        outlineColor = "#FFFFFF";
         break;
       case 50:
-        outlineColor = "#286343";
-        fillColor = "#FFFFFF";
+        fillColor = "#286343";
+        outlineColor = "#FFFFFF";
         break;
       case 10:
-        outlineColor = "#1E5FBF";
-        fillColor = "#FFFFFF";
+        fillColor = "#1E5FBF";
+        outlineColor = "#FFFFFF";
         break;
     }
 

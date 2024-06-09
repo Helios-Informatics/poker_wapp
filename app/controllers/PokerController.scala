@@ -71,14 +71,10 @@ class PokerController @Inject() (val controllerComponents: ControllerComponents)
       "players" -> gameState.getPlayers.map { player =>
         Json.obj(
           "player" -> Json.obj(
-            "card1" -> Json.obj(
-              "rank" -> player.card1.rank.toString,
-              "suit" -> player.card1.suit.id
-            ),
-            "card2" -> Json.obj(
-              "rank" -> player.card2.rank.toString,
-              "suit" -> player.card2.suit.id
-            ),
+            "card1rank" -> player.card1.rank.toString,
+            "card1suit" -> player.card1.suit.id,
+            "card2rank" -> player.card2.rank.toString,
+            "card2suit" -> player.card2.suit.id,
             "playername" -> player.playername,
             "balance" -> player.balance,
             "currentAmountBetted" -> player.currentAmountBetted,
