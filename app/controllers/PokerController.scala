@@ -8,6 +8,14 @@ import de.htwg.poker.controller.Controller
 import de.htwg.poker.model.GameState
 import play.api.libs.json._
 
+import akka.actor.ActorSystem
+import akka.stream.Materializer
+import akka.actor._
+import play.api.libs.streams.ActorFlow
+import scala.collection.immutable.VectorMap
+import scala.swing.event.Event
+import scala.swing.Reactor
+
 /** This controller creates an `Action` to handle HTTP requests to the
   * application's home page.
   */
