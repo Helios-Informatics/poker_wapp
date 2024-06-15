@@ -9,49 +9,29 @@ document.addEventListener('DOMContentLoaded', function () {
     loadJson();
     setupEventListeners();
     setupRaiseSlider();
-    // startActionTimer();
+
 });
 
 function setupEventListeners() {
-    var checkButton = document.getElementById('checkButton');
+    var callCheckButton = document.getElementById('callCheckButton');
 
-    if (checkButton == null) {
-        document.getElementById('callButton').addEventListener('click', function () {
-            window.location.href = 'http://localhost:9000/call';
-        });
-    }
-    else {
-        checkButton.addEventListener('click', function () {
-            window.location.href = 'http://localhost:9000/check';
-        });
-    }
+    callCheckButton.addEventListener('click', function () {
+        console.log(callCheckButton.innerText)
+        if (callCheckButton.innerText == "CALL") {
+            sendActionToServer("call")
+        } else {
+            sendActionToServer("check")
+        }
+    });
 
     document.getElementById('foldButton').addEventListener('click', function () {
-        window.location.href = 'http://localhost:9000/fold';
+        sendActionToServer("fold")
     });
 
     document.getElementById('raiseButton').addEventListener('click', function () {
         var amount = document.getElementById('customRange3').value
-        window.location.href = 'http://localhost:9000/bet/' + amount;
+        sendActionToServer("bet/" + amount);
     });
-}
-
-function startActionTimer() {
-    let progressBar = document.querySelector('.progress-bar');
-    let width = 100;
-    let interval = setInterval(function () {
-        if (width <= 0) {
-            clearInterval(interval);
-            if (document.getElementById('checkButton') !== null) {
-                document.getElementById('checkButton').click();
-            } else {
-                document.getElementById('foldButton').click();
-            }
-        } else {
-            width--;
-            progressBar.style.width = width + '%';
-        }
-    }, 100);
 }
 
 function setupRaiseSlider() {
@@ -65,6 +45,28 @@ function setupRaiseSlider() {
     });
 }
 
+function sendActionToServer(action) {
+    console.log('sendActionToServer() Called')
+    if (!(action == "call" || action == "check" || action == "fold" || action == "restartGame" || action == "allIn" || action.startsWith("bet"))) {
+        console.error(`action ${action} not supported`)
+    } else {
+        $.ajax({
+            type: "POST",
+            url: "/" + action,
+            contentType: 'application/json',
+            accept: "application/json",
+            success: function (json) {
+                console.log(json)
+                updateGame(json)
+                console.log("successfully loaded json and updatedGame");
+            },
+            error: function (_jqXHR, _textStatus, errorThrown) {
+                console.error(`Fehler bei der Anfrage für action "${action}":`, errorThrown);
+            },
+        });
+    }
+}
+
 function loadJson() {
     console.log("trying to load json");
     $.ajax({
@@ -73,6 +75,7 @@ function loadJson() {
         dataType: "json",
 
         success: function (json) {
+            console.log(json)
             updateGame(json)
             console.log("successfully loaded json and updatedGame");
         }
@@ -83,34 +86,50 @@ function updateGame(json) {
     updateBoard(json.board)
     updatePlayers(json.players, json.playerAtTurn)
     updatePot(json.pot)
+    updateButtons(json.highestBetSize, json.players, json.playerAtTurn)
 }
 
-$(document).ready(function () {
-    console.log("Document is ready, filling Game");
-    loadJson();
-});
+function updateButtons(highestBetSize, players, playerAtTurn) {
+    let callCheckButtonText = $("#callCheckButtonText");
+
+
+    if (players[playerAtTurn].player.currentAmountBetted == highestBetSize) {
+        callCheckButtonText.text("CHECK")
+    } else {
+        callCheckButtonText.text("CALL")
+    }
+}
 
 function updateBoard(board) {
     let boardDiv = $("#board");
     boardDiv.empty();
+    let color;
+    let suit;
 
     board.forEach(function (card) {
-        let color;
-        switch (card.suit) {
-            case "Clubs":
-            case "Spades":
+        switch (card.card.suit) {
+            case 1:
                 color = "black-text";
+                suit = "bi-suit-club-fill";
+            case 2:
+                color = "black-text";
+                suit = "bi-suit-spade-fill";
                 break;
-            case "Hearts":
-            case "Diamonds":
+            case 4:
                 color = "red-text";
+                suit = "bi-suit-heart-fill";
+            case 3:
+                color = "red-text";
+                suit = "bi-suit-diamond-fill";
                 break;
         }
 
+        console.log("COLOR:" + color)
+
         let cardHtml = `<div class="card responsive-cards">
-                        <div class="card-icon ${card.suit} ${color} responsive-card-suit"></div>
-                        <div class="card-text ${color} responsive-card-text">${card.rank}</div>
-                    </div>`;
+                        <div class="card-icon ${suit} ${color} responsive-card-suit"></div>
+                        <div class="card-text ${color} responsive-card-text">${card.card.rank}</div>
+                    </div> `;
         boardDiv.append(cardHtml);
     });
 }
@@ -136,6 +155,8 @@ function updatePlayers(players, playerAtTurn) {
 }
 
 function updatePot(pot) {
+    console.log("POT: ")
+    console.log(pot)
     let potDiv = $("#pot");
     potDiv.empty();
     potDiv.text("$ " + pot)

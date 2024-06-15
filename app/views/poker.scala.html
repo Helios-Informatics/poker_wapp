@@ -82,8 +82,9 @@ gameState.getBoard).toUpperCase }
                                     </div>
                                 </div>
                                 <div class="d-flex flex-column justify-content-center align-items-center">
-                                    <div class="pot responsive-pot">@{"$ " + pot}</div>
-                                    <div class="d-flex justify-content-center align-items-center bg-transparent">
+                                    <div id="pot" class="pot responsive-pot">@{"$ " + pot}</div>
+                                    <div id="board"
+                                        class="d-flex justify-content-center align-items-center bg-transparent">
                                         @for(boardCard <- board) { @card(boardCard.rank.toString, boardCard.suit.id) }
                                             </div>
                                     </div>
@@ -160,21 +161,12 @@ gameState.getBoard).toUpperCase }
                                         FOLD
                                     </h5>
                                 </button>
-                                @if(gameState.getCurrentPlayer.currentAmountBetted == gameState.getHighestBetSize) {
-                                <button type="button" id="checkButton"
+                                <button type="button" id="callCheckButton"
                                     class=" button btn btn-success rounded-pill d-flex justify-content-center align-content-center responsive-button">
-                                    <h5 class="mt-1 responsive-button-text">
-                                        CHECK
-                                    </h5>
-                                </button>
-                                } else {
-                                <button type="button" id="callButton"
-                                    class=" button btn btn-success rounded-pill d-flex justify-content-center align-content-center responsive-button">
-                                    <h5 class="mt-1 responsive-button-text">
+                                    <h5 id="callCheckButtonText" class="mt-1 responsive-button-text">
                                         CALL
                                     </h5>
                                 </button>
-                                }
                                 <button type="button" id="raiseButton"
                                     class=" button btn btn-primary rounded-pill d-flex justify-content-center align-content-center responsive-button">
                                     <h5 class="mt-1 responsive-button-text">

@@ -12,17 +12,17 @@ GET / controllers.PokerController.index()
 
 # Game interaction routes
 
-GET /newGame controllers.PokerController.newGame()
-GET /bet/:x controllers.PokerController.bet(x: Int)
-GET /allIn controllers.PokerController.allIn()
-GET /fold controllers.PokerController.fold()
-GET /call controllers.PokerController.call()
-GET /check controllers.PokerController.check()
-GET /restartGame controllers.PokerController.restartGame()
+GET /poker controllers.PokerController.newGame()
 GET /get controllers.PokerController.getJson()
 
 #Websocket
 GET /websocket  controllers.HomeController.socket()
+POST /bet/:x controllers.PokerController.bet(x: Int)
+POST /allIn controllers.PokerController.allIn()
+POST /fold controllers.PokerController.fold()
+POST /call controllers.PokerController.call()
+POST /check controllers.PokerController.check()
+POST /restartGame controllers.PokerController.restartGame()
 
 # Map static resources from the /public folder to the /assets URL path
 
