@@ -51,9 +51,9 @@ class PokerController @Inject() (val controllerComponents: ControllerComponents)
   }
 
   def call() = Action { implicit request: Request[AnyContent] =>
+    println("PokerController.call() function called")
     gameController.call
-    val updatedGameJson = gameStateToJson()
-    Ok(updatedGameJson).as("application/json")
+    Ok(gameStateToJson()).as("application/json")
   }
 
   def check() = Action { implicit request: Request[AnyContent] =>
@@ -89,6 +89,7 @@ class PokerController @Inject() (val controllerComponents: ControllerComponents)
         )
       },
       "playerAtTurn" -> gameState.getPlayerAtTurn,
+      "highestBetSize" -> gameState.getHighestBetSize,
       "board" -> gameState.getBoard.map { card =>
         Json.obj(
           "card" -> Json.obj(

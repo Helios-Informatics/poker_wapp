@@ -11,18 +11,16 @@ $(document).ready(function () {
 });
 
 function setupEventListeners() {
-    var checkButton = document.getElementById('checkButton');
+    var callCheckButton = document.getElementById('callCheckButton');
 
-    if (checkButton == null) {
-        document.getElementById('callButton').addEventListener('click', function () {
+    callCheckButton.addEventListener('click', function () {
+        console.log(callCheckButton.innerText)
+        if (callCheckButton.innerText == "CALL") {
             sendActionToServer("call")
-        });
-    }
-    else {
-        checkButton.addEventListener('click', function () {
+        } else {
             sendActionToServer("check")
-        });
-    }
+        }
+    });
 
     document.getElementById('foldButton').addEventListener('click', function () {
         sendActionToServer("fold")
@@ -46,6 +44,7 @@ function setupRaiseSlider() {
 }
 
 function sendActionToServer(action) {
+    console.log('sendActionToServer() Called')
     if (!(action == "call" || action == "check" || action == "fold" || action == "restartGame" || action == "allIn" || action.startsWith("bet"))) {
         console.error(`action ${action} not supported`)
     } else {
@@ -55,7 +54,7 @@ function sendActionToServer(action) {
             contentType: 'application/json',
             accept: "application/json",
             success: function (json) {
-                setupEventListeners();
+                console.log(json)
                 updateGame(json)
                 console.log("successfully loaded json and updatedGame");
             },
@@ -74,6 +73,7 @@ function loadJson() {
         dataType: "json",
 
         success: function (json) {
+            console.log(json)
             updateGame(json)
             console.log("successfully loaded json and updatedGame");
         }
@@ -84,28 +84,49 @@ function updateGame(json) {
     updateBoard(json.board)
     updatePlayers(json.players, json.playerAtTurn)
     updatePot(json.pot)
+    updateButtons(json.highestBetSize, json.players, json.playerAtTurn)
+}
+
+function updateButtons(highestBetSize, players, playerAtTurn) {
+    let callCheckButtonText = $("#callCheckButtonText");
+
+
+    if (players[playerAtTurn].player.currentAmountBetted == highestBetSize) {
+        callCheckButtonText.text("CHECK")
+    } else {
+        callCheckButtonText.text("CALL")
+    }
 }
 
 function updateBoard(board) {
     let boardDiv = $("#board");
     boardDiv.empty();
+    let color;
+    let suit;
 
     board.forEach(function (card) {
-        let color;
-        switch (card.suit) {
-            case "Clubs":
-            case "Spades":
+        switch (card.card.suit) {
+            case 1:
                 color = "black-text";
+                suit = "bi-suit-club-fill";
+            case 2:
+                color = "black-text";
+                suit = "bi-suit-spade-fill";
                 break;
-            case "Hearts":
-            case "Diamonds":
+            case 4:
                 color = "red-text";
+                suit = "bi-suit-heart-fill";
+            case 3:
+                color = "red-text";
+                suit = "bi-suit-diamond-fill";
                 break;
         }
 
-        let cardHtml = `< div class= "card responsive-cards" >
-                        <div class="card-icon ${card.suit} ${color} responsive-card-suit"></div>
-                        <div class="card-text ${color} responsive-card-text">${card.rank}</div>
+        console.log("COLOR:" + color)
+
+        let cardHtml = `<div class="card responsive-cards">
+                        <div class="card-icon ${suit} ${color} responsive-card-suit"></div>
+                        <div class="card-text ${color} responsive-card-text">${card.card.rank}</div>
                     </div> `;
         boardDiv.append(cardHtml);
     });
@@ -132,6 +153,8 @@ function updatePlayers(players, playerAtTurn) {
 }
 
 function updatePot(pot) {
+    console.log("POT: ")
+    console.log(pot)
     let potDiv = $("#pot");
     potDiv.empty();
     potDiv.text("$ " + pot)
