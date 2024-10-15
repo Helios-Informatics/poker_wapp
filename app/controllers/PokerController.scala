@@ -133,7 +133,7 @@ class PokerController @Inject() (val controllerComponents: ControllerComponents)
         }
 
         reactions += {
-          case event: _ =>
+          case _ =>
             sendJsonToClient()
         }
 
@@ -142,3 +142,4 @@ class PokerController @Inject() (val controllerComponents: ControllerComponents)
         }
 
 }
+    }
