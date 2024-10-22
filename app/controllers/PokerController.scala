@@ -8,9 +8,9 @@ import de.htwg.poker.controller.Controller
 import de.htwg.poker.model.GameState
 import play.api.libs.json._
 
-import akka.actor.ActorSystem
-import akka.stream.Materializer
-import akka.actor._
+
+import org.apache.pekko.stream.Materializer
+import org.apache.pekko.actor._
 import play.api.libs.streams.ActorFlow
 import scala.collection.immutable.VectorMap
 import scala.swing.event.Event
@@ -20,14 +20,20 @@ import scala.swing.Reactor
   * application's home page.
   */
 @Singleton
-class PokerController @Inject() (val controllerComponents: ControllerComponents)
-    extends BaseController {
+class PokerController @Inject() (
+    val controllerComponents: ControllerComponents,
+    implicit val system: ActorSystem,
+    implicit val mat: Materializer
+) extends BaseController {
 
   val gameController = new Controller(
     new GameState(Nil, None, None, 0, 0, Nil, 0, 0, 0, 0)
   )
-  def pokerAsText = gameController.toString()
-  def gameState = gameController.gameState
+
+  val gameControllerPublisher = new GameControllerPublisher(gameController)
+
+  def pokerAsText = gameControllerPublisher.toString()
+  def gameState = gameControllerPublisher.gameState
 
   def index() = Action { implicit request: Request[AnyContent] =>
     Ok(views.html.index())
@@ -36,42 +42,42 @@ class PokerController @Inject() (val controllerComponents: ControllerComponents)
   def newGame() = Action { implicit request: Request[AnyContent] =>
     val players =
       List("Player1", "Player2", "Player3", "Player4", "Player5", "Player6")
-    gameController.createGame(players, "10", "20")
+    gameControllerPublisher.createGame(players, "10", "20")
     Ok(views.html.poker(gameState))
   }
 
   def bet(amount: Int) = Action { implicit request: Request[AnyContent] =>
-    gameController.bet(amount)
+    gameControllerPublisher.bet(amount)
     val updatedGameJson = gameStateToJson()
     Ok(updatedGameJson).as("application/json")
   }
 
   def allIn() = Action { implicit request: Request[AnyContent] =>
-    gameController.allIn()
+    gameControllerPublisher.allIn()
     val updatedGameJson = gameStateToJson()
     Ok(updatedGameJson).as("application/json")
   }
 
   def fold() = Action { implicit request: Request[AnyContent] =>
-    gameController.fold
+    gameControllerPublisher.fold()
     val updatedGameJson = gameStateToJson()
     Ok(updatedGameJson).as("application/json")
   }
 
   def call() = Action { implicit request: Request[AnyContent] =>
     println("PokerController.call() function called")
-    gameController.call
+    gameControllerPublisher.call()
     Ok(gameStateToJson()).as("application/json")
   }
 
   def check() = Action { implicit request: Request[AnyContent] =>
-    gameController.check
+    gameControllerPublisher.check()
     val updatedGameJson = gameStateToJson()
     Ok(updatedGameJson).as("application/json")
   }
 
   def restartGame = Action { implicit request: Request[AnyContent] =>
-    gameController.restartGame
+    gameControllerPublisher.restartGame()
     val updatedGameJson = gameStateToJson()
     Ok(updatedGameJson).as("application/json")
   }
@@ -121,25 +127,22 @@ class PokerController @Inject() (val controllerComponents: ControllerComponents)
       Props(new PokerWebSocketActor(out))
   }
 
-  class PokerWebSocketActor(out: ActorRef)
-      extends Actor with Reactor {
+  class PokerWebSocketActor(out: ActorRef) extends Actor with Reactor {
 
-        listenTo(gameController)
+    listenTo(gameControllerPublisher)
 
-        def receive: Receive = {
-          case msg: String =>
-            out ! gameStateToJson().toString()
-            println("Received: " + msg)
-        }
-
-        reactions += {
-          case _ =>
-            sendJsonToClient()
-        }
-
-        def sendJsonToClient() = {
-          out ! gameStateToJson().toString()
-        }
-
-}
+    def receive: Receive = { case msg: String =>
+      out ! gameStateToJson().toString()
+      println("Received: " + msg)
     }
+
+    reactions += { case _ =>
+      sendJsonToClient()
+    }
+
+    def sendJsonToClient() = {
+      out ! gameStateToJson().toString()
+    }
+
+  }
+}

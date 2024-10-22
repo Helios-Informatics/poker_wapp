@@ -16,7 +16,7 @@ GET /poker controllers.PokerController.newGame()
 GET /get controllers.PokerController.getJson()
 
 #Websocket
-GET /websocket  controllers.HomeController.socket()
+GET /websocket  controllers.PokerController.socket()
 POST /bet/:x controllers.PokerController.bet(x: Int)
 POST /allIn controllers.PokerController.allIn()
 POST /fold controllers.PokerController.fold()
