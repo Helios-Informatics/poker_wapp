@@ -163,7 +163,7 @@ function updatePot(pot) {
 }
 
 function connectWebSocket() {
-    const socket = new WebSocket("ws://localhost:9000/ws");
+    const socket = new WebSocket("ws://172.20.157.69:9000/websocket");
 
     socket.onopen = function (e) {
         console.log("[open] Connection established");
