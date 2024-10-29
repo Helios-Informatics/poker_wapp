@@ -47,7 +47,7 @@ function setupRaiseSlider() {
 
 function sendActionToServer(action) {
     console.log('sendActionToServer() Called')
-    if (!(action == "call" || action == "check" || action == "fold" || action == "restartGame" || action == "allIn" || action.startsWith("bet"))) {
+    if (!(action == "call" || action == "check" || action == "fold" || action == "restartGame" || action == "websocket" || action == "allIn" || action.startsWith("bet"))) {
         console.error(`action ${action} not supported`)
     } else {
         $.ajax({
@@ -164,6 +164,7 @@ function updatePot(pot) {
 
 function connectWebSocket() {
     const socket = new WebSocket("ws://" + window.location.host + " /websocket");
+    sendActionToServer("websocket");
 
     socket.onopen = function (e) {
         console.log("[open] Connection established");
