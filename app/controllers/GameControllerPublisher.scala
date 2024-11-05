@@ -66,5 +66,11 @@ class GameControllerPublisher(val controller: Controller) extends Publisher {
     }) // Publish an event for game restart
   }
 
+  def lobby(): Unit = {
+    publish(new Event {
+      override def toString: String = "Lobby"
+    })
+  }
+
   // Add more methods as needed for your application
 }
