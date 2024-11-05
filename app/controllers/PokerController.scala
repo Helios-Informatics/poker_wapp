@@ -36,6 +36,7 @@ class PokerController @Inject() (
   var playersInQueue: List[String] = List()
   var smallBlind: Int = 10
   var bigBlind: Int = 20
+  var isLobby = false
 
   def pokerAsText = gameControllerPublisher.toString()
   def gameState = gameControllerPublisher.gameState
@@ -45,6 +46,7 @@ class PokerController @Inject() (
   }
 
   def newGame() = Action { implicit request: Request[AnyContent] =>
+    isLobby = false
     val players =
       List("Player1", "Player2", "Player3", "Player4", "Player5", "Player6")
     gameControllerPublisher.createGame(players, "10", "20")
@@ -93,16 +95,16 @@ class PokerController @Inject() (
 
   //lobby functions
   def lobby = Action {
-    val playerInQueueLength = playersInQueue.length
-
+    isLobby = true
+    gameControllerPublisher.lobby()
+    val playersInQueueLength = playersInQueue.length
     if(playersInQueueLength >= 6) {
-      return
+      Ok(views.html.index())
     }
-
-    val newPlayerName = "Player" + (playerInQueueLength + 1)
+    val newPlayerName = "Player" + (playersInQueueLength + 1)
     playersInQueue = playersInQueue :+ newPlayerName
     
-    Ok(views.html.lobby(playersInQueue))
+    Ok(views.html.lobby())
   }
 
   def changeName(newName: String) = Action {
@@ -163,7 +165,11 @@ class PokerController @Inject() (
     listenTo(gameControllerPublisher)
 
     def receive: Receive = { case msg: String =>
-      out ! gameStateToJson().toString()
+      if( isLobby ) {
+        out ! lobbyToJson().toString()
+      } else {
+        out ! gameStateToJson().toString()
+      }
       println("Received: " + msg)
     }
 
@@ -172,7 +178,11 @@ class PokerController @Inject() (
     }
 
     def sendJsonToClient() = {
-      out ! gameStateToJson().toString()
+     if( isLobby ) {
+        out ! lobbyToJson().toString()
+      } else {
+        out ! gameStateToJson().toString()
+      }
     }
 
   }
