@@ -93,6 +93,7 @@ class PokerController @Inject() (
     Ok(gameStateToJson())
   }
 
+  //lobby functions
   def lobby = Action {
     isLobby = true
     gameControllerPublisher.lobby()
@@ -104,6 +105,10 @@ class PokerController @Inject() (
     playersInQueue = playersInQueue :+ newPlayerName
     
     Ok(views.html.lobby())
+  }
+
+  def changeName(newName: String) = Action {
+    
   }
 
   def gameStateToJson() = {
