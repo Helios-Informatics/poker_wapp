@@ -91,6 +91,7 @@ class PokerController @Inject() (
     Ok(gameStateToJson())
   }
 
+  //lobby functions
   def lobby = Action {
     val playerInQueueLength = playersInQueue.length
 
@@ -102,6 +103,10 @@ class PokerController @Inject() (
     playersInQueue = playersInQueue :+ newPlayerName
     
     Ok(views.html.lobby(playersInQueue))
+  }
+
+  def changeName(newName: String) = Action {
+    
   }
 
   def gameStateToJson() = {

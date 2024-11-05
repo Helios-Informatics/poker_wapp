@@ -6,7 +6,7 @@ import { getPlayerHtml } from './utils.js';
 document.addEventListener('DOMContentLoaded', function () {
 
     connectWebSocket();
-    loadJson();
+    loadGame();
     setupEventListeners();
     setupRaiseSlider();
 
@@ -67,7 +67,7 @@ function sendActionToServer(action) {
     }
 }
 
-function loadJson() {
+function loadGame() {
     console.log("trying to load json");
     $.ajax({
         method: "GET",
@@ -80,6 +80,25 @@ function loadJson() {
             console.log("successfully loaded json and updatedGame");
         }
     });
+}
+
+function loadLobby() {
+    console.log("loading Lobby")
+    $.ajax({
+        method: "GET",
+        url: "/lobby",
+        dataType: "json",
+
+        success: function (json) {
+            console.log(json)
+            updateGame(json)
+            console.log("successfully loaded lobby");
+        }
+    });
+}
+
+function updateLobby(json) {
+    //update Lobby View
 }
 
 function updateGame(json) {
