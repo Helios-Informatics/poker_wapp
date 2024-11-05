@@ -32,6 +32,11 @@ class PokerController @Inject() (
 
   val gameControllerPublisher = new GameControllerPublisher(gameController)
 
+  //lobby
+  var playersInQueue: List[String] = List()
+  var smallBlind: Int = 10
+  var bigBlind: Int = 20
+
   def pokerAsText = gameControllerPublisher.toString()
   def gameState = gameControllerPublisher.gameState
 
@@ -86,6 +91,19 @@ class PokerController @Inject() (
     Ok(gameStateToJson())
   }
 
+  def lobby = Action {
+    val playerInQueueLength = playersInQueue.length
+
+    if(playersInQueueLength >= 6) {
+      return
+    }
+
+    val newPlayerName = "Player" + (playerInQueueLength + 1)
+    playersInQueue = playersInQueue :+ newPlayerName
+    
+    Ok(views.html.lobby(playersInQueue))
+  }
+
   def gameStateToJson() = {
     Json.obj(
       "players" -> gameState.getPlayers.map { player =>
@@ -113,6 +131,14 @@ class PokerController @Inject() (
         )
       },
       "pot" -> gameState.getPot
+    )
+  }
+
+  def lobbyToJson() = {
+    Json.obj(
+      "playersInQueue" -> playersInQueue,
+      "smallBlind" -> smallBlind,
+      "bigBlind" -> bigBlind
     )
   }
 

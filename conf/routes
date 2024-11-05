@@ -12,6 +12,7 @@ GET / controllers.PokerController.index()
 
 # Game interaction routes
 
+GET /lobby controllers.PokerController.lobby()
 GET /poker controllers.PokerController.newGame()
 GET /get controllers.PokerController.getJson()
 
