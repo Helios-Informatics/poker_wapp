@@ -13,9 +13,7 @@ document.addEventListener('DOMContentLoaded', function () {
 });
 
 function setupEventListeners() {
-    var callCheckButton = document.getElementById('callCheckButton');
-
-    callCheckButton.addEventListener('click', function () {
+    document.getElementById('callCheckButton').addEventListener('click', function () {
         console.log(callCheckButton.innerText)
         if (callCheckButton.innerText == "CALL") {
             sendActionToServer("call")
@@ -32,6 +30,10 @@ function setupEventListeners() {
         var amount = document.getElementById('customRange3').value
         sendActionToServer("bet/" + amount);
     });
+
+    document.getElementById('startButton').addEventListener('click', function () {
+            newGame();
+        });
 }
 
 function setupRaiseSlider() {
