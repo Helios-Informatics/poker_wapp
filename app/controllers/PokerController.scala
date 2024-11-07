@@ -44,12 +44,26 @@ class PokerController @Inject() (
     Ok(views.html.index())
   }
 
-  def newGame() = Action { implicit request: Request[AnyContent] =>
+  def singleplayer() = Action { implicit request: Request[AnyContent] =>
     isLobby = false
     val players =
-      List("Player1", "Player2")
+      List("Player1", "Player2", "Player3", "Player4", "Player5", "Player6")
     gameControllerPublisher.createGame(players, "10", "20")
     Ok(views.html.poker(gameState))
+  }
+
+  def newGame(): Action[JsValue] = Action(parse.json) { implicit request =>
+    val gameConfigResult = request.body.validate[GameConfig]
+
+    gameConfigResult.fold(
+      errors => {
+        BadRequest(Json.obj("status" -> "error", "message" -> JsError.toJson(errors)))
+      },
+      gameConfig => {
+        gameControllerPublisher.createGame(gameConfig.players, gameConfig.smallBlind, gameConfig.bigBlind)
+        Ok(views.html.poker(gameState))
+      }
+    )
   }
 
   def bet(amount: Int) = Action { implicit request: Request[AnyContent] =>
@@ -108,6 +122,11 @@ class PokerController @Inject() (
 
   def changeName(newName: String) = Action {
     Ok(views.html.lobby())
+  }
+
+  case class GameConfig(players: List[String], smallBlind: String, bigBlind: String)
+  object GameConfig {
+    implicit val gameConfigFormat: Format[GameConfig] = Json.format[GameConfig]
   }
 
   def gameStateToJson() = {

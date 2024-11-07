@@ -67,6 +67,45 @@ function sendActionToServer(action) {
     }
 }
 
+function newGame() {
+const bigBlindValue = $('#bigBlind').val();
+const smallBlindValue = $('#smallBlind').val();
+const players = getPlayerNames();
+
+$.ajax({
+    type: "POST",
+    url: "/newGame",
+    data: JSON.stringify({
+        players: players,
+        smallBlind: smallBlindValue,
+        bigBlind: bigBlindValue
+    }),
+    contentType: "application/json",
+    dataType: "json",
+    success: function (json) {
+        console.log(json)
+        updateGame(json)
+        console.log("successfully loaded json and updatedGame");
+    },
+    error: function (error) {
+        console.error("Error:", error);
+    }
+});
+}
+
+function getPlayerNames() {
+        let playerNames = [];
+
+        $('.player-name').each(function () {
+            const name = $(this).val();
+            playerNames.push(name);
+        });
+
+        console.log(playerNames);
+        return playerNames;
+    }
+
+
 function loadGame() {
     console.log("trying to load json");
     $.ajax({
@@ -95,10 +134,6 @@ function loadLobby() {
             console.log("successfully loaded lobby");
         }
     });
-}
-
-function updateLobby(json) {
-    //update Lobby View
 }
 
 function updateGame(json) {

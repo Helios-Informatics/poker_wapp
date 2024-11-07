@@ -12,7 +12,7 @@ GET / controllers.PokerController.index()
 
 # Game interaction routes
 
-GET /poker controllers.PokerController.newGame()
+GET /singleplayer controllers.PokerController.singleplayer()
 GET /get controllers.PokerController.getJson()
 POST /bet/:x controllers.PokerController.bet(x: Int)
 POST /allIn controllers.PokerController.allIn()
@@ -27,6 +27,7 @@ GET /lobby controllers.PokerController.lobby()
 POST /changeName/:x controllers.PokerController.changeName(x: String)
 # POST /changeSmallBlind/:x controllers.PokerController.changeSmallBlind(x: Int)
 # POST /changeBigBlind/:x controllers.PokerController.changeBigBlind(x: Int)
+# POST /newGame controllers.PokerController.newGame()
 
 # Websocket
 
