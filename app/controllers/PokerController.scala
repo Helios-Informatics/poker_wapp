@@ -8,7 +8,6 @@ import de.htwg.poker.controller.Controller
 import de.htwg.poker.model.GameState
 import play.api.libs.json._
 
-
 import org.apache.pekko.stream.Materializer
 import org.apache.pekko.actor._
 import play.api.libs.streams.ActorFlow
@@ -32,7 +31,7 @@ class PokerController @Inject() (
 
   val gameControllerPublisher = new GameControllerPublisher(gameController)
 
-  //lobby
+  // lobby
   var playersInQueue: List[String] = List()
   var smallBlind: Int = 10
   var bigBlind: Int = 20
@@ -93,22 +92,22 @@ class PokerController @Inject() (
     Ok(gameStateToJson())
   }
 
-  //lobby functions
+  // lobby functions
   def lobby = Action {
     isLobby = true
     gameControllerPublisher.lobby()
     val playersInQueueLength = playersInQueue.length
-    if(playersInQueueLength >= 6) {
+    if (playersInQueueLength >= 6) {
       Ok(views.html.index())
     }
     val newPlayerName = "Player" + (playersInQueueLength + 1)
     playersInQueue = playersInQueue :+ newPlayerName
-    
+
     Ok(views.html.lobby())
   }
 
   def changeName(newName: String) = Action {
-    
+    Ok(views.html.lobby())
   }
 
   def gameStateToJson() = {
@@ -165,7 +164,7 @@ class PokerController @Inject() (
     listenTo(gameControllerPublisher)
 
     def receive: Receive = { case msg: String =>
-      if( isLobby ) {
+      if (isLobby) {
         out ! lobbyToJson().toString()
       } else {
         out ! gameStateToJson().toString()
@@ -178,7 +177,7 @@ class PokerController @Inject() (
     }
 
     def sendJsonToClient() = {
-     if( isLobby ) {
+      if (isLobby) {
         out ! lobbyToJson().toString()
       } else {
         out ! gameStateToJson().toString()

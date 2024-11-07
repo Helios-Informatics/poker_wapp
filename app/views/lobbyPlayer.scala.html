@@ -1,0 +1,11 @@
+@(name: String)
+
+<div class="player bg-primary flex-row rounded" style="width: 25%;">
+    <div class="player-circle responsive-player-circle me-1 my-2">
+        <div class="bi-person-fill player-icon responsive-player-icon"></div>
+    </div>
+    <div class="text-secondary text-white">
+        <input type="text" class="form-control-plaintext text-white" value="@name"
+            onclick="this.removeAttribute('readonly');" readonly>
+    </div>
+</div>

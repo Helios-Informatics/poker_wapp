@@ -24,14 +24,13 @@ POST /restartGame controllers.PokerController.restartGame()
 # lobby
 
 GET /lobby controllers.PokerController.lobby()
-POST /changeName/:x controller.PokerController.changeName(x: String)
-POST /changeSmallBlind/:x controller.PokerController.changeSmallBlind(x: Int)
-POST /changeBigBlind/:x controller.PokerController.changeBigBlind(x: Int)
+POST /changeName/:x controllers.PokerController.changeName(x: String)
+# POST /changeSmallBlind/:x controllers.PokerController.changeSmallBlind(x: Int)
+# POST /changeBigBlind/:x controllers.PokerController.changeBigBlind(x: Int)
 
 # Websocket
-GET /websocket  controllers.PokerController.socket()
 
-
+GET /websocket controllers.PokerController.socket()
 
 # Map static resources from the /public folder to the /assets URL path
 
