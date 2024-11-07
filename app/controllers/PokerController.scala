@@ -47,7 +47,7 @@ class PokerController @Inject() (
   def newGame() = Action { implicit request: Request[AnyContent] =>
     isLobby = false
     val players =
-      List("Player1", "Player2", "Player3", "Player4", "Player5", "Player6")
+      List("Player1", "Player2")
     gameControllerPublisher.createGame(players, "10", "20")
     Ok(views.html.poker(gameState))
   }
