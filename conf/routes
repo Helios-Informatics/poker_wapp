@@ -23,10 +23,13 @@ POST /restartGame controllers.PokerController.restartGame()
 
 # lobby
 
-GET /lobby controllers.PokerController.lobby()
-POST /changeName/:x controllers.PokerController.changeName(x: String)
+GET /join controllers.PokerController.join()
+ # POST /changeName/:x controllers.PokerController.changeName(x: String)
+
 # POST /changeSmallBlind/:x controllers.PokerController.changeSmallBlind(x: Int)
+
 # POST /changeBigBlind/:x controllers.PokerController.changeBigBlind(x: Int)
+
 # POST /newGame controllers.PokerController.newGame()
 
 # Websocket

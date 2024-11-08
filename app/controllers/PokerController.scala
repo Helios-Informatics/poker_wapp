@@ -14,6 +14,7 @@ import play.api.libs.streams.ActorFlow
 import scala.collection.immutable.VectorMap
 import scala.swing.event.Event
 import scala.swing.Reactor
+import scala.collection.immutable.ListMap
 
 /** This controller creates an `Action` to handle HTTP requests to the
   * application's home page.
@@ -31,10 +32,12 @@ class PokerController @Inject() (
 
   val gameControllerPublisher = new GameControllerPublisher(gameController)
 
+
   // lobby
-  var playersInQueue: List[String] = List()
+  var players: ListMap[String, String] = ListMap()
   var smallBlind: Int = 10
   var bigBlind: Int = 20
+
   var isLobby = false
 
   def pokerAsText = gameControllerPublisher.toString()
@@ -96,37 +99,48 @@ class PokerController @Inject() (
     Ok(updatedGameJson).as("application/json")
   }
 
-  def restartGame = Action { implicit request: Request[AnyContent] =>
+  def restartGame() = Action { implicit request: Request[AnyContent] =>
     gameControllerPublisher.restartGame()
     val updatedGameJson = gameStateToJson()
     Ok(updatedGameJson).as("application/json")
   }
 
-  def getJson = Action {
-    Ok(gameStateToJson())
-  }
-
   // lobby functions
-  def lobby = Action {
+  def join() = Action { implicit request: Request[AnyContent] =>
+    println("Joining lobby")
     isLobby = true
     gameControllerPublisher.lobby()
-    val playersInQueueLength = playersInQueue.length
-    if (playersInQueueLength >= 6) {
+
+    val playerID = request.headers.get("playerID").getOrElse("")
+    val playersLength = players.toList.length
+    if (playersLength >= 6) {
+      print("Player limit reached")
       Ok(views.html.index())
     }
-    val newPlayerName = "Player" + (playersInQueueLength + 1)
-    playersInQueue = playersInQueue :+ newPlayerName
 
-    Ok(views.html.lobby())
+    if( playerID == "") {
+      print("Could not receive playerID")
+      Ok(views.html.index())
+    }
+
+
+    val newPlayerName = "Player" + (playersLength + 1)
+    players = players + (playerID -> newPlayerName)
+
+    println("New Player: " + playerID + " " + newPlayerName)
+
+    val updatedLobbyJson = lobbyToJson()
+    Ok(updatedLobbyJson).as("application/json")
   }
 
-  def changeName(newName: String) = Action {
-    Ok(views.html.lobby())
-  }
 
   case class GameConfig(players: List[String], smallBlind: String, bigBlind: String)
   object GameConfig {
     implicit val gameConfigFormat: Format[GameConfig] = Json.format[GameConfig]
+  }
+
+    def getJson = Action {
+    Ok(gameStateToJson())
   }
 
   def gameStateToJson() = {
@@ -161,7 +175,7 @@ class PokerController @Inject() (
 
   def lobbyToJson() = {
     Json.obj(
-      "playersInQueue" -> playersInQueue,
+      "players" -> players,
       "smallBlind" -> smallBlind,
       "bigBlind" -> bigBlind
     )
