@@ -15,13 +15,13 @@
 </head>
 
 <body class="body">
-    <div class="w-100 d-flex flex-row justify-content-center align-content-center">
-        <h1 class="text-white">Poker</h1>
-        <div class="bi bi-suit-spade-fill text-white"></div>
-    </div>
-    <div class="h-100 w-100 d-flex flex-row px-4">
+
+    <div class="h-90 w-100 d-flex flex-row px-4 mt-5">
         <div class="h-100 w-50 d-flex flex-column align-content-center">
-            <h2 class="text-white">Players</h2>
+            <div class=" d-flex flex-row">
+            <h2 class="text-white mb-5">Players</h2>
+            <h2 class="text-white ms-3"> (1/6)</h2>
+        </div>
             <div>
                 <div>
                     @lobbyPlayer("Julian")
@@ -29,21 +29,20 @@
             </div>
         </div>
         <div class="h-100 w-50 d-flex flex-column align-content-center">
-            <h2 class="text-white">Settings</h2>
-            <div class="form-group">
+            <h2 class="text-white mb-5">Settings</h2>
+            <div class="form-group w-50">
                 <label for="bigBlind" class="form-label text-white">Big Blind</label>
                 <input type="number" class="form-control" id="bigBlind" placeholder="Enter big blind amount">
             </div>
-            <div class="form-group">
+            <div class="form-group mt-3 w-50">
                 <label for="smallBlind" class="form-label text-white">Small Blind</label>
-                <input type="number" class="form-control" id="smallBlind" placeholder="Enter small blind amount">
-            </div>
-            <div class="w-100 d-flex flex-row justify-content-center align-items-end mt-4">
-                <button type="button" class="btn btn-primary me-2">Copy Invite Link</button>
-                <button type="button" class="btn btn-success " id="startButton">Start Game</button>
+                <input type="number" class="form-control " id="smallBlind" placeholder="Enter small blind amount">
             </div>
         </div>
     </div>
+    <div class="fixed-bottom w-100 h-10 d-flex flex-row justify-content-end align-items-end mb-5 pe-5">
+        <button type="button" class="btn btn-primary me-2">Copy Invite Link</button>
+        <button type="button" class="btn btn-success " id="startButton">Start Game</button>
+    </div>
 </body>
-
 </html>
