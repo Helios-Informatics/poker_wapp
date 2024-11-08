@@ -32,8 +32,20 @@ function setupEventListeners() {
     });
 
     document.getElementById('startButton').addEventListener('click', function () {
-            newGame();
-        });
+        newGame();
+    });
+
+    document.getElementById('copyLinkButton').addEventListener('click', function () {
+        const lobbyUrl = window.location.origin + "/lobby";
+        navigator.clipboard.writeText(lobbyUrl)
+            .then(() => {
+                console.log('Lobby link copied to clipboard:', lobbyUrl);
+                alert('Invite link copied to clipboard!');
+            })
+            .catch(err => {
+                console.error('Error copying lobby link:', err);
+            });
+    });
 }
 
 function setupRaiseSlider() {
@@ -70,42 +82,42 @@ function sendActionToServer(action) {
 }
 
 function newGame() {
-const bigBlindValue = $('#bigBlind').val();
-const smallBlindValue = $('#smallBlind').val();
-const players = getPlayerNames();
+    const bigBlindValue = $('#bigBlind').val();
+    const smallBlindValue = $('#smallBlind').val();
+    const players = getPlayerNames();
 
-$.ajax({
-    type: "POST",
-    url: "/newGame",
-    data: JSON.stringify({
-        players: players,
-        smallBlind: smallBlindValue,
-        bigBlind: bigBlindValue
-    }),
-    contentType: "application/json",
-    dataType: "json",
-    success: function (json) {
-        console.log(json)
-        updateGame(json)
-        console.log("successfully loaded json and updatedGame");
-    },
-    error: function (error) {
-        console.error("Error:", error);
-    }
-});
+    $.ajax({
+        type: "POST",
+        url: "/newGame",
+        data: JSON.stringify({
+            players: players,
+            smallBlind: smallBlindValue,
+            bigBlind: bigBlindValue
+        }),
+        contentType: "application/json",
+        dataType: "json",
+        success: function (json) {
+            console.log(json)
+            updateGame(json)
+            console.log("successfully loaded json and updatedGame");
+        },
+        error: function (error) {
+            console.error("Error:", error);
+        }
+    });
 }
 
 function getPlayerNames() {
-        let playerNames = [];
+    let playerNames = [];
 
-        $('.player-name').each(function () {
-            const name = $(this).val();
-            playerNames.push(name);
-        });
+    $('.player-name').each(function () {
+        const name = $(this).val();
+        playerNames.push(name);
+    });
 
-        console.log(playerNames);
-        return playerNames;
-    }
+    console.log(playerNames);
+    return playerNames;
+}
 
 
 function loadGame() {

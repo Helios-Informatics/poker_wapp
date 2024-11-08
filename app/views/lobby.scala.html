@@ -19,9 +19,9 @@
     <div class="h-90 w-100 d-flex flex-row px-4 mt-5">
         <div class="h-100 w-50 d-flex flex-column align-content-center">
             <div class=" d-flex flex-row">
-            <h2 class="text-white mb-5">Players</h2>
-            <h2 class="text-white ms-3"> (1/6)</h2>
-        </div>
+                <h2 class="text-white mb-5">Players</h2>
+                <h2 class="text-white ms-3"> (1/6)</h2>
+            </div>
             <div>
                 <div>
                     @lobbyPlayer("Julian")
@@ -36,7 +36,11 @@
             </div>
             <div class="form-group mt-3 w-50">
                 <label for="smallBlind" class="form-label text-white">Small Blind</label>
-                <input type="number" class="form-control " id="smallBlind" placeholder="Enter small blind amount">
+                <input type="number" class="form-control" id="smallBlind" placeholder="Enter small blind amount">
+            </div>
+            <div class="w-100 d-flex flex-row justify-content-center align-items-end mt-4">
+                <button type="button" class="btn btn-primary me-2" id="copyLinkButton">Copy Invite Link</button>
+                <button type="button" class="btn btn-success " id="startButton">Start Game</button>
             </div>
         </div>
     </div>
@@ -45,4 +49,5 @@
         <button type="button" class="btn btn-success " id="startButton">Start Game</button>
     </div>
 </body>
+
 </html>
