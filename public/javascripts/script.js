@@ -231,7 +231,7 @@ function updatePot(pot) {
 }
 
 function connectWebSocket() {
-    const socket = new WebSocket("ws://" + window.location.host + "/websocket");
+    const socket = new WebSocket("wss://" + window.location.host + "/websocket");
     sendActionToServer("websocket");
 
     socket.onopen = function (e) {
