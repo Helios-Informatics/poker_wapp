@@ -7,30 +7,11 @@ document.addEventListener('DOMContentLoaded', function () {
 
     connectWebSocket();
     loadGame();
-    setupEventListeners();
-    setupRaiseSlider();
+    setupLobbyEventListeners();
 
 });
 
-function setupEventListeners() {
-    document.getElementById('callCheckButton').addEventListener('click', function () {
-        console.log(callCheckButton.innerText)
-        if (callCheckButton.innerText == "CALL") {
-            sendActionToServer("call")
-        } else {
-            sendActionToServer("check")
-        }
-    });
-
-    document.getElementById('foldButton').addEventListener('click', function () {
-        sendActionToServer("fold")
-    });
-
-    document.getElementById('raiseButton').addEventListener('click', function () {
-        var amount = document.getElementById('customRange3').value
-        sendActionToServer("bet/" + amount);
-    });
-
+function setupLobbyEventListeners() {
     document.getElementById('startButton').addEventListener('click', function () {
         newGame();
     });
@@ -45,6 +26,25 @@ function setupEventListeners() {
             .catch(err => {
                 console.error('Error copying lobby link:', err);
             });
+    });
+}
+function setupGameEventListeners() {
+    document.getElementById('callCheckButton').addEventListener('click', function () {
+        console.log(callCheckButton.innerText);
+        if (callCheckButton.innerText === "CALL") {
+            sendActionToServer("call");
+        } else {
+            sendActionToServer("check");
+        }
+    });
+
+    document.getElementById('foldButton').addEventListener('click', function () {
+        sendActionToServer("fold");
+    });
+
+    document.getElementById('raiseButton').addEventListener('click', function () {
+        const amount = document.getElementById('customRange3').value;
+        sendActionToServer("bet/" + amount);
     });
 }
 
@@ -131,6 +131,8 @@ function loadGame() {
             console.log(json)
             updateGame(json)
             console.log("successfully loaded json and updatedGame");
+            setupGameEventListeners();
+            setupRaiseSlider();
         }
     });
 }
