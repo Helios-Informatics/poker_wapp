@@ -8,7 +8,7 @@ import de.htwg.poker.controller.Controller
 case class GameEvent(eventType: String)
 
 // Wrapper class for the Controller
-class GameControllerPublisher(val controller: Controller) extends Publisher {
+class PokerControllerPublisher(val controller: Controller) extends Publisher {
 
   def gameState = controller.gameState
 

@@ -1,21 +1,23 @@
 import { calculateCoinsHtml } from "./utils.js";
 import { getPlayerCardsHtml } from "./utils.js";
 import { getPlayerHtml } from "./utils.js";
+import { getLobbyPlayerHtml } from "./utils.js";
+
+var isLobby = true;
+var playerID = "";
 
 // display slider value
 document.addEventListener('DOMContentLoaded', function () {
     connectWebSocket();
-    loadGame();
     setupLobbyEventListeners();
 
-  let playerID = getCookie("playerID");
+  playerID = getCookie("playerID");
   if (!playerID) {
     playerID = generatePlayerID();
     setCookie("playerID", playerID, 1);
   }
   console.log("PlayerID:", playerID);
 
-  join(playerID);
 });
 
 function setupLobbyEventListeners() {
@@ -24,7 +26,7 @@ function setupLobbyEventListeners() {
     });
 
     document.getElementById('copyLinkButton').addEventListener('click', function () {
-        const lobbyUrl = window.location.origin + "/lobby";
+        const lobbyUrl = window.location.origin;
         navigator.clipboard.writeText(lobbyUrl)
             .then(() => {
                 console.log('Lobby link copied to clipboard:', lobbyUrl);
@@ -54,6 +56,18 @@ function setupGameEventListeners() {
         sendActionToServer("bet/" + amount);
     });
 }
+
+function setupRaiseSlider() {
+    var slider = document.getElementById("customRange3");
+    var output = document.getElementById("sliderValue");
+
+    output.innerText = "$ " + slider.value;
+
+    slider.addEventListener("input", function () {
+        output.innerText = "$ " + slider.value;
+    });
+}
+
 //Cookie stuff
 function setCookie(name, value, days) {
     const date = new Date();
@@ -71,8 +85,11 @@ function getCookie(name) {
     while (c.charAt(0) == " ") {
       c = c.substring(1);
     }
-    return "";
+    if (c.indexOf(name + "=") == 0) {
+        return c.substring(name.length + 1, c.length);
+    }
 }
+    return "";
 }
 
 function generatePlayerID() {
@@ -80,19 +97,9 @@ function generatePlayerID() {
 }
 
 
-function setupRaiseSlider() {
-    var slider = document.getElementById("customRange3");
-    var output = document.getElementById("sliderValue");
-
-    output.innerText = "$ " + slider.value;
-
-    slider.addEventListener("input", function () {
-        output.innerText = "$ " + slider.value;
-    });
-}
-
+//Get and Post Requests
 function sendActionToServer(action) {
-    console.log("sendActionToServer() Called");
+    console.log("sendActionToServer() Called: ", action);
     if (
         !(
             action == "call" ||
@@ -126,6 +133,7 @@ function sendActionToServer(action) {
 }
 
 function newGame() {
+    console.log("newGame() Called");
     const bigBlindValue = $("#bigBlind").val();
     const smallBlindValue = $("#smallBlind").val();
     const players = getPlayerNames();
@@ -151,18 +159,6 @@ function newGame() {
     });
 }
 
-function getPlayerNames() {
-    let playerNames = [];
-
-    $(".player-name").each(function () {
-        const name = $(this).val();
-        playerNames.push(name);
-    });
-
-    console.log(playerNames);
-    return playerNames;
-}
-
 function loadGame() {
     console.log("trying to load json");
     $.ajax({
@@ -171,6 +167,7 @@ function loadGame() {
         dataType: "json",
 
         success: function (json) {
+            isLobby = false;
             console.log(json)
             updateGame(json)
             console.log("successfully loaded json and updatedGame");
@@ -181,7 +178,7 @@ function loadGame() {
 }
 
 function join(playerID) {
-  console.log("loading Lobby");
+  console.log("joining Lobby");
   $.ajax({
     method: "GET",
     url: "/join",
@@ -191,6 +188,7 @@ function join(playerID) {
     dataType: "json",
 
     success: function (json) {
+      isLobby = true;
       console.log(json);
       updateLobby(json);
       console.log("successfully loaded lobby");
@@ -216,11 +214,26 @@ function loadWebSocket() {
 
 //update Lobby View
 function updateLobby(json) {
-    
+    updateLobbyPlayers(json.players);
+}
+
+function updateLobbyPlayers(players) {
+    let playersDiv = $("#players");
+    let playersAmountDiv = $("#playersAmount");
+
+    playersDiv.empty();
+
+    for (const [playerID, playerName] of Object.entries(players)) {
+        let playerHtml = getLobbyPlayerHtml(playerName);
+        playersDiv.append(playerHtml);
+      }
+
+    playersAmountDiv.text("(" + Object.keys(players).length +"/6)");
 }
 
 //update Game View
 function updateGame(json) {
+    console.log("updateGame() Called");
     updateBoard(json.board);
     updatePlayers(json.players, json.playerAtTurn);
     updatePot(json.pot);
@@ -311,12 +324,25 @@ function updatePot(pot) {
     potDiv.text("$ " + pot);
 }
 
+function getPlayerNames() {
+    let playerNames = [];
+
+    $(".player-name").each(function () {
+        const name = $(this).val();
+        playerNames.push(name);
+    });
+
+    console.log(playerNames);
+    return playerNames;
+}
+
 function connectWebSocket() {
-    const socket = new WebSocket("wss://" + window.location.host + "/websocket");
+    const socket = new WebSocket("ws://" + window.location.host + "/websocket");
     loadWebSocket();
 
     socket.onopen = function (e) {
         console.log("[open] Connection established");
+        join(playerID);
     };
     socket.onclose = function (event) {
         if (event.wasClean) {
@@ -332,7 +358,12 @@ function connectWebSocket() {
     };
 
     socket.onmessage = function (event) {
+        console.log(`[message] Data received from server: ${event.data}`);
         var json = JSON.parse(event.data);
-        updateGame(json);
-    };
+        if (isLobby) {
+            updateLobby(json);
+        } else {
+            updateGame(json);
+        }
+        };
 }

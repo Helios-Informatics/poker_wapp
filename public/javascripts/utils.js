@@ -1,3 +1,23 @@
+export function getLobbyPlayerHtml(name) {
+  return `<div
+  class="player bg-primary flex-row justify-content-start rounded-4 mt-3"
+  style="width: 70%"
+>
+  <div class="player-circle player-circle me-1 my-2">
+    <div class="bi-person-fill my-player-icon text-white"></div>
+  </div>
+  <div class="text-secondary text-white ms-3">
+    <input
+      type="text"
+      class="form-control-lg form-control-plaintext text-white player-name"
+      value="${name}"
+      onclick="this.removeAttribute('readonly');"
+      readonly
+    />
+  </div>
+</div>`
+}
+
 export function getPlayerHtml(name, balance, index, folded) {
 
   return folded ? `<div class="player ">

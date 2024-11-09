@@ -20,23 +20,22 @@
         <div class="h-100 w-50 d-flex flex-column align-content-center">
             <div class=" d-flex flex-row">
             <h2 class="text-white mb-5">Players</h2>
-            <h2 class="text-white ms-3"> (1/6)</h2>
+            <h2 class="text-white ms-3" id="playersAmount"> (0/6)</h2>
         </div>
             <div>
-                <div>
-                    @lobbyPlayer("Julian")
+                <div id="players" class="flex-column">
                 </div>
             </div>
         </div>
         <div class="h-100 w-50 d-flex flex-column align-content-center">
             <h2 class="text-white mb-5">Settings</h2>
             <div class="form-group w-50">
-                <label for="bigBlind" class="form-label text-white">Big Blind</label>
-                <input type="number" class="form-control" id="bigBlind" placeholder="Enter big blind amount">
+                <label for="smallBlind" class="form-label text-white">Small Blind</label>
+                <input type="number" class="form-control " id="smallBlind" value="10" placeholder="Enter small blind amount">
             </div>
             <div class="form-group mt-3 w-50">
-                <label for="smallBlind" class="form-label text-white">Small Blind</label>
-                <input type="number" class="form-control " id="smallBlind" placeholder="Enter small blind amount">
+                <label for="bigBlind" class="form-label text-white">Big Blind</label>
+                <input type="number" class="form-control" id="bigBlind" value="20" placeholder="Enter big blind amount">
             </div>
         </div>
     </div>
@@ -46,3 +45,25 @@
     </div>
 </body>
 </html>
+
+<style>
+  .player-circle {
+    width: 50px;
+    height: 50px;
+  }
+
+  .player-circle {
+    flex-shrink: 0;
+    border-radius: 304px;
+    background: #4b5563;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-left: 5px;
+    box-shadow: 2px 1px 1px 1px rgba(0, 0, 0, 0.25);
+  }
+
+  .my-player-icon {
+    font-size: 25px;
+  }
+</style>
