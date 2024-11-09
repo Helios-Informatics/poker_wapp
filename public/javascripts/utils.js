@@ -1,7 +1,7 @@
 export function getLobbyPlayerHtml(name) {
   return `<div
   class="player bg-primary flex-row justify-content-start rounded-4 mt-3"
-  style="width: 70%"
+  style="width: 50%"
 >
   <div class="player-circle player-circle me-1 my-2">
     <div class="bi-person-fill my-player-icon text-white"></div>
