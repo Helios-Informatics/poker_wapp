@@ -73,6 +73,7 @@ function getCookie(name) {
     }
     return "";
 }
+}
 
 function generatePlayerID() {
     return "player-" + Math.random().toString(36).substr(2, 9);
@@ -191,10 +192,12 @@ function join(playerID) {
 
     success: function (json) {
       console.log(json);
+      updateLobby(json);
       console.log("successfully loaded lobby");
     },
   });
 }
+
 function loadWebSocket() {
     console.log("trying to load websocket");
     $.ajax({
@@ -212,6 +215,9 @@ function loadWebSocket() {
 
 
 //update Lobby View
+function updateLobby(json) {
+    
+}
 
 //update Game View
 function updateGame(json) {
@@ -329,5 +335,4 @@ function connectWebSocket() {
         var json = JSON.parse(event.data);
         updateGame(json);
     };
-}
 }

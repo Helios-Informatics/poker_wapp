@@ -112,7 +112,15 @@ class PokerController @Inject() (
     gameControllerPublisher.lobby()
 
     val playerID = request.headers.get("playerID").getOrElse("")
+
+    if (players.contains(playerID)) {
+      println("Player already in lobby")
+      val updatedLobbyJson = lobbyToJson()
+      Ok(updatedLobbyJson).as("application/json")
+    }
+
     val playersLength = players.toList.length
+
     if (playersLength >= 6) {
       print("Player limit reached")
       Ok(views.html.index())
@@ -122,7 +130,6 @@ class PokerController @Inject() (
       print("Could not receive playerID")
       Ok(views.html.index())
     }
-
 
     val newPlayerName = "Player" + (playersLength + 1)
     players = players + (playerID -> newPlayerName)
