@@ -8,14 +8,14 @@ document.addEventListener('DOMContentLoaded', function () {
     loadGame();
     setupLobbyEventListeners();
 
-  let playerID = getCookie("playerID");
-  if (!playerID) {
-    playerID = generatePlayerID();
-    setCookie("playerID", playerID, 1);
-  }
-  console.log("PlayerID:", playerID);
+    let playerID = getCookie("playerID");
+    if (!playerID) {
+        playerID = generatePlayerID();
+        setCookie("playerID", playerID, 1);
+    }
+    console.log("PlayerID:", playerID);
 
-  join(playerID);
+    join(playerID);
 });
 
 function setupLobbyEventListeners() {
@@ -63,16 +63,16 @@ function setCookie(name, value, days) {
 }
 
 function getCookie(name) {
-  console.log("getCookie() Called");
-  const decodedCookie = decodeURIComponent(document.cookie);
-  const cookies = decodedCookie.split(";");
-  for (let i = 0; i < cookies.length; i++) {
-    let c = cookies[i];
-    while (c.charAt(0) == " ") {
-      c = c.substring(1);
+    console.log("getCookie() Called");
+    const decodedCookie = decodeURIComponent(document.cookie);
+    const cookies = decodedCookie.split(";");
+    for (let i = 0; i < cookies.length; i++) {
+        let c = cookies[i];
+        while (c.charAt(0) == " ") {
+            c = c.substring(1);
+        }
+        return "";
     }
-    return "";
-}
 }
 
 function generatePlayerID() {
@@ -181,21 +181,21 @@ function loadGame() {
 }
 
 function join(playerID) {
-  console.log("loading Lobby");
-  $.ajax({
-    method: "GET",
-    url: "/join",
-    headers: {
-      playerID: playerID,
-    },
-    dataType: "json",
+    console.log("loading Lobby");
+    $.ajax({
+        method: "GET",
+        url: "/join",
+        headers: {
+            playerID: playerID,
+        },
+        dataType: "json",
 
-    success: function (json) {
-      console.log(json);
-      updateLobby(json);
-      console.log("successfully loaded lobby");
-    },
-  });
+        success: function (json) {
+            console.log(json);
+            updateLobby(json);
+            console.log("successfully loaded lobby");
+        },
+    });
 }
 
 function loadWebSocket() {
@@ -216,7 +216,7 @@ function loadWebSocket() {
 
 //update Lobby View
 function updateLobby(json) {
-    
+
 }
 
 //update Game View
@@ -312,7 +312,7 @@ function updatePot(pot) {
 }
 
 function connectWebSocket() {
-    const socket = new WebSocket("wss://" + window.location.host + "/websocket");
+    const socket = new WebSocket("ws://" + window.location.host + "/websocket");
     loadWebSocket();
 
     socket.onopen = function (e) {
