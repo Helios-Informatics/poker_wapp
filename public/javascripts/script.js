@@ -4,9 +4,7 @@ import { getPlayerHtml } from "./utils.js";
 
 // display slider value
 document.addEventListener('DOMContentLoaded', function () {
-
     connectWebSocket();
-    join();
     loadGame();
     setupLobbyEventListeners();
 
@@ -16,6 +14,8 @@ document.addEventListener('DOMContentLoaded', function () {
     setCookie("playerID", playerID, 1);
   }
   console.log("PlayerID:", playerID);
+
+  join(playerID);
 });
 
 function setupLobbyEventListeners() {
@@ -63,6 +63,7 @@ function setCookie(name, value, days) {
 }
 
 function getCookie(name) {
+  console.log("getCookie() Called");
   const decodedCookie = decodeURIComponent(document.cookie);
   const cookies = decodedCookie.split(";");
   for (let i = 0; i < cookies.length; i++) {
@@ -183,7 +184,7 @@ function loadGame() {
     });
 }
 
-function join() {
+function join(playerID) {
   console.log("loading Lobby");
   $.ajax({
     method: "GET",
@@ -195,7 +196,6 @@ function join() {
 
     success: function (json) {
       console.log(json);
-      updateGame(json);
       console.log("successfully loaded lobby");
     },
   });
@@ -296,12 +296,13 @@ function updatePot(pot) {
 }
 
 function connectWebSocket() {
-    const socket = new WebSocket("wss://" + window.location.host + "/websocket");
+    const socket = new WebSocket("ws://" + window.location.host + "/websocket");
     sendActionToServer("websocket");
 
   socket.onopen = function (e) {
     console.log("[open] Connection established");
   };
+
   socket.onclose = function (event) {
     if (event.wasClean) {
       console.log(
