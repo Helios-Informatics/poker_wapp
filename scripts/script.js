@@ -18,23 +18,6 @@ document.addEventListener('DOMContentLoaded', function () {
     join(playerID);
 });
 
-function setupLobbyEventListeners() {
-    document.getElementById('startButton').addEventListener('click', function () {
-        newGame();
-    });
-
-    document.getElementById('copyLinkButton').addEventListener('click', function () {
-        const lobbyUrl = window.location.origin + "/lobby";
-        navigator.clipboard.writeText(lobbyUrl)
-            .then(() => {
-                console.log('Lobby link copied to clipboard:', lobbyUrl);
-                alert('Invite link copied to clipboard!');
-            })
-            .catch(err => {
-                console.error('Error copying lobby link:', err);
-            });
-    });
-}
 function setupGameEventListeners() {
     document.getElementById('callCheckButton').addEventListener('click', function () {
         console.log(callCheckButton.innerText);
@@ -125,7 +108,7 @@ function sendActionToServer(action) {
     }
 }
 
-function newGame() {
+export function newGame() {
     const bigBlindValue = $("#bigBlind").val();
     const smallBlindValue = $("#smallBlind").val();
     const players = getPlayerNames();

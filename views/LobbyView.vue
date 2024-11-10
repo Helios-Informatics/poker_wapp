@@ -1,6 +1,7 @@
 <script setup>
 import { ref } from "vue";
 import LobbyPlayer from "../components/LobbyPlayer.vue";
+import { newGame } from "../scripts/script.js";
 
 const players = ref(["Julian"]);
 const bigBlind = ref("");
@@ -17,36 +18,6 @@ function copyLobbyLink() {
     .catch((err) => {
       console.error("Error copying lobby link:", err);
     });
-}
-
-function newGame() {
-  const playersList = players.value;
-  const smallBlindValue = smallBlind.value;
-  const bigBlindValue = bigBlind.value;
-
-  fetch("/newGame", {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify({
-      players: playersList,
-      smallBlind: smallBlindValue,
-      bigBlind: bigBlindValue,
-    }),
-  })
-    .then((response) => response.json())
-    .then((data) => {
-      console.log(data);
-      updateGame(data);
-    })
-    .catch((error) => {
-      console.error("Error:", error);
-    });
-}
-
-function updateGame(json) {
-  console.log("Game updated:", json);
 }
 </script>
 <template>

@@ -1,6 +1,5 @@
 <script setup>
 import { defineProps, computed } from "vue";
-import { calculateCoins } from "de.htwg.poker.util.WappFunctions";
 
 const props = defineProps({
   amount: Number,

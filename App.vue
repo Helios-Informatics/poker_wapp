@@ -1,9 +1,10 @@
 <script setup>
 import LobbyView from "./views/LobbyView.vue";
+import PokerView from "./views/PokerView.vue";
 </script>
 
 <template>
-  <LobbyView />
+  <PokerView />
 </template>
 
 <style>

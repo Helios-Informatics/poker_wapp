@@ -4,7 +4,6 @@ import Player from "../components/Player.vue";
 import PlayerCards from "../components/PlayerCards.vue";
 import Coins from "../components/Coins.vue";
 import Card from "../components/Card.vue";
-import { HandInfo } from "de.htwg.poker.model";
 
 const props = defineProps({
   gameState: Object,
@@ -16,15 +15,6 @@ const indexedPlayers = computed(() =>
 const playerAtTurn = computed(() => props.gameState.getPlayerAtTurn());
 const board = computed(() => props.gameState.getBoard());
 const pot = computed(() => props.gameState.getPot());
-const handInfo = computed(() =>
-  HandInfo.evaluate(
-    [
-      props.gameState.getPlayers()[playerAtTurn.value].card1,
-      props.gameState.getPlayers()[playerAtTurn.value].card2,
-    ],
-    props.gameState.getBoard()
-  ).toUpperCase()
-);
 
 onMounted(() => {
   const slider = document.getElementById("customRange3");
@@ -62,7 +52,7 @@ onMounted(() => {
     <div class="d-flex flex-column justify-evenly container-fluid">
       <div class="container-fluid">
         <div class="d-flex align-items-center justify-space-around row">
-          <div class="col text-white">your current hand: {{ handInfo }}</div>
+          <div class="col text-white">your current hand: {{ "handInfo" }}</div>
           <div class="col d-flex justify-end">
             <button
               type="button"
