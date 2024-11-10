@@ -3,7 +3,6 @@ import { getPlayerCardsHtml } from "./utils.js";
 import { getPlayerHtml } from "./utils.js";
 import { getLobbyPlayerHtml } from "./utils.js";
 
-var isLobby = true;
 var playerID = "";
 
 // display slider value
@@ -167,7 +166,6 @@ function loadGame() {
         dataType: "json",
 
         success: function (json) {
-            isLobby = false;
             console.log(json)
             updateGame(json)
             console.log("successfully loaded json and updatedGame");
@@ -188,7 +186,6 @@ function join(playerID) {
     dataType: "json",
 
     success: function (json) {
-      isLobby = true;
       console.log(json);
       updateLobby(json);
       console.log("successfully loaded lobby");
@@ -221,6 +218,10 @@ function updateLobbyPlayers(players) {
     let playersDiv = $("#players");
     let playersAmountDiv = $("#playersAmount");
 
+    if (!playersDiv.length || !playersAmountDiv.length) {
+        return;
+    }
+
     playersDiv.empty();
 
     for (const [playerID, playerName] of Object.entries(players)) {
@@ -243,6 +244,10 @@ function updateGame(json) {
 function updateButtons(highestBetSize, players, playerAtTurn) {
     let callCheckButtonText = $("#callCheckButtonText");
 
+    if (!callCheckButtonText) {
+        return;
+    }
+
     if (players[playerAtTurn].player.currentAmountBetted == highestBetSize) {
         callCheckButtonText.text("CHECK");
     } else {
@@ -252,6 +257,11 @@ function updateButtons(highestBetSize, players, playerAtTurn) {
 
 function updateBoard(board) {
     let boardDiv = $("#board");
+
+    if (!boardDiv) {
+        return;
+    }
+
     boardDiv.empty();
     let color;
     let suit;
@@ -290,6 +300,10 @@ function updatePlayers(players, playerAtTurn) {
         let playerCardsDiv = $("#playercards-" + index);
         let playerCoinsDiv = $("#playercoins-" + index);
 
+        if (!playerDiv || !playerCardsDiv || !playerCoinsDiv) {
+            return;
+        }
+
         playerDiv.empty();
         playerCardsDiv.empty();
         playerCoinsDiv.empty();
@@ -317,9 +331,12 @@ function updatePlayers(players, playerAtTurn) {
 }
 
 function updatePot(pot) {
-    console.log("POT: ");
-    console.log(pot);
     let potDiv = $("#pot");
+
+    if (!potDiv) {
+        return;
+    }
+    
     potDiv.empty();
     potDiv.text("$ " + pot);
 }
@@ -360,10 +377,7 @@ function connectWebSocket() {
     socket.onmessage = function (event) {
         console.log(`[message] Data received from server: ${event.data}`);
         var json = JSON.parse(event.data);
-        if (isLobby) {
             updateLobby(json);
-        } else {
             updateGame(json);
-        }
         };
 }
