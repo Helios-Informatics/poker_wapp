@@ -16,7 +16,7 @@ const props = defineProps({
       :class="[
         'player-circle',
         'responsive-player-circle',
-        'me-1',
+        'mr-1',
         { 'opacity-25': folded },
       ]"
     >

@@ -2,13 +2,13 @@ export function getPlayerHtml(name, balance, index, folded) {
 
   return folded ? `<div class="player ">
         <div class="text-secondary">${name}</div>
-        <div class="player-circle responsive-player-circle me-1 opacity-25">
+        <div class="player-circle responsive-player-circle mr-1 opacity-25">
             <div class="bi-person-fill player-icon responsive-player-icon opacity-25"></div>
         </div>
         <div class="player-balance responsive-player-balance opacity-25">$ ${balance}</div>
         </div>` : `<div class="player">
         <div class="text-secondary">${name}</div>
-        <div class="player-circle responsive-player-circle me-1">
+        <div class="player-circle responsive-player-circle mr-1">
         <div class="bi-person-fill player-icon responsive-player-icon"></div>
         </div>
         <div class="player-balance responsive-player-balance">$  ${balance}</div>

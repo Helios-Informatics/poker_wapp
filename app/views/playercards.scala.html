@@ -1,9 +1,0 @@
-@(playerIndex: Int, playerAtTurn: Int, gameState: de.htwg.poker.model.GameState)
-@indexedPlayers = @{ gameState.getPlayers.zipWithIndex }
-
-@if(playerAtTurn == playerIndex) {
-@card(indexedPlayers(playerIndex)._1.card1.rank.toString, indexedPlayers(playerIndex)._1.card1.suit.id)
-@card(indexedPlayers(playerIndex)._1.card2.rank.toString, indexedPlayers(playerIndex)._1.card2.suit.id)
-} else {
-@hiddencard()
-}

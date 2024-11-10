@@ -59,14 +59,14 @@ onMounted(() => {
 </script>
 <template>
   <div class="d-flex w-100 h-100">
-    <div class="d-flex flex-column justify-content-evenly container-fluid">
+    <div class="d-flex flex-column justify-evenly container-fluid">
       <div class="container-fluid">
         <div class="d-flex align-items-center justify-space-around row">
           <div class="col text-white">your current hand: {{ handInfo }}</div>
-          <div class="col d-flex justify-content-end">
+          <div class="col d-flex justify-end">
             <button
               type="button"
-              class="btn btn-secondary rounded-pill responsive-button d-flex align-items-center justify-content-center button"
+              class="btn btn-secondary rounded-pill responsive-button d-flex align-items-center justify-center button"
             >
               <h5 class="responsive-button-text">LEAVE</h5>
             </button>
@@ -74,7 +74,7 @@ onMounted(() => {
         </div>
       </div>
       <div class="d-flex flex-column">
-        <div class="d-flex justify-content-center align-items-center mb-2">
+        <div class="d-flex justify-center align-items-center mb-2">
           <div
             v-if="indexedPlayers.length >= 1"
             class="top-left-player"
@@ -100,7 +100,7 @@ onMounted(() => {
             />
           </div>
         </div>
-        <div class="d-flex justify-content-center align-items-center">
+        <div class="d-flex justify-center align-items-center">
           <div v-if="indexedPlayers.length >= 6" id="player-5">
             <Player
               :name="indexedPlayers[5].playername"
@@ -109,10 +109,10 @@ onMounted(() => {
               position="left-player"
             />
           </div>
-          <div class="d-flex justify-content-center align-items-center">
+          <div class="d-flex justify-center align-items-center">
             <div class="table responsive-table">
-              <div class="d-flex justify-content-around align-items-center">
-                <div class="d-flex justify-content-center align-items-center">
+              <div class="d-flex justify-around align-items-center">
+                <div class="d-flex justify-center align-items-center">
                   <div
                     v-if="indexedPlayers.length >= 1"
                     class="bg-transparent"
@@ -122,7 +122,7 @@ onMounted(() => {
                   </div>
                   <div
                     v-if="indexedPlayers.length >= 1"
-                    class="bg-transparent d-flex justify-content-center align-items-center"
+                    class="bg-transparent d-flex justify-center align-items-center"
                     id="playercards-0"
                   >
                     <PlayerCards
@@ -132,7 +132,7 @@ onMounted(() => {
                     />
                   </div>
                 </div>
-                <div class="d-flex justify-content-center align-items-center">
+                <div class="d-flex justify-center align-items-center">
                   <div
                     v-if="indexedPlayers.length >= 2"
                     class="bg-transparent"
@@ -142,7 +142,7 @@ onMounted(() => {
                   </div>
                   <div
                     v-if="indexedPlayers.length >= 2"
-                    class="bg-transparent d-flex justify-content-center align-items-center"
+                    class="bg-transparent d-flex justify-center align-items-center"
                     id="playercards-1"
                   >
                     <PlayerCards
@@ -154,12 +154,12 @@ onMounted(() => {
                 </div>
               </div>
               <div
-                class="d-flex justify-content-between align-items-center responsive-table-middle-row-margin-top"
+                class="d-flex justify-between align-items-center responsive-table-middle-row-margin-top"
               >
-                <div class="d-flex justify-content-center align-items-center">
+                <div class="d-flex justify-center align-items-center">
                   <div
                     v-if="indexedPlayers.length >= 6"
-                    class="bg-transparent d-flex justify-content-center align-items-center"
+                    class="bg-transparent d-flex justify-center align-items-center"
                     id="playercards-5"
                   >
                     <PlayerCards
@@ -177,14 +177,14 @@ onMounted(() => {
                   </div>
                 </div>
                 <div
-                  class="d-flex flex-column justify-content-center align-items-center"
+                  class="d-flex flex-column justify-center align-items-center"
                 >
                   <div id="pot" class="pot responsive-pot">
                     {{ "$ " + pot }}
                   </div>
                   <div
                     id="board"
-                    class="d-flex justify-content-center align-items-center bg-transparent"
+                    class="d-flex justify-center align-items-center bg-transparent"
                   >
                     <Card
                       v-for="(boardCard, index) in board"
@@ -194,7 +194,7 @@ onMounted(() => {
                     />
                   </div>
                 </div>
-                <div class="d-flex justify-content-center align-items-center">
+                <div class="d-flex justify-center align-items-center">
                   <div
                     v-if="indexedPlayers.length >= 3"
                     class="bg-transparent"
@@ -204,7 +204,7 @@ onMounted(() => {
                   </div>
                   <div
                     v-if="indexedPlayers.length >= 3"
-                    class="bg-transparent d-flex justify-content-center align-items-center"
+                    class="bg-transparent d-flex justify-center align-items-center"
                     id="playercards-2"
                   >
                     <PlayerCards
@@ -216,9 +216,9 @@ onMounted(() => {
                 </div>
               </div>
               <div
-                class="d-flex justify-content-around align-items-center responsive-table-lower-row-margin-top"
+                class="d-flex justify-around align-items-center responsive-table-lower-row-margin-top"
               >
-                <div class="d-flex justify-content-center align-items-center">
+                <div class="d-flex justify-center align-items-center">
                   <div
                     v-if="indexedPlayers.length >= 5"
                     class="bg-transparent"
@@ -228,7 +228,7 @@ onMounted(() => {
                   </div>
                   <div
                     v-if="indexedPlayers.length >= 5"
-                    class="bg-transparent d-flex justify-content-center align-items-center"
+                    class="bg-transparent d-flex justify-center align-items-center"
                     id="playercards-4"
                   >
                     <PlayerCards
@@ -238,7 +238,7 @@ onMounted(() => {
                     />
                   </div>
                 </div>
-                <div class="d-flex justify-content-center align-items-center">
+                <div class="d-flex justify-center align-items-center">
                   <div
                     v-if="indexedPlayers.length >= 4"
                     class="bg-transparent"
@@ -248,7 +248,7 @@ onMounted(() => {
                   </div>
                   <div
                     v-if="indexedPlayers.length >= 4"
-                    class="bg-transparent d-flex justify-content-center align-items-center"
+                    class="bg-transparent d-flex justify-center align-items-center"
                     id="playercards-3"
                   >
                     <PlayerCards
@@ -270,7 +270,7 @@ onMounted(() => {
             />
           </div>
         </div>
-        <div class="d-flex justify-content-center align-items-center mt-2">
+        <div class="d-flex justify-center align-items-center mt-2">
           <div
             v-if="indexedPlayers.length >= 5"
             class="top-left-player"
@@ -299,26 +299,26 @@ onMounted(() => {
       </div>
       <div class="container-fluid">
         <div
-          class="col d-flex justify-content-end text-white me-4 mb-4 font fs-2"
+          class="col d-flex justify-end text-white mr-4 mb-4 font fs-2"
           id="sliderValue"
         >
           $0
         </div>
       </div>
       <div class="container-fluid">
-        <div class="d-flex align-items-center justify-content-end row">
-          <div class="col d-flex gap-3 justify-content-end me-3">
+        <div class="d-flex align-items-center justify-end row">
+          <div class="col d-flex gap-3 justify-end mr-3">
             <button
               type="button"
               id="foldButton"
-              class="button btn btn-danger rounded-pill d-flex justify-content-center align-content-center responsive-button"
+              class="button btn btn-danger rounded-pill d-flex justify-center align-center responsive-button"
             >
               <h5 class="mt-1 responsive-button-text">FOLD</h5>
             </button>
             <button
               type="button"
               id="callCheckButton"
-              class="button btn btn-success rounded-pill d-flex justify-content-center align-content-center responsive-button"
+              class="button btn btn-success rounded-pill d-flex justify-center align-center responsive-button"
             >
               <h5 id="callCheckButtonText" class="mt-1 responsive-button-text">
                 CALL
@@ -327,7 +327,7 @@ onMounted(() => {
             <button
               type="button"
               id="raiseButton"
-              class="button btn btn-primary rounded-pill d-flex justify-content-center align-content-center responsive-button"
+              class="button btn btn-primary rounded-pill d-flex justify-center align-center responsive-button"
             >
               <h5 class="mt-1 responsive-button-text">RAISE</h5>
             </button>
@@ -335,12 +335,12 @@ onMounted(() => {
         </div>
       </div>
       <div
-        class="d-flex flex-column justify-content-end align-items-center"
+        class="d-flex flex-column justify-end align-items-center"
         style="width: 100px"
       >
         <input
           type="range"
-          class="form-range me-5 responsive-slider-size"
+          class="form-range mr-5 responsive-slider-size"
           style="margin-bottom: 230px"
           orient="vertical"
           min="0"

@@ -1,31 +1,30 @@
 <script setup>
-import { defineProps } from "vue";
+import { defineProps, ref } from "vue";
 
 const props = defineProps({
   name: String,
 });
 
-function makeEditable(event) {
-  event.target.removeAttribute("readonly");
-}
+const name = ref(props.name);
 </script>
 <template>
   <div
-    class="player bg-primary flex-row justify-content-start rounded-4"
-    style="width: 70%"
+    class="player bg-primary flex-row justify-start align-center rounded-lg"
+    style="width: 40%"
   >
-    <div class="player-circle player-circle me-1 my-2">
-      <div class="bi-person-fill my-player-icon text-white"></div>
+    <div class="player-circle player-circle my-2">
+      <v-icon icon="mdi mdi-account"></v-icon>
     </div>
-    <div class="text-secondary text-white ms-3">
-      <input
-        type="text"
-        class="form-control-lg form-control-plaintext text-white player-name"
-        :value="name"
-        @click="makeEditable"
-        readonly
-      />
-    </div>
+
+    <v-text-field
+      hide-details
+      class="player-name"
+      v-model="name"
+      color="white"
+      variant=""
+      dense
+      outlined
+    ></v-text-field>
   </div>
 </template>
 <style scoped>
