@@ -6,7 +6,6 @@ import { getPlayerHtml } from "./utils.js";
 document.addEventListener('DOMContentLoaded', function () {
     connectWebSocket();
     loadGame();
-    setupLobbyEventListeners();
 
     let playerID = getCookie("playerID");
     if (!playerID) {
@@ -18,25 +17,6 @@ document.addEventListener('DOMContentLoaded', function () {
     join(playerID);
 });
 
-function setupGameEventListeners() {
-    document.getElementById('callCheckButton').addEventListener('click', function () {
-        console.log(callCheckButton.innerText);
-        if (callCheckButton.innerText === "CALL") {
-            sendActionToServer("call");
-        } else {
-            sendActionToServer("check");
-        }
-    });
-
-    document.getElementById('foldButton').addEventListener('click', function () {
-        sendActionToServer("fold");
-    });
-
-    document.getElementById('raiseButton').addEventListener('click', function () {
-        const amount = document.getElementById('customRange3').value;
-        sendActionToServer("bet/" + amount);
-    });
-}
 //Cookie stuff
 function setCookie(name, value, days) {
     const date = new Date();
@@ -63,18 +43,7 @@ function generatePlayerID() {
 }
 
 
-function setupRaiseSlider() {
-    var slider = document.getElementById("customRange3");
-    var output = document.getElementById("sliderValue");
-
-    output.innerText = "$ " + slider.value;
-
-    slider.addEventListener("input", function () {
-        output.innerText = "$ " + slider.value;
-    });
-}
-
-function sendActionToServer(action) {
+export function sendActionToServer(action) {
     console.log("sendActionToServer() Called");
     if (
         !(
