@@ -85,8 +85,9 @@ class PokerController @Inject() (
     Ok(updatedPokerJson).as("application/json")
   }
 
-  def restartGame() = Action { implicit request: Request[AnyContent] =>
-    pokerControllerPublisher.restartGame()
+  def leave() = Action { implicit request: Request[AnyContent] =>
+    isLobby = true;
+    pokerControllerPublisher.leave()
     val updatedPokerJson = pokerToJson()
     Ok(updatedPokerJson).as("application/json")
   }

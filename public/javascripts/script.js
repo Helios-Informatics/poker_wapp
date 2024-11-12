@@ -55,6 +55,10 @@ function setupGameEventListeners() {
         const amount = document.getElementById('customRange3').value;
         sendActionToServer("bet/" + amount);
     });
+
+    document.getElementById('leaveButton').addEventListener('click', function () {
+        sendActionToServer("leave");
+    });
 }
 
 function setupRaiseSlider() {
@@ -109,6 +113,7 @@ function sendActionToServer(action) {
             action == "fold" ||
             action == "restartGame" ||
             action == "allIn" ||
+            action == "leave" ||
             action.startsWith("bet")
         )
     ) {

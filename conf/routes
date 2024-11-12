@@ -20,7 +20,7 @@ POST /allIn controllers.PokerController.allIn()
 POST /fold controllers.PokerController.fold()
 POST /call controllers.PokerController.call()
 POST /check controllers.PokerController.check()
-POST /restartGame controllers.PokerController.restartGame()
+POST /leave controllers.PokerController.leave()
 
 # lobby
 
