@@ -56,6 +56,7 @@ class PokerController @Inject() (
   }
 
   def newGame(): Action[JsValue] = Action(parse.json) { implicit request =>
+    isLobby = false
     val gameConfigResult = request.body.validate[GameConfig]
 
     gameConfigResult.fold(
@@ -64,7 +65,8 @@ class PokerController @Inject() (
       },
       gameConfig => {
         pokerControllerPublisher.createGame(gameConfig.players, gameConfig.smallBlind, gameConfig.bigBlind)
-        Ok(views.html.poker(gameState))
+        val updatedGameJson = gameStateToJson()
+        Ok(views.html.poker(gameState)).as("text/html")
       }
     )
   }

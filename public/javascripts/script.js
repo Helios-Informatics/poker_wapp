@@ -133,6 +133,7 @@ function sendActionToServer(action) {
 
 function newGame() {
     console.log("newGame() Called");
+
     const bigBlindValue = $("#bigBlind").val();
     const smallBlindValue = $("#smallBlind").val();
     const players = getPlayerNames();
@@ -146,11 +147,13 @@ function newGame() {
             bigBlind: bigBlindValue,
         }),
         contentType: "application/json",
-        dataType: "json",
-        success: function (json) {
-            console.log(json);
-            updateGame(json);
-            console.log("successfully loaded json and updatedGame");
+        dataType: "html",
+        success: function (response) {
+            $("body").html(response);
+            setupGameEventListeners();
+            setupRaiseSlider();
+            console.log("successfully rendered Game View");
+            loadGame();
         },
         error: function (error) {
             console.error("Error:", error);
@@ -162,18 +165,17 @@ function loadGame() {
     console.log("trying to load json");
     $.ajax({
         method: "GET",
-        url: "/get",
+        url: "/loadGame",
         dataType: "json",
 
         success: function (json) {
             console.log(json)
             updateGame(json)
             console.log("successfully loaded json and updatedGame");
-            setupGameEventListeners();
-            setupRaiseSlider();
         }
     });
 }
+
 
 function join(playerID) {
   console.log("joining Lobby");
@@ -244,7 +246,7 @@ function updateGame(json) {
 function updateButtons(highestBetSize, players, playerAtTurn) {
     let callCheckButtonText = $("#callCheckButtonText");
 
-    if (!callCheckButtonText) {
+    if (!callCheckButtonText || !highestBetSize || !players || !playerAtTurn) {
         return;
     }
 
@@ -258,7 +260,7 @@ function updateButtons(highestBetSize, players, playerAtTurn) {
 function updateBoard(board) {
     let boardDiv = $("#board");
 
-    if (!boardDiv) {
+    if (!boardDiv || !board) {
         return;
     }
 
@@ -295,6 +297,11 @@ function updateBoard(board) {
 }
 
 function updatePlayers(players, playerAtTurn) {
+
+    if(!players || !playerAtTurn) {
+        return;
+    }
+    
     players.forEach(function (player, index) {
         let playerDiv = $("#player-" + index);
         let playerCardsDiv = $("#playercards-" + index);
@@ -333,10 +340,10 @@ function updatePlayers(players, playerAtTurn) {
 function updatePot(pot) {
     let potDiv = $("#pot");
 
-    if (!potDiv) {
+    if (!potDiv || !pot) {
         return;
     }
-    
+
     potDiv.empty();
     potDiv.text("$ " + pot);
 }

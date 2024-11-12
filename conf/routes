@@ -13,7 +13,8 @@ GET / controllers.PokerController.index()
 # Game interaction routes
 
 GET /singleplayer controllers.PokerController.singleplayer()
-GET /get controllers.PokerController.getJson()
+POST /newGame controllers.PokerController.newGame()
+GET /loadGame controllers.PokerController.getJson()
 POST /bet/:x controllers.PokerController.bet(x: Int)
 POST /allIn controllers.PokerController.allIn()
 POST /fold controllers.PokerController.fold()
