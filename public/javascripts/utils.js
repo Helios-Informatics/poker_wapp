@@ -1,3 +1,5 @@
+import { getCookie } from './script.js';
+
 export function getLobbyPlayerHtml(name) {
   return `<div
   class="player bg-primary flex-row justify-content-start rounded-4 mt-3"
@@ -18,7 +20,7 @@ export function getLobbyPlayerHtml(name) {
 </div>`
 }
 
-export function getPlayerHtml(name, balance, index, folded) {
+export function getPlayerHtml(name, balance, atTurn, folded) {
 
   return folded ? `<div class="player ">
         <div class="text-secondary">${name}</div>
@@ -26,16 +28,22 @@ export function getPlayerHtml(name, balance, index, folded) {
             <div class="bi-person-fill player-icon responsive-player-icon opacity-25"></div>
         </div>
         <div class="player-balance responsive-player-balance opacity-25">$ ${balance}</div>
+        </div>` : ( atTurn ? `<div class="player">
+        <div class="text-primary">${name}</div>
+        <div class="player-circle responsive-player-circle me-1">
+        <div class="bi-person-fill player-icon responsive-player-icon"></div>
+        </div>
+        <div class="player-balance responsive-player-balance">$  ${balance}</div>
         </div>` : `<div class="player">
         <div class="text-secondary">${name}</div>
         <div class="player-circle responsive-player-circle me-1">
         <div class="bi-person-fill player-icon responsive-player-icon"></div>
         </div>
         <div class="player-balance responsive-player-balance">$  ${balance}</div>
-        </div>`
+        </div>`)
 }
 
-export function getPlayerCardsHtml(index, playerAtTurn, rank1, rank2, suit1, suit2) {
+export function getPlayerCardsHtml(playerID, rank1, rank2, suit1, suit2) {
 
   let cardColor1;
   let suitstyle1;
@@ -76,7 +84,10 @@ export function getPlayerCardsHtml(index, playerAtTurn, rank1, rank2, suit1, sui
       break;
   }
 
-  return playerAtTurn == index ? `<div class="card responsive-cards">
+  console.log("current playerID: ", playerID);
+  let isOwnPlayer = getCookie("playerID") === playerID;
+
+  return isOwnPlayer ? `<div class="card responsive-cards">
     <div class="card-icon ${suitstyle1} ${cardColor1} responsive-card-suit"></div>
     <div class="card-text ${cardColor1} responsive-card-text">${rank1}</div>
     </div>

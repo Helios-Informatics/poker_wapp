@@ -50,7 +50,7 @@ class PokerController @Inject() (
   def newGame() = Action { implicit request: Request[AnyContent] =>
     isLobby = false
 
-    pokerControllerPublisher.createGame(players.values.toList, smallBlind.toString, bigBlind.toString)
+    pokerControllerPublisher.createGame(players.keys.toList, smallBlind.toString, bigBlind.toString)
     val updatedPokerJson = pokerToJson()
     Ok(updatedPokerJson).as("application/json")
   }
@@ -114,7 +114,7 @@ class PokerController @Inject() (
       
     } else {
       val newPlayerName = "Player" + (playersLength + 1)
-      players = players + (playerID -> newPlayerName)
+      players = players + (newPlayerName -> playerID)
 
       pokerControllerPublisher.lobby()
 
@@ -153,6 +153,7 @@ class PokerController @Inject() (
       "players" -> gameState.getPlayers.map { player =>
         Json.obj(
           "player" -> Json.obj(
+            "id" -> players.getOrElse(player.playername, ""),
             "card1rank" -> player.card1.rank.toString,
             "card1suit" -> player.card1.suit.id,
             "card2rank" -> player.card2.rank.toString,

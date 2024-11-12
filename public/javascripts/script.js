@@ -76,7 +76,7 @@ function setCookie(name, value, days) {
     document.cookie = name + "=" + value + ";" + expires + ";path=/";
 }
 
-function getCookie(name) {
+export function getCookie(name) {
   console.log("getCookie() Called");
   const decodedCookie = decodeURIComponent(document.cookie);
   const cookies = decodedCookie.split(";");
@@ -86,9 +86,11 @@ function getCookie(name) {
       c = c.substring(1);
     }
     if (c.indexOf(name + "=") == 0) {
+        console.log("Cookie found: ", c);
         return c.substring(name.length + 1, c.length);
     }
 }
+    console.log("Cookie not found");
     return "";
 }
 
@@ -119,7 +121,6 @@ function sendActionToServer(action) {
             accept: "application/json",
             success: function (json) {
                 console.log(json);
-                updateGame(json);
                 console.log("successfully loaded json and updatedGame");
             },
             error: function (_jqXHR, _textStatus, errorThrown) {
@@ -151,7 +152,6 @@ function newGame() {
         dataType: "json",
         success: function (json) {
             console.log(json);
-            updateView(json);
             console.log("successfully rendered Game View");
         },
         error: function (error) {
@@ -173,7 +173,6 @@ function join(playerID) {
 
     success: function (json) {
       console.log(json);
-      updateLobby(json);
       console.log("successfully loaded lobby");
     },
   });
@@ -188,7 +187,6 @@ function loadWebSocket() {
 
         success: function (json) {
             console.log(json)
-            updateGame(json)
             console.log("successfully loaded json and updatedGame");
         }
     });
@@ -196,21 +194,30 @@ function loadWebSocket() {
 
 
 function updateView(json) {
+    console.log("updateView() Called", json);
     if (json.isLobby) {
-        if(!currentViewIsLobby) {
-            $("body").load("/loadLobby");
-            setupLobbyEventListeners();
-            currentViewIsLobby = true;
+        if (!currentViewIsLobby) {
+            $("body").load("/loadLobby", function() {
+                setupLobbyEventListeners();
+                currentViewIsLobby = true;
+                updateLobby(json);
+            });
+        } else {
+            updateLobby(json);
         }
-        updateLobby(json);
     } else {
         if(currentViewIsLobby) {
-            $("body").load("/loadGame");
-            currentViewIsLobby = false;
-            setTimeout(setupGameEventListeners, 100);
-            setTimeout(setupRaiseSlider, 100);
+            console.log("loading Game View");
+            $("body").load("/loadGame", function() {
+                currentViewIsLobby = false;
+                setupGameEventListeners();
+                setupRaiseSlider();
+                updateGame(json);
+            });
+        } else {
+            updateGame(json);
         }
-        updateGame(json);
+
     }
 }
 
@@ -230,7 +237,7 @@ function updateLobbyPlayers(players) {
 
     playersDiv.empty();
 
-    for (const [playerID, playerName] of Object.entries(players)) {
+    for (const [playerName, _] of Object.entries(players)) {
         let playerHtml = getLobbyPlayerHtml(playerName);
         playersDiv.append(playerHtml);
       }
@@ -240,7 +247,7 @@ function updateLobbyPlayers(players) {
 
 //update Game View
 function updateGame(json) {
-    console.log("updateGame() Called");
+    console.log("updateGame", json);
     updateBoard(json.board);
     updatePlayers(json.players, json.playerAtTurn);
     updatePot(json.pot);
@@ -249,9 +256,28 @@ function updateGame(json) {
 
 function updateButtons(highestBetSize, players, playerAtTurn) {
     let callCheckButtonText = $("#callCheckButtonText");
+    let callCheckButton = $("#callCheckButton");
+    let foldButton = $("#foldButton");
+    let raiseButton = $("#raiseButton");
 
-    if (!callCheckButtonText || !highestBetSize || !players || !playerAtTurn) {
+    if (!callCheckButtonText || !callCheckButton || !foldButton || !raiseButton) {
         return;
+    }
+
+    console.log("update Buttons")
+    console.log("own cookie: ", getCookie("playerID"));
+    console.log("player at turn: ", players[playerAtTurn].player.id);
+
+    let selfIsAtTurn = getCookie("playerID") == players[playerAtTurn].player.id;
+
+    if (!selfIsAtTurn) {
+        callCheckButton.prop("disabled", true).addClass("disabled-button");
+        foldButton.prop("disabled", true).addClass("disabled-button");
+        raiseButton.prop("disabled", true).addClass("disabled-button");
+    } else {
+        callCheckButton.prop("disabled", false).removeClass("disabled-button");
+        foldButton.prop("disabled", false).removeClass("disabled-button");
+        raiseButton.prop("disabled", false).removeClass("disabled-button");
     }
 
     if (players[playerAtTurn].player.currentAmountBetted == highestBetSize) {
@@ -264,7 +290,7 @@ function updateButtons(highestBetSize, players, playerAtTurn) {
 function updateBoard(board) {
     let boardDiv = $("#board");
 
-    if (!boardDiv || !board) {
+    if (!boardDiv) {
         return;
     }
 
@@ -301,12 +327,12 @@ function updateBoard(board) {
 }
 
 function updatePlayers(players, playerAtTurn) {
-
-    if(!players || !playerAtTurn) {
-        return;
-    }
+    console.log("updatePlayers() Called", players, playerAtTurn);
+    console.log("updatePlayers() Called with playerAtTurn: ", playerAtTurn);
     
     players.forEach(function (player, index) {
+        console.log("Updating Player: ", player)
+
         let playerDiv = $("#player-" + index);
         let playerCardsDiv = $("#playercards-" + index);
         let playerCoinsDiv = $("#playercoins-" + index);
@@ -319,15 +345,16 @@ function updatePlayers(players, playerAtTurn) {
         playerCardsDiv.empty();
         playerCoinsDiv.empty();
 
+        let atTurn = index == playerAtTurn;
+
         let playerHtml = getPlayerHtml(
             player.player.playername,
             player.player.balance,
-            index,
+            atTurn,
             player.player.folded
         );
         let playerCardsHtml = getPlayerCardsHtml(
-            index,
-            playerAtTurn,
+            player.player.id,
             player.player.card1rank,
             player.player.card2rank,
             player.player.card1suit,
