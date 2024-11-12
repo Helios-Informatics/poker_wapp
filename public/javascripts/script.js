@@ -4,6 +4,7 @@ import { getPlayerHtml } from "./utils.js";
 import { getLobbyPlayerHtml } from "./utils.js";
 
 var playerID = "";
+var currentViewIsLobby = true;
 
 // display slider value
 document.addEventListener('DOMContentLoaded', function () {
@@ -147,32 +148,15 @@ function newGame() {
             bigBlind: bigBlindValue,
         }),
         contentType: "application/json",
-        dataType: "html",
-        success: function (response) {
-            $("body").html(response);
-            setupGameEventListeners();
-            setupRaiseSlider();
+        dataType: "json",
+        success: function (json) {
+            console.log(json);
+            updateView(json);
             console.log("successfully rendered Game View");
-            loadGame();
         },
         error: function (error) {
             console.error("Error:", error);
         },
-    });
-}
-
-function loadGame() {
-    console.log("trying to load json");
-    $.ajax({
-        method: "GET",
-        url: "/loadGame",
-        dataType: "json",
-
-        success: function (json) {
-            console.log(json)
-            updateGame(json)
-            console.log("successfully loaded json and updatedGame");
-        }
     });
 }
 
@@ -211,9 +195,29 @@ function loadWebSocket() {
 }
 
 
+function updateView(json) {
+    if (json.isLobby) {
+        if(!currentViewIsLobby) {
+            $("body").load("/loadLobby");
+            setupLobbyEventListeners();
+            currentViewIsLobby = true;
+        }
+        updateLobby(json);
+    } else {
+        if(currentViewIsLobby) {
+            $("body").load("/loadGame");
+            currentViewIsLobby = false;
+            setTimeout(setupGameEventListeners, 100);
+            setTimeout(setupRaiseSlider, 100);
+        }
+        updateGame(json);
+    }
+}
+
 //update Lobby View
 function updateLobby(json) {
-    updateLobbyPlayers(json.players);
+    console.log("updateLobby() Called");
+    updateLobbyPlayers(json.lobbyPlayers);
 }
 
 function updateLobbyPlayers(players) {
@@ -384,7 +388,6 @@ function connectWebSocket() {
     socket.onmessage = function (event) {
         console.log(`[message] Data received from server: ${event.data}`);
         var json = JSON.parse(event.data);
-            updateLobby(json);
-            updateGame(json);
+            updateView(json);
         };
 }

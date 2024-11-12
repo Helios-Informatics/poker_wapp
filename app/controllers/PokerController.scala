@@ -47,64 +47,48 @@ class PokerController @Inject() (
     Ok(views.html.index())
   }
 
-  def singleplayer() = Action { implicit request: Request[AnyContent] =>
+  def newGame() = Action { implicit request: Request[AnyContent] =>
     isLobby = false
-    val players =
-      List("Player1", "Player2", "Player3", "Player4", "Player5", "Player6")
-    pokerControllerPublisher.createGame(players, "10", "20")
-    Ok(views.html.poker(gameState))
-  }
 
-  def newGame(): Action[JsValue] = Action(parse.json) { implicit request =>
-    isLobby = false
-    val gameConfigResult = request.body.validate[GameConfig]
-
-    gameConfigResult.fold(
-      errors => {
-        BadRequest(Json.obj("status" -> "error", "message" -> JsError.toJson(errors)))
-      },
-      gameConfig => {
-        pokerControllerPublisher.createGame(gameConfig.players, gameConfig.smallBlind, gameConfig.bigBlind)
-        val updatedGameJson = gameStateToJson()
-        Ok(views.html.poker(gameState)).as("text/html")
-      }
-    )
+    pokerControllerPublisher.createGame(players.values.toList, smallBlind.toString, bigBlind.toString)
+    val updatedPokerJson = pokerToJson()
+    Ok(updatedPokerJson).as("application/json")
   }
 
   def bet(amount: Int) = Action { implicit request: Request[AnyContent] =>
     pokerControllerPublisher.bet(amount)
-    val updatedGameJson = gameStateToJson()
-    Ok(updatedGameJson).as("application/json")
+    val updatedPokerJson = pokerToJson()
+    Ok(updatedPokerJson).as("application/json")
   }
 
   def allIn() = Action { implicit request: Request[AnyContent] =>
     pokerControllerPublisher.allIn()
-    val updatedGameJson = gameStateToJson()
-    Ok(updatedGameJson).as("application/json")
+    val updatedPokerJson = pokerToJson()
+    Ok(updatedPokerJson).as("application/json")
   }
 
   def fold() = Action { implicit request: Request[AnyContent] =>
     pokerControllerPublisher.fold()
-    val updatedGameJson = gameStateToJson()
-    Ok(updatedGameJson).as("application/json")
+    val updatedPokerJson = pokerToJson()
+    Ok(updatedPokerJson).as("application/json")
   }
 
   def call() = Action { implicit request: Request[AnyContent] =>
     println("PokerController.call() function called")
     pokerControllerPublisher.call()
-    Ok(gameStateToJson()).as("application/json")
+    Ok(pokerToJson()).as("application/json")
   }
 
   def check() = Action { implicit request: Request[AnyContent] =>
     pokerControllerPublisher.check()
-    val updatedGameJson = gameStateToJson()
-    Ok(updatedGameJson).as("application/json")
+    val updatedPokerJson = pokerToJson()
+    Ok(updatedPokerJson).as("application/json")
   }
 
   def restartGame() = Action { implicit request: Request[AnyContent] =>
     pokerControllerPublisher.restartGame()
-    val updatedGameJson = gameStateToJson()
-    Ok(updatedGameJson).as("application/json")
+    val updatedPokerJson = pokerToJson()
+    Ok(updatedPokerJson).as("application/json")
   }
 
   // lobby functions
@@ -121,8 +105,8 @@ class PokerController @Inject() (
 
     } else if (players.contains(playerID)) {
       println("Player already in lobby")
-      val updatedLobbyJson = lobbyToJson()
-      Ok(updatedLobbyJson).as("application/json")
+      val updatedPokerJson = pokerToJson()
+      Ok(updatedPokerJson).as("application/json")
 
     } else if (playersLength >= 6) {
       print("Player limit reached")
@@ -136,10 +120,18 @@ class PokerController @Inject() (
 
       println("New Player: " + playerID + " " + newPlayerName)
 
-      val updatedLobbyJson = lobbyToJson()
-      Ok(updatedLobbyJson).as("application/json")
+      val updatedPokerJson = pokerToJson()
+      Ok(updatedPokerJson).as("application/json")
     }
 
+  }
+
+  def loadLobbyView() = Action { implicit request: Request[AnyContent] =>
+    Ok(views.html.index())
+  }
+
+  def loadGameView() = Action { implicit request: Request[AnyContent] =>
+    Ok(views.html.poker(gameState))
   }
 
 
@@ -149,11 +141,15 @@ class PokerController @Inject() (
   }
 
     def getJson = Action {
-    Ok(gameStateToJson())
+    Ok(pokerToJson())
   }
 
-  def gameStateToJson() = {
+  def pokerToJson() = {
     Json.obj(
+      "isLobby" -> isLobby,
+      "lobbyPlayers" -> players,
+      "smallBlind" -> smallBlind,
+      "bigBlind" -> bigBlind,
       "players" -> gameState.getPlayers.map { player =>
         Json.obj(
           "player" -> Json.obj(
@@ -182,14 +178,6 @@ class PokerController @Inject() (
     )
   }
 
-  def lobbyToJson() = {
-    Json.obj(
-      "players" -> players,
-      "smallBlind" -> smallBlind,
-      "bigBlind" -> bigBlind
-    )
-  }
-
   def socket(): WebSocket = WebSocket.accept[String, String] { request =>
     ActorFlow.actorRef { out =>
       println("Connect received")
@@ -206,12 +194,7 @@ class PokerController @Inject() (
     listenTo(pokerControllerPublisher)
 
     def receive: Receive = { case msg: String =>
-      if (isLobby) {
-        out ! lobbyToJson().toString()
-      } else {
-        out ! gameStateToJson().toString()
-      }
-      println("Received: " + msg)
+        out ! pokerToJson().toString()
     }
 
     reactions += { case _ =>
@@ -219,11 +202,7 @@ class PokerController @Inject() (
     }
 
     def sendJsonToClient() = {
-      if (isLobby) {
-        out ! lobbyToJson().toString()
-      } else {
-        out ! gameStateToJson().toString()
-      }
+        out ! pokerToJson().toString()
     }
 
   }
