@@ -8,11 +8,8 @@
 
 # An example controller showing a sample home page
 
-GET / controllers.PokerController.index()
-
 # Game interaction routes
 
-GET /singleplayer controllers.PokerController.singleplayer()
 GET /get controllers.PokerController.getJson()
 POST /bet/:x controllers.PokerController.bet(x: Int)
 POST /allIn controllers.PokerController.allIn()
@@ -24,7 +21,8 @@ POST /restartGame controllers.PokerController.restartGame()
 # lobby
 
 GET /join controllers.PokerController.join()
- # POST /changeName/:x controllers.PokerController.changeName(x: String)
+
+# POST /changeName/:x controllers.PokerController.changeName(x: String)
 
 # POST /changeSmallBlind/:x controllers.PokerController.changeSmallBlind(x: Int)
 

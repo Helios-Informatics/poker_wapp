@@ -1,22 +1,9 @@
 <script setup>
-import PokerView from "./views/PokerView.vue";
-
-const exampleGamestate = {
-  getPlayers: () => [
-    { playername: "Julian", balance: 1000, folded: false },
-    { playername: "John", balance: 1000, folded: false },
-    { playername: "Jane", balance: 1000, folded: false },
-    { playername: "Jack", balance: 1000, folded: false },
-    { playername: "Jill", balance: 1000, folded: false },
-  ],
-  getPlayerAtTurn: () => 0,
-  getBoard: () => [],
-  getPot: () => 0,
-};
+import LobbyView from "./views/LobbyView.vue";
 </script>
 
 <template>
-  <PokerView :gameState="exampleGamestate" />
+  <LobbyView />
 </template>
 
 <style>

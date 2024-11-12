@@ -1,11 +1,20 @@
 <script setup>
-import { ref } from "vue";
+import { onMounted, ref } from "vue";
 import LobbyPlayer from "../components/LobbyPlayer.vue";
-import { newGame } from "../scripts/script.js";
+import {
+  newGame,
+  connectWebSocket,
+  getCookie,
+  setCookie,
+  generatePlayerID,
+} from "../scripts/script.js";
 
-const players = ref(["Julian"]);
+const players = ref();
 const bigBlind = ref("");
 const smallBlind = ref("");
+const loading = ref(true);
+
+const playerID = ref("");
 
 function copyLobbyLink() {
   const lobbyUrl = window.location.origin;
@@ -19,18 +28,35 @@ function copyLobbyLink() {
       console.error("Error copying lobby link:", err);
     });
 }
+
+ onMounted(async() => {
+  console.log("Lobby view mounted");
+  const response = await connectWebSocket();
+  players.value = response.lobbyPlayers;
+  smallBlind.value = response.smallBlind;
+  bigBlind.value = response.bigBlind;
+
+  playerID.value = getCookie("playerID");
+  if (!playerID.value) {
+    playerID.value = generatePlayerID();
+    setCookie("playerID", playerID.value, 1);
+  }
+  console.log("PlayerID:", playerID.value);
+  console.log("response:", response);
+  loading.value = false;
+});
 </script>
 <template>
-  <div class="body">
+  <div class="body" v-if="!loading">
     <div
       class="d-flex flex-column align-center mt-5"
-      style="height: 90vh; width: 100vw;"
+      style="height: 90vh; width: 100vw"
     >
       <div class="d-flex flex-row justify-space-between w-100 px-5">
-        <div class="d-flex flex-column" style="width: 45%;">
+        <div class="d-flex flex-column" style="width: 45%">
           <div class="d-flex flex-row">
             <h2 class="text-white mb-5">Players</h2>
-            <h2 class="text-white ms-3">(1/6)</h2>
+            <h2 class="text-white ms-3">{{"(" + players.length + "/6)"}}</h2>
           </div>
           <div>
             <div v-for="player in players" :key="player">
@@ -38,7 +64,7 @@ function copyLobbyLink() {
             </div>
           </div>
         </div>
-        <div class="d-flex flex-column text-white" style="width: 45%;">
+        <div class="d-flex flex-column text-white" style="width: 45%">
           <h2 class="text-white mb-5">Settings</h2>
           <v-text-field
             v-model="bigBlind"
@@ -63,7 +89,9 @@ function copyLobbyLink() {
         <v-btn color="primary" class="mr-2" @click="copyLobbyLink">
           Copy Invite Link
         </v-btn>
-        <v-btn color="success" @click="newGame">Start Game</v-btn>
+        <v-btn color="success" @click="newGame(smallBlind, bigBlind, players)"
+          >Start Game</v-btn
+        >
       </div>
     </div>
   </div>

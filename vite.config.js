@@ -7,7 +7,7 @@ export default defineConfig({
   server: {
     proxy: {
       '/websocket': {
-        target: 'ws://localhost:3000',
+        target: 'ws://localhost:9000',
         ws: true
       },
     }
