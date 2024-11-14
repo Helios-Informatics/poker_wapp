@@ -1,19 +1,32 @@
 <script setup>
-import { defineProps, computed, ref } from "vue";
+import { defineProps, computed, ref,watch } from "vue";
 import Player from "../components/Player.vue";
 import PlayerCards from "../components/PlayerCards.vue";
 import Coins from "../components/Coins.vue";
 import Card from "../components/Card.vue";
 import { sendActionToServer } from "../scripts/script.js";
 
-const gameState = ref({});
+const props = defineProps(
+  {
+    gameState: Object,
+  }
+);
+
+const gamestate = ref(props.gameState);
+console.log("Gamestate updated:", gamestate.value);
+
+watch(() => props.gameState, (newGameState) => {
+  gamestate.value = newGameState;
+  console.log("Gamestate updated:", gamestate.value);
+});
 
 const indexedPlayers = computed(() =>
-  props.gameState.getPlayers().map((player, index) => ({ ...player, index }))
+  props.gameState.players.map((player, index) => ({ ...player, index }))
 );
-const playerAtTurn = computed(() => props.gameState.getPlayerAtTurn());
-const board = computed(() => props.gameState.getBoard());
-const pot = computed(() => props.gameState.getPot());
+const playerAtTurn = computed(() => props.gameState.playerAtTurn);
+const board = computed(() => props.gameState.board);
+const pot = computed(() => props.gameState.pot);
+const highestBetSize = computed(() => props.gameState.highestBetSize);
 
 const sliderValue = ref(0);
 function updateSliderValue(event) {
@@ -40,7 +53,7 @@ function handleAction(action) {
 }
 </script>
 <template>
-  <div class="d-flex w-100 h-100">
+  <div class="d-flex w-100 h-100" v-if="gameState !== {}">
     <div class="d-flex flex-column justify-evenly container-fluid">
       <!-- Current Hand Info & Leave Button -->
       <div class="container-fluid">
@@ -106,7 +119,7 @@ function handleAction(action) {
                   <PlayerCards
                     :playerIndex="player.index"
                     :playerAtTurn="playerAtTurn"
-                    :gameState="props.gameState"
+                    :gameState="gameState"
                   />
                 </div>
               </div>

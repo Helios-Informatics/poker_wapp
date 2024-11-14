@@ -1,9 +1,22 @@
 <script setup>
+import { ref } from "vue";
 import LobbyView from "./views/LobbyView.vue";
+import PokerView from "./views/PokerView.vue";
+
+const currentViewIsLobby = ref(true);
+
+const gameState = ref({});
+
+function handleViewChange({ isLobby, data }) {
+  currentViewIsLobby.value = isLobby;
+  gameState.value = data;
+}
+
 </script>
 
 <template>
-  <LobbyView />
+  <LobbyView v-if="currentViewIsLobby" @currentViewIsLobby:updated="handleViewChange"/>
+  <PokerView v-else :gameState="gameState" />
 </template>
 
 <style>

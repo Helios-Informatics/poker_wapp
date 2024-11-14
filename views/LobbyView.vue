@@ -15,6 +15,9 @@ const smallBlind = ref("");
 const loading = ref(true);
 
 const playerID = ref("");
+const currentViewIsLobby = ref(true);
+
+const emit = defineEmits(["currentViewIsLobby:updated"]);
 
 function copyLobbyLink() {
   const lobbyUrl = window.location.origin;
@@ -29,22 +32,39 @@ function copyLobbyLink() {
     });
 }
 
- onMounted(async() => {
+onMounted(async () => {
   console.log("Lobby view mounted");
-  const response = await connectWebSocket();
-  players.value = response.lobbyPlayers;
-  smallBlind.value = response.smallBlind;
-  bigBlind.value = response.bigBlind;
-
   playerID.value = getCookie("playerID");
-  if (!playerID.value) {
+  if (playerID.value === "") {
     playerID.value = generatePlayerID();
     setCookie("playerID", playerID.value, 1);
   }
   console.log("PlayerID:", playerID.value);
-  console.log("response:", response);
-  loading.value = false;
+
+  // Define the onUpdate callback to handle data updates
+  const onUpdate = (data) => {
+    players.value = data.lobbyPlayers;
+    smallBlind.value = data.smallBlind;
+    bigBlind.value = data.bigBlind;
+    currentViewIsLobby.value = data.isLobby;
+    emit("currentViewIsLobby:updated", { isLobby: currentViewIsLobby.value, data });
+    };
+
+  try {
+    // Pass the onUpdate callback to connectWebSocket
+    const response = await connectWebSocket(playerID.value, onUpdate);
+
+    // Initial data from connection
+    console.log("Initial response:", response);
+    players.value = response.lobbyPlayers;
+    smallBlind.value = response.smallBlind;
+    bigBlind.value = response.bigBlind;
+    loading.value = false;
+  } catch (error) {
+    console.error("Error in WebSocket connection:", error);
+  }
 });
+
 </script>
 <template>
   <div class="body" v-if="!loading">
@@ -56,7 +76,7 @@ function copyLobbyLink() {
         <div class="d-flex flex-column" style="width: 45%">
           <div class="d-flex flex-row">
             <h2 class="text-white mb-5">Players</h2>
-            <h2 class="text-white ms-3">{{"(" + players.length + "/6)"}}</h2>
+            <h2 class="text-white ms-3">{{ "(" + players.length + "/6)" }}</h2>
           </div>
           <div>
             <div v-for="player in players" :key="player">

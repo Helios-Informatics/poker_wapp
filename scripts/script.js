@@ -1,4 +1,5 @@
 import axios from 'axios';
+import { pl } from 'vuetify/locale';
 
 
 var playerID = "";
@@ -14,7 +15,7 @@ export function setCookie(name, value, days) {
 }
 
 export function getCookie(name) {
-    console.log("getCookie() Called");
+    console.log("getCookie() Called", name);
     const decodedCookie = decodeURIComponent(document.cookie);
     const cookies = decodedCookie.split(";");
     for (let i = 0; i < cookies.length; i++) {
@@ -30,6 +31,7 @@ export function getCookie(name) {
 }
 
 export function generatePlayerID() {
+    console.log("generatePlayerID() Called");
     return "player-" + Math.random().toString(36).substr(2, 9);
 }
 
@@ -93,9 +95,9 @@ export function newGame(smallBlindValue, bigBlindValue, players) {
 
 
 function join(playerID) {
-    console.log("joining Lobby");
+    console.log("joining Lobby", playerID);
 
-    axios.get(`${serverAdress}/join`, {
+    return axios.get(`${serverAdress}/join`, {
         headers: {
             playerID: playerID,
             'Accept': 'application/json',
@@ -116,7 +118,7 @@ async function loadWebSocket() {
 
     await axios.get(`${serverAdress}/websocket`, {
         headers: {
-            'Access-Control-Allow-Origin': '*',
+            'Access-Control-Allow-Origin': 'null',
             'Accept': 'application/json',
         }
     })
@@ -134,17 +136,14 @@ async function loadWebSocket() {
 function updateView(json) {
     if (json.isLobby) {
         if (!currentViewIsLobby) {
-            $("body").load("/loadLobby");
-            setupLobbyEventListeners();
+
             currentViewIsLobby = true;
         }
         return json;
     } else {
         if (currentViewIsLobby) {
-            $("body").load("/loadGame");
+
             currentViewIsLobby = false;
-            setTimeout(setupGameEventListeners, 100);
-            setTimeout(setupRaiseSlider, 100);
         }
         return json;
     }
@@ -163,30 +162,42 @@ function updateGame(json) {
 }
 
 
-export async function connectWebSocket() {
-    const socket = new WebSocket("ws://" + window.location.host + "/websocket");
-    await loadWebSocket();
+export async function connectWebSocket(newPlayerID, onUpdate) {
+    playerID = newPlayerID;
+    console.log("connectWebSocket() Called", newPlayerID);
 
-    socket.onopen = function (e) {
-        console.log("[open] Connection established");
-        return join(playerID);
-    };
-    socket.onclose = function (event) {
-        if (event.wasClean) {
-            console.log(
-                `[close] Connection closed cleanly, code=${event.code} reason=${event.reason}`
-            );
-        } else {
-            console.log("[close] Connection died");
+    return new Promise((resolve, reject) => {
+        const socket = new WebSocket("ws://" + window.location.host + "/websocket");
+
+        socket.onopen = function (e) {
+            console.log("[open] Connection established");
+            join(playerID)
+                .then(response => {
+                    resolve(response); // Resolve promise with the response after joining
+                })
+                .catch(err => {
+                    reject(err); // Reject if joining fails
+                });
+        };
+
+        socket.onerror = function (error) {
+            console.log(`[error] ${error.message}`);
+            reject(new Error("WebSocket error"));
+        };
+
+        socket.onmessage = function (event) {
+            console.log(`[message] Data received from server: ${event.data}`);
+            var json = JSON.parse(event.data);
+            onUpdate(json);
+            //updateView(json);
         }
-    };
-    socket.onerror = function (error) {
-        console.log(`[error] ${error.message}`);
-    };
 
-    socket.onmessage = function (event) {
-        console.log(`[message] Data received from server: ${event.data}`);
-        var json = JSON.parse(event.data);
-        return updateView(json);
-    };
+        socket.onclose = function (event) {
+            if (event.wasClean) {
+                console.log(`[close] Connection closed cleanly, code=${event.code} reason=${event.reason}`);
+            } else {
+                console.log("[close] Connection died");
+            }
+        };
+    });
 }

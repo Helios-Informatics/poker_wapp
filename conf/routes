@@ -28,7 +28,7 @@ GET /join controllers.PokerController.join()
 
 # POST /changeBigBlind/:x controllers.PokerController.changeBigBlind(x: Int)
 
-# POST /newGame controllers.PokerController.newGame()
+POST /newGame controllers.PokerController.newGame()
 
 # Websocket
 

@@ -1,5 +1,5 @@
 <script setup>
-import { defineProps, computed } from "vue";
+import { defineProps, computed ,watch,ref} from "vue";
 import Card from "./Card.vue";
 import HiddenCard from "./HiddenCard.vue";
 
@@ -9,21 +9,41 @@ const props = defineProps({
   gameState: Object,
 });
 
+const playerIndex = ref(props.playerIndex);
+const playerAtTurn = ref(props.playerAtTurn);
+const gameState = ref(props.gameState);
+
+watch(() => props.playerIndex, (newPlayerIndex) => {
+  playerIndex.value = newPlayerIndex;
+  console.log("PlayerIndex updated:", playerIndex.value);
+});
+watch(() => props.playerAtTurn, (newPlayerAtTurn) => {
+  playerAtTurn.value = newPlayerAtTurn;
+  console.log("PlayerAtTurn updated:", playerAtTurn.value);
+});
+watch(() => props.gameState, (newGameState) => {
+  gameState.value = newGameState;
+  console.log("GameState updated:", gameState.value);
+});
+
+console.log("PlayerCards props:", props);
+
 const indexedPlayers = computed(() =>
-  props.gameState.getPlayers().map((player, index) => ({ ...player, index }))
+  gameState.value.players.map((player, index) => ({ ...player, index }))
 );
+console.log("Indexed players:", indexedPlayers.value[playerIndex.value]);
 </script>
 <template>
   <div>
     <Card
       v-if="playerAtTurn === playerIndex"
-      :rank="indexedPlayers[playerIndex].card1.rank.toString()"
-      :suitID="indexedPlayers[playerIndex].card1.suit.id"
+      :rank="indexedPlayers[playerIndex].player.card1rank.toString()"
+      :suitID="indexedPlayers[playerIndex].player.card1suit.id"
     />
     <Card
       v-if="playerAtTurn === playerIndex"
-      :rank="indexedPlayers[playerIndex].card2.rank.toString()"
-      :suitID="indexedPlayers[playerIndex].card2.suit.id"
+      :rank="indexedPlayers[playerIndex].player.card2rank.toString()"
+      :suitID="indexedPlayers[playerIndex].player.card2suit.id"
     />
     <HiddenCard v-else />
     <HiddenCard v-else />
