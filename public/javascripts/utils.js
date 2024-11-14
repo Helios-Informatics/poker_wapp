@@ -65,8 +65,6 @@ export function getPlayerCardsHtml(playerID, rank1, rank2, suit1, suit2) {
       suitstyle1 = "bi-suit-diamond-fill";
   }
 
-  console.log("Updating Playercards", suitstyle1, suitstyle2)
-
   switch (suit2) {
     case 1:
       cardColor2 = "black-text";

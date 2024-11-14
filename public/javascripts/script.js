@@ -321,10 +321,6 @@ function updateBoard(board) {
                 break;
         }
 
-        console.log("CAAARD")
-        console.log("COLOR:" + color);
-        console.log("SUIT: ", suit)
-
         let cardHtml = `<div class="card responsive-cards">
                         <div class="card-icon ${suit} ${color} responsive-card-suit"></div>
                         <div class="card-text ${color} responsive-card-text">${card.card.rank}</div>
@@ -338,7 +334,6 @@ function updatePlayers(players, playerAtTurn) {
     console.log("updatePlayers() Called with playerAtTurn: ", playerAtTurn);
     
     players.forEach(function (player, index) {
-        console.log("Updating Player: ", player)
 
         let playerDiv = $("#player-" + index);
         let playerCardsDiv = $("#playercards-" + index);
