@@ -57,15 +57,15 @@ export function getPlayerCardsHtml(playerID, rank1, rank2, suit1, suit2) {
     case 2:
       cardColor1 = "black-text";
       suitstyle1 = "bi-suit-spade-fill"
-      break;
     case 4:
       cardColor1 = "red-text";
       suitstyle1 = "bi-suit-heart-fill"
     case 3:
       cardColor1 = "red-text";
       suitstyle1 = "bi-suit-diamond-fill";
-      break;
   }
+
+  console.log("Updating Playercards", suitstyle1, suitstyle2)
 
   switch (suit2) {
     case 1:

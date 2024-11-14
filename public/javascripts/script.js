@@ -293,13 +293,11 @@ function updateButtons(highestBetSize, players, playerAtTurn) {
 }
 
 function updateBoard(board) {
+    console.log("updateBoard called:", board)
     let boardDiv = $("#board");
 
-    if (!boardDiv) {
-        return;
-    }
-
     boardDiv.empty();
+
     let color;
     let suit;
 
@@ -308,6 +306,7 @@ function updateBoard(board) {
             case 1:
                 color = "black-text";
                 suit = "bi-suit-club-fill";
+                break;
             case 2:
                 color = "black-text";
                 suit = "bi-suit-spade-fill";
@@ -315,13 +314,16 @@ function updateBoard(board) {
             case 4:
                 color = "red-text";
                 suit = "bi-suit-heart-fill";
+                break;
             case 3:
                 color = "red-text";
                 suit = "bi-suit-diamond-fill";
                 break;
         }
 
+        console.log("CAAARD")
         console.log("COLOR:" + color);
+        console.log("SUIT: ", suit)
 
         let cardHtml = `<div class="card responsive-cards">
                         <div class="card-icon ${suit} ${color} responsive-card-suit"></div>
