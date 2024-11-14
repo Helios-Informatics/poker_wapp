@@ -54,21 +54,26 @@ export function getPlayerCardsHtml(playerID, rank1, rank2, suit1, suit2) {
     case 1:
       cardColor1 = "black-text";
       suitstyle1 = "bi-suit-club-fill"
+      break;
     case 2:
       cardColor1 = "black-text";
       suitstyle1 = "bi-suit-spade-fill"
+      break;
     case 4:
       cardColor1 = "red-text";
       suitstyle1 = "bi-suit-heart-fill"
+      break;
     case 3:
       cardColor1 = "red-text";
       suitstyle1 = "bi-suit-diamond-fill";
+      break;
   }
 
   switch (suit2) {
     case 1:
       cardColor2 = "black-text";
       suitstyle2 = "bi-suit-club-fill"
+      break;
     case 2:
       cardColor2 = "black-text";
       suitstyle2 = "bi-suit-spade-fill"
@@ -76,6 +81,7 @@ export function getPlayerCardsHtml(playerID, rank1, rank2, suit1, suit2) {
     case 4:
       cardColor2 = "red-text";
       suitstyle2 = "bi-suit-heart-fill"
+      break;
     case 3:
       cardColor2 = "red-text";
       suitstyle2 = "bi-suit-diamond-fill";
@@ -136,7 +142,9 @@ export function calculateCoinsHtml(amount) {
         break;
     }
 
+
     for (let i = 0; i < amountOfCoins; i++) {
+
       html += `
           <div class="coin" style="top: ${i * -5}px;">
             <svg class="responsive-coins" viewBox="0 0 281 281" fill="${fillColor}" xmlns="http://www.w3.org/2000/svg">

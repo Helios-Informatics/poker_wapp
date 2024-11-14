@@ -44,6 +44,7 @@ class PokerController @Inject() (
   def gameState = pokerControllerPublisher.gameState
 
   def index() = Action { implicit request: Request[AnyContent] =>
+    Evaluator.readHashes
     Ok(views.html.index())
   }
 
