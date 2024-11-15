@@ -1,24 +1,64 @@
 <script setup>
-import { ref } from "vue";
+import { ref, onMounted } from "vue";
 import LobbyView from "./views/LobbyView.vue";
 import PokerView from "./views/PokerView.vue";
+import {
+  connectWebSocket,
+  getCookie,
+  setCookie,
+  generatePlayerID,
+} from "./scripts/script.js";
 
 const currentViewIsLobby = ref(true);
-
+const playerID = ref("");
 const gameState = ref({});
+const lobbyState = ref({});
 
-function handleViewChange({ isLobby, data }) {
-  currentViewIsLobby.value = isLobby;
-  gameState.value = data;
-}
+const isLoading = ref(true);
+
+onMounted(async () => {
+  console.log("Lobby view mounted");
+  playerID.value = getCookie("playerID");
+  if (playerID.value === "") {
+    playerID.value = generatePlayerID();
+    setCookie("playerID", playerID.value, 1);
+  }
+  console.log("PlayerID:", playerID.value);
+
+  const onUpdate = (data) => {
+    console.log("Data received:", data);
+    lobbyState.value.lobbyPlayers = data.lobbyPlayers;
+    lobbyState.value.smallBlind = data.smallBlind;
+    lobbyState.value.bigBlind = data.bigBlind;
+    currentViewIsLobby.value = data.isLobby;
+
+    const { isLobby, lobbyPlayers, smallBlind, bigBlind, ...gameData } = data;
+    gameState.value = gameData;
+  };
+
+  try {
+    const response = await connectWebSocket(playerID.value, onUpdate);
+
+    console.log("Initial response:", response);
+    lobbyState.value.lobbyPlayers = response.lobbyPlayers;
+    lobbyState.value.smallBlind = response.smallBlind;
+    lobbyState.value.bigBlind = response.bigBlind;
+
+    const { isLobby, lobbyPlayers, smallBlind, bigBlind, ...gameData } =
+      response;
+    gameState.value = gameData;
+    isLoading.value = false;
+  } catch (error) {
+    console.error("Error in WebSocket connection:", error);
+  }
+});
 </script>
 
 <template>
-  <LobbyView
-    v-if="currentViewIsLobby"
-    @currentViewIsLobby:updated="handleViewChange"
-  />
-  <PokerView v-else :gameState="gameState" />
+  <div v-if="!isLoading">
+    <LobbyView v-if="currentViewIsLobby" :lobbyState="lobbyState" />
+    <PokerView v-else :gameState="gameState" />
+  </div>
 </template>
 
 <style>

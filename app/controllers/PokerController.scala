@@ -43,10 +43,11 @@ class PokerController @Inject() (
   def gameState = pokerControllerPublisher.gameState
 
   def newGame() = Action { implicit request: Request[AnyContent] =>
+    Evaluator.readHashes
     isLobby = false
 
     pokerControllerPublisher.createGame(
-      players.values.toList,
+      players.keys.toList,
       smallBlind.toString,
       bigBlind.toString
     )
@@ -98,22 +99,22 @@ class PokerController @Inject() (
     val playerID = request.headers.get("playerID").getOrElse("")
     val playersLength = players.toList.length
 
+    println("playerrs: " + players)
+    println("playerID: " + playerID)
+
     if (playerID == "") {
-      print("Could not receive playerID")
       BadRequest("Error: playerID is missing")
 
-    } else if (players.contains(playerID)) {
+    } else if (players.values.toList.contains(playerID)) {
       println("Player already in lobby")
       val updatedPokerJson = pokerToJson()
       Ok(updatedPokerJson).as("application/json")
 
     } else if (playersLength >= 6) {
-      print("Player limit reached")
       BadRequest("Error: Player limit reached")
-
     } else {
       val newPlayerName = "Player" + (playersLength + 1)
-      players = players + (playerID -> newPlayerName)
+      players = players + (newPlayerName -> playerID)
 
       pokerControllerPublisher.lobby()
 
@@ -147,6 +148,7 @@ class PokerController @Inject() (
       "players" -> gameState.getPlayers.map { player =>
         Json.obj(
           "player" -> Json.obj(
+            "id" -> players.getOrElse(player.playername, ""),
             "card1rank" -> player.card1.rank.toString,
             "card1suit" -> player.card1.suit.id,
             "card2rank" -> player.card2.rank.toString,

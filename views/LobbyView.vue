@@ -1,23 +1,29 @@
 <script setup>
-import { onMounted, ref } from "vue";
+import { onMounted, ref, watch } from "vue";
 import LobbyPlayer from "../components/LobbyPlayer.vue";
-import {
-  newGame,
-  connectWebSocket,
-  getCookie,
-  setCookie,
-  generatePlayerID,
-} from "../scripts/script.js";
+import { newGame } from "../scripts/script.js";
+import { pl } from "vuetify/locale";
 
-const players = ref();
-const bigBlind = ref("");
-const smallBlind = ref("");
-const loading = ref(true);
+const props = defineProps({
+  lobbyState: Object,
+});
 
-const playerID = ref("");
-const currentViewIsLobby = ref(true);
+const lobbyState = ref(props.lobbyState);
+const players = ref(lobbyState.value.lobbyPlayers);
+const bigBlind = ref(lobbyState.value.bigBlind);
+const smallBlind = ref(lobbyState.value.smallBlind);
 
-const emit = defineEmits(["currentViewIsLobby:updated"]);
+watch(
+  () => props.lobbyState,
+  (newLobbyState) => {
+    lobbyState.value = newLobbyState;
+    console.log("Lobby state updated:", lobbyState.value);
+    players.value = lobbyState.value.lobbyPlayers;
+    bigBlind.value = lobbyState.value.bigBlind;
+    smallBlind.value = lobbyState.value.smallBlind;
+  },
+  { immediate: true, deep: true }
+);
 
 function copyLobbyLink() {
   const lobbyUrl = window.location.origin;
@@ -31,43 +37,9 @@ function copyLobbyLink() {
       console.error("Error copying lobby link:", err);
     });
 }
-
-onMounted(async () => {
-  console.log("Lobby view mounted");
-  playerID.value = getCookie("playerID");
-  if (playerID.value === "") {
-    playerID.value = generatePlayerID();
-    setCookie("playerID", playerID.value, 1);
-  }
-  console.log("PlayerID:", playerID.value);
-
-  // Define the onUpdate callback to handle data updates
-  const onUpdate = (data) => {
-    players.value = data.lobbyPlayers;
-    smallBlind.value = data.smallBlind;
-    bigBlind.value = data.bigBlind;
-    currentViewIsLobby.value = data.isLobby;
-    emit("currentViewIsLobby:updated", { isLobby: currentViewIsLobby.value, data });
-    };
-
-  try {
-    // Pass the onUpdate callback to connectWebSocket
-    const response = await connectWebSocket(playerID.value, onUpdate);
-
-    // Initial data from connection
-    console.log("Initial response:", response);
-    players.value = response.lobbyPlayers;
-    smallBlind.value = response.smallBlind;
-    bigBlind.value = response.bigBlind;
-    loading.value = false;
-  } catch (error) {
-    console.error("Error in WebSocket connection:", error);
-  }
-});
-
 </script>
 <template>
-  <div class="body" v-if="!loading">
+  <div class="body">
     <div
       class="d-flex flex-column align-center mt-5"
       style="height: 90vh; width: 100vw"

@@ -4,6 +4,7 @@ import Card from "./Card.vue";
 import HiddenCard from "./HiddenCard.vue";
 
 const props = defineProps({
+  showCards: Boolean,
   playerIndex: Number,
   playerAtTurn: Number,
   gameState: Object,
@@ -12,6 +13,7 @@ const props = defineProps({
 const playerIndex = ref(props.playerIndex);
 const playerAtTurn = ref(props.playerAtTurn);
 const gameState = ref(props.gameState);
+const showCards = ref(props.showCards);
 
 watch(
   () => props.playerIndex,
@@ -34,6 +36,13 @@ watch(
     console.log("GameState updated:", gameState.value);
   }
 );
+watch(
+  () => props.showCards,
+  (newShowCards) => {
+    showCards.value = newShowCards;
+    console.log("ShowCards updated:", showCards.value);
+  }
+);
 
 const indexedPlayers = computed(() =>
   gameState.value.players.map((player, index) => ({ ...player, index }))
@@ -42,12 +51,12 @@ const indexedPlayers = computed(() =>
 <template>
   <div class="d-flex">
     <Card
-      v-if="playerAtTurn === playerIndex"
+      v-if="showCards"
       :rank="indexedPlayers[playerIndex].player.card1rank.toString()"
       :suitID="indexedPlayers[playerIndex].player.card1suit"
     />
     <Card
-      v-if="playerAtTurn === playerIndex"
+      v-if="showCards"
       :rank="indexedPlayers[playerIndex].player.card2rank.toString()"
       :suitID="indexedPlayers[playerIndex].player.card2suit"
     />

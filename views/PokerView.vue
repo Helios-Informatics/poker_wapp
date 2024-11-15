@@ -1,44 +1,54 @@
 <script setup>
-import { defineProps, computed, ref, watch } from "vue";
+import { computed, ref, watch } from "vue";
 import Player from "../components/Player.vue";
 import PlayerCards from "../components/PlayerCards.vue";
 import Coins from "../components/Coins.vue";
 import Card from "../components/Card.vue";
-import { sendActionToServer } from "../scripts/script.js";
+import { sendActionToServer, getCookie } from "../scripts/script.js";
 
 const props = defineProps({
   gameState: Object,
 });
 
+const sliderValue = ref(0);
 const gamestate = ref(props.gameState);
 
 watch(
   () => props.gameState,
   (newGameState) => {
     gamestate.value = newGameState;
-    console.log("Gamestate updated:", gamestate.value);
-  }
+    console.log("Gamestate updated:", gamestate.value, gamestate.value.board);
+  },
+  { immediate: true }
 );
 
 const indexedPlayers = computed(() =>
-  props.gameState.players.map((player, index) => ({ ...player, index }))
+  gamestate.value.players.map((player, index) => ({ ...player, index }))
 );
 
-const playerAtTurn = computed(() => props.gameState.playerAtTurn);
-const board = computed(() => props.gameState.board);
-const pot = computed(() => props.gameState.pot);
-const highestBetSize = computed(() => props.gameState.highestBetSize);
+const playerAtTurn = computed(() => gamestate.value.playerAtTurn);
+const board = computed(() => gamestate.value.board);
+const pot = computed(() => gamestate.value.pot);
+const highestBetSize = computed(() => gamestate.value.highestBetSize);
 
-const sliderValue = ref(0);
+const selfIsAtTurn = computed(
+  () =>
+    getCookie("playerID") ===
+    gamestate.value.players[gamestate.value.playerAtTurn]?.player.id
+);
+
+const callCheckButtonText = computed(() =>
+  gamestate.value.players[gamestate.value.playerAtTurn]?.player
+    .currentAmountBetted === highestBetSize.value
+    ? "CHECK"
+    : "CALL"
+);
 
 function handleAction(action) {
   try {
     let response;
     if (action === "callCheck") {
-      const actionType =
-        document.getElementById("callCheckButtonText").innerText === "CALL"
-          ? "call"
-          : "check";
+      const actionType = callCheckButtonText.value.toLowerCase();
       response = sendActionToServer(actionType);
     } else if (action === "fold") {
       response = sendActionToServer("fold");
@@ -51,6 +61,7 @@ function handleAction(action) {
   }
 }
 </script>
+
 <template>
   <div class="d-flex w-100 h-100 body" v-if="gameState !== {}">
     <div class="d-flex flex-column justify-space-evenly container-fluid w-100">
@@ -113,6 +124,7 @@ function handleAction(action) {
                 >
                   <Coins :amount="player.player.currentAmountBetted" />
                   <PlayerCards
+                    :showCards="player.player.id === getCookie('playerID')"
                     :playerIndex="player.index"
                     :playerAtTurn="playerAtTurn"
                     :gameState="gameState"
@@ -135,8 +147,8 @@ function handleAction(action) {
                     <Card
                       v-for="(boardCard, index) in board"
                       :key="index"
-                      :rank="boardCard.rank.toString()"
-                      :suitID="boardCard.suit.id"
+                      :rank="boardCard.card.rank.toString()"
+                      :suitID="boardCard.card.suit"
                     />
                   </div>
                 </div>
@@ -199,6 +211,7 @@ function handleAction(action) {
               class="btn btn-danger rounded-pill responsive-button"
               color="error"
               @click="handleAction('fold')"
+              :disabled="!selfIsAtTurn"
             >
               <h5 class="mt-1 responsive-button-text">FOLD</h5>
             </v-btn>
@@ -207,9 +220,10 @@ function handleAction(action) {
               class="btn btn-success rounded-pill responsive-button"
               color="success"
               @click="handleAction('callCheck')"
+              :disabled="!selfIsAtTurn"
             >
-              <h5 id="callCheckButtonText" class="mt-1 responsive-button-text">
-                CALL
+              <h5 class="mt-1 responsive-button-text">
+                {{ callCheckButtonText }}
               </h5>
             </v-btn>
 
@@ -217,9 +231,11 @@ function handleAction(action) {
               class="btn btn-primary rounded-pill responsive-button"
               color="primary"
               @click="handleAction('raise')"
+              :disabled="!selfIsAtTurn"
             >
               <h5 class="mt-1 responsive-button-text">RAISE</h5>
             </v-btn>
+
             <div
               class="d-flex flex-column justify-end align-center"
               style="width: 100px"

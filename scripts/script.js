@@ -15,18 +15,20 @@ export function setCookie(name, value, days) {
 }
 
 export function getCookie(name) {
-    console.log("getCookie() Called", name);
-    const decodedCookie = decodeURIComponent(document.cookie);
-    const cookies = decodedCookie.split(";");
-    for (let i = 0; i < cookies.length; i++) {
-        let c = cookies[i];
-        while (c.charAt(0) == " ") {
-            c = c.substring(1);
-        }
-        if (c.indexOf(name + "=") == 0) {
-            return c.substring(name.length + 1, c.length);
-        }
+  console.log("getCookie() Called");
+  const decodedCookie = decodeURIComponent(document.cookie);
+  const cookies = decodedCookie.split(";");
+  for (let i = 0; i < cookies.length; i++) {
+    let c = cookies[i];
+    while (c.charAt(0) == " ") {
+      c = c.substring(1);
     }
+    if (c.indexOf(name + "=") == 0) {
+        console.log("Cookie found: ", c);
+        return c.substring(name.length + 1, c.length);
+    }
+}
+    console.log("Cookie not found");
     return "";
 }
 
@@ -113,25 +115,6 @@ function join(playerID) {
             console.error("Error:", error);
         });
 }
-async function loadWebSocket() {
-    console.log("trying to load websocket");
-
-    await axios.get(`${serverAdress}/websocket`, {
-        headers: {
-            'Access-Control-Allow-Origin': 'null',
-            'Accept': 'application/json',
-        }
-    })
-        .then(response => {
-            console.log(response.data);
-            updateGame(response.data);
-            console.log("successfully loaded json and updatedGame");
-        })
-        .catch(error => {
-            console.error("Error:", error);
-        });
-}
-
 
 function updateView(json) {
     if (json.isLobby) {
