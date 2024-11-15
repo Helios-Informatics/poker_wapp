@@ -11,11 +11,13 @@ function handleViewChange({ isLobby, data }) {
   currentViewIsLobby.value = isLobby;
   gameState.value = data;
 }
-
 </script>
 
 <template>
-  <LobbyView v-if="currentViewIsLobby" @currentViewIsLobby:updated="handleViewChange"/>
+  <LobbyView
+    v-if="currentViewIsLobby"
+    @currentViewIsLobby:updated="handleViewChange"
+  />
   <PokerView v-else :gameState="gameState" />
 </template>
 

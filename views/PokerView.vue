@@ -1,37 +1,36 @@
 <script setup>
-import { defineProps, computed, ref,watch } from "vue";
+import { defineProps, computed, ref, watch } from "vue";
 import Player from "../components/Player.vue";
 import PlayerCards from "../components/PlayerCards.vue";
 import Coins from "../components/Coins.vue";
 import Card from "../components/Card.vue";
 import { sendActionToServer } from "../scripts/script.js";
 
-const props = defineProps(
-  {
-    gameState: Object,
-  }
-);
+const props = defineProps({
+  gameState: Object,
+});
 
 const gamestate = ref(props.gameState);
-console.log("Gamestate updated:", gamestate.value);
 
-watch(() => props.gameState, (newGameState) => {
-  gamestate.value = newGameState;
-  console.log("Gamestate updated:", gamestate.value);
-});
+watch(
+  () => props.gameState,
+  (newGameState) => {
+    gamestate.value = newGameState;
+    console.log("Gamestate updated:", gamestate.value);
+  }
+);
 
 const indexedPlayers = computed(() =>
   props.gameState.players.map((player, index) => ({ ...player, index }))
 );
+
 const playerAtTurn = computed(() => props.gameState.playerAtTurn);
 const board = computed(() => props.gameState.board);
 const pot = computed(() => props.gameState.pot);
 const highestBetSize = computed(() => props.gameState.highestBetSize);
 
 const sliderValue = ref(0);
-function updateSliderValue(event) {
-  sliderValue.value = event.target.value;
-}
+
 function handleAction(action) {
   try {
     let response;
@@ -53,19 +52,20 @@ function handleAction(action) {
 }
 </script>
 <template>
-  <div class="d-flex w-100 h-100" v-if="gameState !== {}">
-    <div class="d-flex flex-column justify-evenly container-fluid">
+  <div class="d-flex w-100 h-100 body" v-if="gameState !== {}">
+    <div class="d-flex flex-column justify-space-evenly container-fluid w-100">
       <!-- Current Hand Info & Leave Button -->
-      <div class="container-fluid">
-        <div class="d-flex align-items-center justify-space-around row">
+      <div class="container-fluid w-100">
+        <div class="d-flex align-center justify-space-around row">
           <div class="col text-white">Your current hand: {{ "handInfo" }}</div>
           <div class="col d-flex justify-end">
-            <button
-              type="button"
-              class="btn btn-secondary rounded-pill responsive-button d-flex align-items-center justify-center button"
+            <v-btn
+              class="responsive-button d-flex align-center justify-center"
+              color="secondary"
+              rounded
             >
               <h5 class="responsive-button-text">LEAVE</h5>
-            </button>
+            </v-btn>
           </div>
         </div>
       </div>
@@ -73,26 +73,22 @@ function handleAction(action) {
       <!-- Players and Board Layout -->
       <div class="d-flex flex-column">
         <div
-          class="d-flex justify-center align-items-center mb-2"
+          class="d-flex flex-row justify-center align-center mb-2"
           v-for="player in indexedPlayers.slice(0, 2)"
           :key="player.index"
         >
-          <div
-            :class="player.index === 0 ? 'top-left-player' : 'top-right-player'"
+          <Player
             :id="'player-' + player.index"
-          >
-            <Player
-              :name="player.playername"
-              :balance="player.balance"
-              :folded="player.folded"
-              :position="
-                player.index === 0 ? 'top-left-player' : 'top-right-player'
-              "
-            />
-          </div>
+            :name="player.player.playername"
+            :balance="player.player.balance"
+            :folded="player.player.folded"
+            :position="
+              player.index === 0 ? 'top-left-player' : 'top-right-player'
+            "
+          />
         </div>
 
-        <div class="d-flex justify-center align-items-center">
+        <div class="d-flex justify-center align-center">
           <!-- Left, Center, and Right Players and Board -->
           <div
             v-for="player in indexedPlayers.slice(5, 6)"
@@ -100,22 +96,22 @@ function handleAction(action) {
             id="player-5"
           >
             <Player
-              :name="player.playername"
-              :balance="player.balance"
-              :folded="player.folded"
+              :name="player.player.playername"
+              :balance="player.player.balance"
+              :folded="player.player.folded"
               position="left-player"
             />
           </div>
 
-          <div class="d-flex justify-center align-items-center">
+          <div class="d-flex justify-center align-center">
             <div class="table responsive-table">
-              <div class="d-flex justify-around align-items-center">
+              <div class="d-flex justify-space-around align-center">
                 <div
                   v-for="player in indexedPlayers.slice(0, 2)"
                   :key="'coins-' + player.index"
-                  class="d-flex justify-center align-items-center"
+                  class="d-flex justify-center align-center"
                 >
-                  <Coins :amount="player.currentAmountBetted" />
+                  <Coins :amount="player.player.currentAmountBetted" />
                   <PlayerCards
                     :playerIndex="player.index"
                     :playerAtTurn="playerAtTurn"
@@ -126,17 +122,15 @@ function handleAction(action) {
 
               <!-- Pot and Board Cards -->
               <div
-                class="d-flex justify-between align-items-center responsive-table-middle-row-margin-top"
+                class="d-flex justify-center align-center responsive-table-middle-row-margin-top"
               >
-                <div
-                  class="d-flex flex-column justify-center align-items-center"
-                >
+                <div class="d-flex flex-column justify-center align-center">
                   <div id="pot" class="pot responsive-pot">
                     {{ "$ " + pot }}
                   </div>
                   <div
                     id="board"
-                    class="d-flex justify-center align-items-center bg-transparent"
+                    class="d-flex justify-center align-center bg-transparent"
                   >
                     <Card
                       v-for="(boardCard, index) in board"
@@ -163,20 +157,24 @@ function handleAction(action) {
 
         <!-- Bottom Players -->
         <div
-          class="d-flex justify-center align-items-center mt-2"
+          class="d-flex justify-center align-center mt-2"
           v-for="player in indexedPlayers.slice(4, 6)"
           :key="player.index"
         >
           <div
-            :class="player.index === 4 ? 'top-left-player' : 'top-right-player'"
+            :class="
+              player.index === 4 ? 'bottom-left-player' : 'bottom-right-player'
+            "
             :id="'player-' + player.index"
           >
             <Player
-              :name="player.playername"
-              :balance="player.balance"
-              :folded="player.folded"
+              :name="player.player.playername"
+              :balance="player.player.balance"
+              :folded="player.player.folded"
               :position="
-                player.index === 4 ? 'top-left-player' : 'top-right-player'
+                player.index === 4
+                  ? 'bottom-left-player'
+                  : 'bottom-right-player'
               "
             />
           </div>
@@ -184,7 +182,7 @@ function handleAction(action) {
       </div>
 
       <!-- Slider Value Display -->
-      <div class="container-fluid">
+      <div class="container-fluid w-100">
         <div
           class="col d-flex justify-end text-white mr-4 mb-4 font fs-2"
           id="sliderValue"
@@ -194,51 +192,50 @@ function handleAction(action) {
       </div>
 
       <!-- Action Buttons -->
-      <div class="container-fluid">
-        <div class="d-flex align-items-center justify-end row">
+      <div class="container-fluid w-100">
+        <div class="d-flex align-center justify-end row">
           <div class="col d-flex gap-3 justify-end mr-3">
-            <button
-              type="button"
-              class="button btn btn-danger rounded-pill responsive-button"
+            <v-btn
+              class="btn btn-danger rounded-pill responsive-button"
+              color="error"
               @click="handleAction('fold')"
             >
               <h5 class="mt-1 responsive-button-text">FOLD</h5>
-            </button>
-            <button
-              type="button"
-              class="button btn btn-success rounded-pill responsive-button"
+            </v-btn>
+
+            <v-btn
+              class="btn btn-success rounded-pill responsive-button"
+              color="success"
               @click="handleAction('callCheck')"
             >
               <h5 id="callCheckButtonText" class="mt-1 responsive-button-text">
                 CALL
               </h5>
-            </button>
-            <button
-              type="button"
-              class="button btn btn-primary rounded-pill responsive-button"
+            </v-btn>
+
+            <v-btn
+              class="btn btn-primary rounded-pill responsive-button"
+              color="primary"
               @click="handleAction('raise')"
             >
               <h5 class="mt-1 responsive-button-text">RAISE</h5>
-            </button>
+            </v-btn>
+            <div
+              class="d-flex flex-column justify-end align-center"
+              style="width: 100px"
+            >
+              <v-slider
+                class="mr-5 responsive-slider-size"
+                v-model="sliderValue"
+                min="0"
+                max="1000"
+                step="10"
+                color="primary"
+                direction="vertical"
+              />
+            </div>
           </div>
         </div>
-      </div>
-
-      <!-- Range Slider -->
-      <div
-        class="d-flex flex-column justify-end align-items-center"
-        style="width: 100px"
-      >
-        <input
-          type="range"
-          class="form-range mr-5 responsive-slider-size"
-          style="margin-bottom: 230px"
-          orient="vertical"
-          min="0"
-          max="1000"
-          step="10"
-          v-model="sliderValue"
-        />
       </div>
     </div>
   </div>

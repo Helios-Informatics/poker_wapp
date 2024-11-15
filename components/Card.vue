@@ -10,25 +10,28 @@ const suitStyle = computed(() => getSuitStyle(props.suitID));
 const suit = computed(() => suitStyle.value[0]);
 const color = computed(() => suitStyle.value[1]);
 
-
 function getSuitStyle(suitID) {
   switch (suitID) {
-    case 0:
-      return ["♠", "black"];
     case 1:
-      return ["♣", "black"];
+      return ["mdi mdi-cards-club", "black"];
     case 2:
-      return ["♦", "red"];
+      return ["mdi mdi-cards-spade", "black"];
     case 3:
-      return ["♥", "red"];
+      return ["mdi mdi-cards-diamond", "red"];
+    case 4:
+      return ["mdi mdi-cards-heart", "red"];
     default:
-      return ["", ""];
+      return [null, null];
   }
 }
 </script>
 <template>
   <div class="card responsive-cards">
-    <div :class="['card-icon', suit, color, 'responsive-card-suit']"></div>
-    <div :class="['card-text', color, 'responsive-card-text']">{{ rank }}</div>
+    <div :class="['card-icon', 'responsive-card-suit']">
+      <v-icon :color="color">{{ suit }}</v-icon>
+    </div>
+    <div :class="['card-text', `text-${color}`, 'responsive-card-text']">
+      {{ rank }}
+    </div>
   </div>
 </template>

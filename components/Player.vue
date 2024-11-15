@@ -1,5 +1,5 @@
 <script setup>
-import { defineProps } from "vue";
+import { defineProps, ref, watch } from "vue";
 
 const props = defineProps({
   name: String,
@@ -7,6 +7,36 @@ const props = defineProps({
   folded: Boolean,
   position: String,
 });
+
+const name = ref(props.name);
+const balance = ref(props.balance);
+const folded = ref(props.folded);
+const position = ref(props.position);
+
+watch(
+  () => props.name,
+  (newName) => {
+    name.value = newName;
+  }
+);
+watch(
+  () => props.balance,
+  (newBalance) => {
+    balance.value = newBalance;
+  }
+);
+watch(
+  () => props.folded,
+  (newFolded) => {
+    folded.value = newFolded;
+  }
+);
+watch(
+  () => props.position,
+  (newPosition) => {
+    position.value = newPosition;
+  }
+);
 </script>
 
 <template>
@@ -22,7 +52,7 @@ const props = defineProps({
     >
       <div
         :class="[
-          'bi-person-fill',
+          'mdi mdi-account',
           'player-icon',
           'responsive-player-icon',
           { 'opacity-25': folded },
