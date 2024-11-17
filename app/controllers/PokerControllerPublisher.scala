@@ -59,6 +59,12 @@ class PokerControllerPublisher(val controller: Controller) extends Publisher {
     }) // Publish an event for check action
   }
 
+  def leave(): Unit = {
+    publish(new Event {
+      override def toString: String = "Left"
+    }) // Publish an event for leave action
+  }
+
   def restartGame(): Unit = {
     controller.restartGame
     publish(new Event {

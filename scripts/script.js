@@ -15,19 +15,19 @@ export function setCookie(name, value, days) {
 }
 
 export function getCookie(name) {
-  console.log("getCookie() Called");
-  const decodedCookie = decodeURIComponent(document.cookie);
-  const cookies = decodedCookie.split(";");
-  for (let i = 0; i < cookies.length; i++) {
-    let c = cookies[i];
-    while (c.charAt(0) == " ") {
-      c = c.substring(1);
+    console.log("getCookie() Called");
+    const decodedCookie = decodeURIComponent(document.cookie);
+    const cookies = decodedCookie.split(";");
+    for (let i = 0; i < cookies.length; i++) {
+        let c = cookies[i];
+        while (c.charAt(0) == " ") {
+            c = c.substring(1);
+        }
+        if (c.indexOf(name + "=") == 0) {
+            console.log("Cookie found: ", c);
+            return c.substring(name.length + 1, c.length);
+        }
     }
-    if (c.indexOf(name + "=") == 0) {
-        console.log("Cookie found: ", c);
-        return c.substring(name.length + 1, c.length);
-    }
-}
     console.log("Cookie not found");
     return "";
 }
@@ -49,6 +49,7 @@ export function sendActionToServer(action) {
             action == "fold" ||
             action == "restartGame" ||
             action == "allIn" ||
+            action == "leave" ||
             action.startsWith("bet")
         )
     ) {

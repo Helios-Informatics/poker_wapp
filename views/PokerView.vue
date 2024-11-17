@@ -54,6 +54,8 @@ function handleAction(action) {
       response = sendActionToServer("fold");
     } else if (action === "raise") {
       response = sendActionToServer(`bet/${sliderValue.value}`);
+    } else if (action === "leave") {
+      response = sendActionToServer("leave");
     }
     gamestate.value = response;
   } catch (error) {
@@ -76,6 +78,7 @@ function handleAction(action) {
               class="responsive-button d-flex align-center justify-center"
               color="secondary"
               rounded
+              @click="handleAction('leave')" 
             >
               <h5 class="responsive-button-text">LEAVE</h5>
             </v-btn>

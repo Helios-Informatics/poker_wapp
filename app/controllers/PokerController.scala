@@ -126,6 +126,13 @@ class PokerController @Inject() (
 
   }
 
+  def leave() = Action { implicit request: Request[AnyContent] =>
+    isLobby = true;
+    pokerControllerPublisher.leave()
+    val updatedPokerJson = pokerToJson()
+    Ok(updatedPokerJson).as("application/json")
+  }
+
   case class GameConfig(
       players: List[String],
       smallBlind: String,
