@@ -78,7 +78,7 @@ function handleAction(action) {
               class="responsive-button d-flex align-center justify-center"
               color="secondary"
               rounded
-              @click="handleAction('leave')" 
+              @click="handleAction('leave')"
             >
               <h5 class="responsive-button-text">LEAVE</h5>
             </v-btn>
@@ -197,35 +197,43 @@ function handleAction(action) {
 
         <!-- Action Buttons -->
         <div class="container-fluid w-100 mt-16">
-          <div class="d-flex align-center justify-end row">
-            <div class="col d-flex gap-3 align-end mr-3">
+          <div class="d-flex align-center justify-center row">
+            <div class="col d-flex gap-3 align-end">
               <v-btn
-                class="btn btn-danger rounded-pill responsive-button"
-                color="error"
+                class="responsive-button mr-4 font-weight-bold"
+                color="red-accent-4"
+                rounded
+                variant="tonal"
+                text="FOLD"
+                height="50"
+                prepend-icon="mdi-close-circle-outline"
                 @click="handleAction('fold')"
                 :disabled="!selfIsAtTurn"
               >
-                <h5 class="mt-1 responsive-button-text">FOLD</h5>
               </v-btn>
-
               <v-btn
-                class="btn btn-success rounded-pill responsive-button"
-                color="success"
-                @click="handleAction('callCheck')"
+                class="responsive-button mr-4 font-weight-bold"
+                color="green-accent-4"
+                rounded
+                variant="tonal"
+                :text="callCheckButtonText"
+                height="50"
+                prepend-icon="mdi-check-circle-outline"
+                @click="handleAction('fold')"
                 :disabled="!selfIsAtTurn"
               >
-                <h5 class="mt-1 responsive-button-text">
-                  {{ callCheckButtonText }}
-                </h5>
               </v-btn>
-
               <v-btn
-                class="btn btn-primary rounded-pill responsive-button"
-                color="primary"
-                @click="handleAction('raise')"
+                class="responsive-button font-weight-bold"
+                color="blue-accent-4"
+                rounded
+                variant="tonal"
+                text="RAISE"
+                height="50"
+                prepend-icon="mdi-arrow-up-thin-circle-outline"
+                @click="handleAction('fold')"
                 :disabled="!selfIsAtTurn"
               >
-                <h5 class="mt-1 responsive-button-text">RAISE</h5>
               </v-btn>
             </div>
           </div>
