@@ -116,6 +116,7 @@ class PokerController @Inject() (
       val newPlayerName = "Player" + (playersLength + 1)
       players = players + (newPlayerName -> playerID)
 
+
       pokerControllerPublisher.lobby()
 
       println("New Player: " + playerID + " " + newPlayerName)

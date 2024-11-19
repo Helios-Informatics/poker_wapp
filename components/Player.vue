@@ -6,12 +6,14 @@ const props = defineProps({
   balance: Number,
   folded: Boolean,
   position: String,
+  isAtTurn: Boolean,
 });
 
 const name = ref(props.name);
 const balance = ref(props.balance);
 const folded = ref(props.folded);
 const position = ref(props.position);
+const isAtTurn = ref(props.isAtTurn);
 
 watch(
   () => props.name,
@@ -37,11 +39,17 @@ watch(
     position.value = newPosition;
   }
 );
+watch(
+  () => props.isAtTurn,
+  (newIsAtTurn) => {
+    isAtTurn.value = newIsAtTurn;
+  }
+);  
 </script>
 
 <template>
   <div :class="['player', position]">
-    <div class="text-secondary">{{ name }}</div>
+    <div :class="isAtTurn ? 'text-secondary' : 'text-grey'">{{ name }}</div>
     <div
       :class="[
         'player-circle',

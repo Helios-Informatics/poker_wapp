@@ -13,6 +13,8 @@ const players = ref(lobbyState.value.lobbyPlayers);
 const bigBlind = ref(lobbyState.value.bigBlind);
 const smallBlind = ref(lobbyState.value.smallBlind);
 
+const playerKeys = ref(Object.keys(players.value));
+
 watch(
   () => props.lobbyState,
   (newLobbyState) => {
@@ -21,6 +23,9 @@ watch(
     players.value = lobbyState.value.lobbyPlayers;
     bigBlind.value = lobbyState.value.bigBlind;
     smallBlind.value = lobbyState.value.smallBlind;
+
+    playerKeys.value = Object.keys(players.value);
+
   },
   { immediate: true, deep: true }
 );
@@ -48,11 +53,10 @@ function copyLobbyLink() {
         <div class="d-flex flex-column" style="width: 45%">
           <div class="d-flex flex-row">
             <h2 class="text-white mb-5">Players</h2>
-            <h2 class="text-white ms-3">{{ "(" + players.length + "/6)" }}</h2>
           </div>
           <div>
-            <div v-for="player in players" :key="player">
-              <LobbyPlayer :name="player" />
+            <div v-for="(key, index) in playerKeys" :key="index">
+              <LobbyPlayer :name="key" />
             </div>
           </div>
         </div>
