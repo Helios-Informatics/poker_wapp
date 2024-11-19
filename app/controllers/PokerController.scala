@@ -105,7 +105,7 @@ class PokerController @Inject() (
       print("Could not receive playerID")
       Ok(views.html.index())
 
-    } else if (players.contains(playerID)) {
+    } else if (players.values.toList.contains(playerID)) {
       println("Player already in lobby")
       val updatedPokerJson = pokerToJson()
       Ok(updatedPokerJson).as("application/json")
@@ -152,7 +152,7 @@ class PokerController @Inject() (
       "lobbyPlayers" -> players,
       "smallBlind" -> smallBlind,
       "bigBlind" -> bigBlind,
-      "players" -> gameState.getPlayers.map { player =>
+      "players" -> gameState.getPlayers.zipWithIndex.map { case (player, index) =>
         Json.obj(
           "player" -> Json.obj(
             "id" -> players.getOrElse(player.playername, ""),
@@ -163,7 +163,8 @@ class PokerController @Inject() (
             "playername" -> player.playername,
             "balance" -> player.balance,
             "currentAmountBetted" -> player.currentAmountBetted,
-            "folded" -> player.folded
+            "folded" -> player.folded,
+            "handEval" -> gameState.getHandEval(index)
           )
         )
       },

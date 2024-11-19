@@ -332,7 +332,7 @@ function updateBoard(board) {
 function updatePlayers(players, playerAtTurn) {
     console.log("updatePlayers() Called", players, playerAtTurn);
     console.log("updatePlayers() Called with playerAtTurn: ", playerAtTurn);
-    
+
     players.forEach(function (player, index) {
 
         let playerDiv = $("#player-" + index);
