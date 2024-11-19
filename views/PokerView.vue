@@ -39,6 +39,22 @@ const selfIsAtTurn = computed(
     gamestate.value.players[gamestate.value.playerAtTurn]?.player.id
 );
 
+const handInfo = computed(
+  () =>
+  {
+    console.log("handInfo called")
+    for (const player of indexedPlayers.value) {
+      console.log("handInfo: checking Player: ", player)
+      if(getCookie("playerID") === player.player.id) {
+        console.log("found own player:", player.player.id)
+        console.log("handEval: ", player.player.handEval)
+        return player.player.handEval
+      }
+    }
+    return "Error"
+  }
+)
+
 const callCheckButtonText = computed(() =>
   gamestate.value.players[gamestate.value.playerAtTurn]?.player
     .currentAmountBetted === highestBetSize.value
@@ -72,7 +88,7 @@ function handleAction(action) {
       <!-- Current Hand Info & Leave Button -->
       <div class="container-fluid w-100">
         <div class="d-flex align-center justify-space-between">
-          <div class="col text-white">Your current hand: {{ "handInfo" }}</div>
+          <div class="col text-white">Your current hand: {{ handInfo }}</div>
           <div class="col d-flex justify-end">
             <v-btn class="responsive-button mr-4 font-weight-bold text-none text-h6" color="grey-darken-3" rounded
               variant="flat" text="Leave" height="50" prepend-icon="mdi-arrow-collapse-left"
