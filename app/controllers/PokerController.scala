@@ -116,6 +116,7 @@ class PokerController @Inject() (
       val newPlayerName = "Player" + (playersLength + 1)
       players = players + (newPlayerName -> playerID)
 
+
       pokerControllerPublisher.lobby()
 
       println("New Player: " + playerID + " " + newPlayerName)
@@ -152,7 +153,7 @@ class PokerController @Inject() (
       "lobbyPlayers" -> players,
       "smallBlind" -> smallBlind,
       "bigBlind" -> bigBlind,
-      "players" -> gameState.getPlayers.map { player =>
+      "players" -> gameState.getPlayers.zipWithIndex.map { case (player, index) =>
         Json.obj(
           "player" -> Json.obj(
             "id" -> players.getOrElse(player.playername, ""),
@@ -163,7 +164,8 @@ class PokerController @Inject() (
             "playername" -> player.playername,
             "balance" -> player.balance,
             "currentAmountBetted" -> player.currentAmountBetted,
-            "folded" -> player.folded
+            "folded" -> player.folded,
+            "handEval" -> gameState.getHandEval(index)
           )
         )
       },
