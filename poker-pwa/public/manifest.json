@@ -5,5 +5,25 @@
     "display": "standalone",
     "background_color": "#ffffff",
     "theme_color": "#4DBA87",
-    "icons": []
+    "icons": [
+        {
+            "src": "poker.png",
+            "sizes": "512x512",
+            "type": "image/png"
+        }
+    ],
+    "screenshots": [
+        {
+            "src": "wide_poker_screenshot.png",
+            "sizes": "1900x952",
+            "type": "image/png",
+            "form_factor": "wide"
+        },
+        {
+            "src": "narrow_poker_screenshot.png",
+            "sizes": "704x946",
+            "type": "image/png",
+            "form_factor": "narrow"
+        }
+    ]
 }
