@@ -173,17 +173,17 @@ function handleExpiredTurn() {
               <div class="d-flex justify-space-between align-center mt-6">
                 <!-- Left Player (if present) -->
                 <div
-                  v-if="indexedPlayers[2]"
+                  v-if="indexedPlayers[5]"
                   class="d-flex justify-center align-center"
                 >
                   <Coins
-                    :amount="indexedPlayers[2].player.currentAmountBetted"
+                    :amount="indexedPlayers[5].player.currentAmountBetted"
                   />
                   <PlayerCards
                     :showCards="
-                      indexedPlayers[2].player.id === getCookie('playerID')
+                      indexedPlayers[5].player.id === getCookie('playerID')
                     "
-                    :playerIndex="indexedPlayers[2].index"
+                    :playerIndex="indexedPlayers[5].index"
                     :playerAtTurn="playerAtTurn"
                     :gameState="gameState"
                   />
@@ -211,17 +211,17 @@ function handleExpiredTurn() {
 
                 <!-- Right Player (if present) -->
                 <div
-                  v-if="indexedPlayers[3]"
+                  v-if="indexedPlayers[2]"
                   class="d-flex justify-center align-center"
                 >
                   <Coins
-                    :amount="indexedPlayers[3].player.currentAmountBetted"
+                    :amount="indexedPlayers[2].player.currentAmountBetted"
                   />
                   <PlayerCards
                     :showCards="
-                      indexedPlayers[3].player.id === getCookie('playerID')
+                      indexedPlayers[2].player.id === getCookie('playerID')
                     "
-                    :playerIndex="indexedPlayers[3].index"
+                    :playerIndex="indexedPlayers[2].index"
                     :playerAtTurn="playerAtTurn"
                     :gameState="gameState"
                   />
