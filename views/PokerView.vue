@@ -150,6 +150,7 @@ function handleExpiredTurn() {
               :folded="player.player.folded"
               position="left-player"
               :isAtTurn="playerAtTurn === player.index"
+              @turnCountdownExpired="handleExpiredTurn"
             />
           </div>
 
@@ -254,6 +255,7 @@ function handleExpiredTurn() {
               :folded="indexedPlayers[2].player.folded"
               position="right-player"
               :isAtTurn="playerAtTurn === indexedPlayers[2].index"
+              @turnCountdownExpired="handleExpiredTurn"
             />
           </div>
         </div>
@@ -270,6 +272,7 @@ function handleExpiredTurn() {
               :position="
                 player.index === 4 ? 'top-left-player' : 'top-right-player'
               "
+              @turnCountdownExpired="handleExpiredTurn"
             />
           </div>
         </div>
