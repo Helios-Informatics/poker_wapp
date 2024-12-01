@@ -6,6 +6,7 @@ import HiddenCard from "./HiddenCard.vue";
 const props = defineProps({
   showCards: Boolean,
   playerIndex: Number,
+  folded: Boolean,
   playerAtTurn: Number,
   gameState: Object,
 });
@@ -14,6 +15,7 @@ const playerIndex = ref(props.playerIndex);
 const playerAtTurn = ref(props.playerAtTurn);
 const gameState = ref(props.gameState);
 const showCards = ref(props.showCards);
+const folded = ref(props.folded)
 
 watch(
   () => props.playerIndex,
@@ -29,6 +31,13 @@ watch(
     console.log("PlayerAtTurn updated:", playerAtTurn.value);
   }
 );
+watch(
+  () => props.folded,
+  (newFolded) => {
+    folded.value = newFolded;
+    console.log("folded updated", folded.value)
+  }
+)
 watch(
   () => props.gameState,
   (newGameState) => {
@@ -49,7 +58,7 @@ const indexedPlayers = computed(() =>
 );
 </script>
 <template>
-  <div class="d-flex">
+  <div :class="['d-flex', {'opacity-50': folded}]">
     <Card
       v-if="showCards"
       :rank="indexedPlayers[playerIndex].player.card1rank.toString()"

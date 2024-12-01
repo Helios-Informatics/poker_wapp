@@ -166,6 +166,7 @@ function handleExpiredTurn() {
                   <PlayerCards
                     :showCards="player.player.id === getCookie('playerID')"
                     :playerIndex="player.index"
+                    :folded="player.player.folded"
                     :playerAtTurn="false"
                     :gameState="gameState"
                   />
@@ -186,6 +187,7 @@ function handleExpiredTurn() {
                     "
                     :playerIndex="indexedPlayers[5].index"
                     :playerAtTurn="playerAtTurn"
+                    :folded="indexedPlayers[5].player.folded"
                     :gameState="gameState"
                   />
                 </div>
@@ -224,6 +226,7 @@ function handleExpiredTurn() {
                     "
                     :playerIndex="indexedPlayers[2].index"
                     :playerAtTurn="playerAtTurn"
+                    :folded="indexedPlayers[2].player.folded"
                     :gameState="gameState"
                   />
                 </div>
@@ -240,6 +243,7 @@ function handleExpiredTurn() {
                     :showCards="player.player.id === getCookie('playerID')"
                     :playerIndex="player.index"
                     :playerAtTurn="playerAtTurn"
+                    :folded="player.player.folded"
                     :gameState="gameState"
                   />
                 </div>

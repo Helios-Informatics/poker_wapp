@@ -84,13 +84,13 @@ function startTurnCountdown() {
 
 <template>
   <div :class="['player', position]">
-    <div :class="isAtTurn ? 'text-secondary' : 'text-grey'">{{ name }}</div>
+    <div :class="[isAtTurn ? 'text-secondary' : 'text-grey', { 'opacity-50': folded }]">{{ name }}</div>
     <div
       :class="[
         'player-circle',
         'responsive-player-circle',
         'mr-1',
-        { 'opacity-25': folded },
+        { 'opacity-50' : folded },
       ]"
     >
       <v-progress-circular
@@ -106,7 +106,7 @@ function startTurnCountdown() {
             'mdi mdi-account',
             'player-icon',
             'responsive-player-icon',
-            { 'opacity-25': folded },
+            { 'opacity-50': folded },
           ]"
         ></div>
       </v-progress-circular>
@@ -116,7 +116,7 @@ function startTurnCountdown() {
           'mdi mdi-account',
           'player-icon',
           'responsive-player-icon',
-          { 'opacity-25': folded },
+          { 'opacity-50': folded },
         ]"
       ></div>
     </div>
@@ -125,7 +125,7 @@ function startTurnCountdown() {
       :class="[
         'player-balance',
         'responsive-player-balance',
-        { 'opacity-25': folded },
+        { 'opacity-50': folded },
       ]"
     >
       $ {{ balance }}
