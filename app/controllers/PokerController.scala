@@ -38,6 +38,7 @@ class PokerController @Inject() (
   var bigBlind: Int = 20
 
   var isLobby = false
+  var newRoundStarted = true
 
   def pokerAsText = pokerControllerPublisher.toString()
   def gameState = pokerControllerPublisher.gameState
@@ -68,6 +69,7 @@ class PokerController @Inject() (
   }
 
   def fold() = Action { implicit request: Request[AnyContent] =>
+    println("PokerController.fold() function called")
     pokerControllerPublisher.fold()
     val updatedPokerJson = pokerToJson()
     Ok(updatedPokerJson).as("application/json")
@@ -150,6 +152,7 @@ class PokerController @Inject() (
   def pokerToJson() = {
     Json.obj(
       "isLobby" -> isLobby,
+      "newRoundStarted" -> gameState.newRoundStarted,
       "lobbyPlayers" -> players,
       "smallBlind" -> smallBlind,
       "bigBlind" -> bigBlind,

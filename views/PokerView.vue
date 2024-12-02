@@ -35,6 +35,7 @@ const currentPlayerBetSize = computed(
     gamestate.value.players[gamestate.value.playerAtTurn]?.player
       .currentAmountBetted
 );
+const newRoundStarted = computed(() => gamestate.value.newRoundStarted);
 
 const selfIsAtTurn = computed(
   () =>
@@ -63,6 +64,15 @@ const callCheckButtonText = computed(() =>
 );
 
 function handleAction(action) {
+  if (
+    !(
+      getCookie("playerID") ===
+      indexedPlayers.value[playerAtTurn.value].player.id
+    )
+  ) {
+    return;
+  }
+
   try {
     let response;
     if (action === "callCheck") {
@@ -75,14 +85,12 @@ function handleAction(action) {
     } else if (action === "leave") {
       response = sendActionToServer("leave");
     }
-    gamestate.value = response;
   } catch (error) {
     console.error("Error handling action:", error);
   }
 }
 
 function handleExpiredTurn() {
-  console.log("Handle expired turn called.");
   if (highestBetSize.value - currentPlayerBetSize.value > 0) {
     console.log("Folding due to expired turn");
     handleAction("fold");
@@ -132,6 +140,7 @@ function handleExpiredTurn() {
               :position="
                 player.index === 0 ? 'top-left-player' : 'top-right-player'
               "
+              :newRoundStarted="newRoundStarted"
               @turnCountdownExpired="handleExpiredTurn"
             />
           </div>
@@ -150,6 +159,7 @@ function handleExpiredTurn() {
               :folded="player.player.folded"
               position="left-player"
               :isAtTurn="playerAtTurn === player.index"
+              :newRoundStarted="newRoundStarted"
               @turnCountdownExpired="handleExpiredTurn"
             />
           </div>
@@ -259,6 +269,7 @@ function handleExpiredTurn() {
               :folded="indexedPlayers[2].player.folded"
               position="right-player"
               :isAtTurn="playerAtTurn === indexedPlayers[2].index"
+              :newRoundStarted="newRoundStarted"
               @turnCountdownExpired="handleExpiredTurn"
             />
           </div>
@@ -276,6 +287,7 @@ function handleExpiredTurn() {
               :position="
                 player.index === 4 ? 'top-left-player' : 'top-right-player'
               "
+              :newRoundStarted="newRoundStarted"
               @turnCountdownExpired="handleExpiredTurn"
             />
           </div>
