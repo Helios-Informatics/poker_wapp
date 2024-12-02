@@ -21,6 +21,8 @@ const turnCountdown = ref(100);
 const turnCountdownActive = ref(false);
 const newRoundStarted = ref(props.newRoundStarted);
 
+const timerIntervalID = ref(null);
+
 watch(
   () => props.name,
   (newName) => {
@@ -52,10 +54,6 @@ watch(
   (newIsAtTurn) => {
     isAtTurn.value = newIsAtTurn;
     if (!turnCountdownActive.value && newIsAtTurn) {
-      console.log(
-        "LUL: Starting turn countdown because of NEW IS AT TURN for player",
-        name.value
-      );
       startTurnCountdown();
     } else {
       turnCountdownActive.value = false;
@@ -65,19 +63,11 @@ watch(
 watch(
   () => props.newRoundStarted,
   (newRoundStartedValue) => {
-    console.log("LUL: NEW ROUND STARTED", newRoundStartedValue);
     newRoundStarted.value = newRoundStartedValue;
     //setTimeout
     setTimeout(() => {
-      if (
-        !turnCountdownActive.value &&
-        newRoundStartedValue &&
-        isAtTurn.value
-      ) {
-        console.log(
-          "LUL: Starting turn countdown because of NEWROUNDSTARTED AND IS AT TURN for player",
-          name.value
-        );
+      if (newRoundStartedValue && isAtTurn.value) {
+        clearInterval(timerIntervalID.value);
         startTurnCountdown();
       }
     }, 200);
@@ -86,10 +76,6 @@ watch(
 
 onMounted(() => {
   if (!turnCountdownActive.value && isAtTurn.value) {
-    console.log(
-      "LUL: Starting turn countdown because of ONMOUNTED for player",
-      name.value
-    );
     startTurnCountdown();
   }
 });
@@ -99,18 +85,17 @@ function startTurnCountdown() {
   let duration = 13;
   let time = duration;
   turnCountdown.value = 100;
-  const interval = setInterval(() => {
+  timerIntervalID.value = setInterval(() => {
     if (!turnCountdownActive.value) {
-      clearInterval(interval);
+      clearInterval(timerIntervalID.value);
       return;
     }
     time--;
     turnCountdown.value = (time / duration) * 100;
     if (time === -1) {
-      console.log("LUL: Turn countdown expired for player", name.value);
-      clearInterval(interval);
       turnCountdownActive.value = false;
       emit("turnCountdownExpired");
+      clearInterval(timerIntervalID.value);
     }
   }, 1000);
 }
@@ -119,10 +104,7 @@ function startTurnCountdown() {
 <template>
   <div :class="['player', position]">
     <div
-      :class="[
-        isAtTurn ? 'text-secondary' : 'text-grey',
-        { 'opacity-50': folded },
-      ]"
+      :class="[isAtTurn ? 'text-white' : 'text-grey', { 'opacity-50': folded }]"
     >
       {{ name }}
     </div>
