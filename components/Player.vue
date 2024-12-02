@@ -80,7 +80,7 @@ watch(
         );
         startTurnCountdown();
       }
-    }, 100);
+    }, 200);
   }
 );
 
