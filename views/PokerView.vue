@@ -109,11 +109,16 @@ function handleExpiredTurn() {
       <!-- Current Hand Info & Leave Button -->
       <div class="container-fluid w-100">
         <div class="d-flex align-center justify-space-between">
-          <div class="col text-white">Your current hand: {{ handInfo }}</div>
+          <div class="d-flex align-center justify-start">
+            <div class="text-white ml-4 text-h6">Your current hand:</div>
+            <div class="col ml-4 text-red text-h6">
+              {{ handInfo }}
+            </div>
+          </div>
           <div class="col d-flex justify-end">
             <v-btn
               class="responsive-button mr-4 font-weight-bold text-none text-h6"
-              color="grey-darken-3"
+              color="#4b4b4b"
               rounded
               variant="flat"
               text="Leave"
@@ -299,7 +304,7 @@ function handleExpiredTurn() {
           <div class="col d-flex gap-3 align-end">
             <v-btn
               class="responsive-button mr-4 font-weight-bold text-none text-h6"
-              color="red-darken-4"
+              color="#af4d4d"
               rounded
               variant="flat"
               text="Fold"
@@ -311,7 +316,7 @@ function handleExpiredTurn() {
             </v-btn>
             <v-btn
               class="responsive-button mr-4 font-weight-bold text-none text-h6"
-              color="green-darken-4"
+              color="#3da466"
               rounded
               variant="flat"
               :text="callCheckButtonText"
@@ -323,14 +328,14 @@ function handleExpiredTurn() {
             </v-btn>
             <div class="d-flex flex-column">
               <div
-                class="col d-flex justify-end text-white mr-4 mb-4 font text-h5"
+                class="col d-flex justify-end text-white mr-4 mb-4 font text-h4"
                 id="sliderValue"
               >
                 ${{ sliderValue }}
               </div>
               <v-btn
                 class="responsive-button font-weight-bold text-none text-h6"
-                color="blue-darken-4"
+                color="#3a62c9"
                 rounded
                 variant="flat"
                 text="Raise"
@@ -350,12 +355,12 @@ function handleExpiredTurn() {
       style="width: 100px"
     >
       <v-slider
-        class="mr-5 responsive-slider-size"
+        class="mr-5 responsive-slider-size mb-8"
         v-model="sliderValue"
         min="0"
         max="1000"
         step="10"
-        color="primary"
+        color="#3a62c9"
         direction="vertical"
       />
     </div>

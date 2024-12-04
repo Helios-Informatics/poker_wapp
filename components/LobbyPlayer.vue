@@ -9,8 +9,8 @@ const name = ref(props.name);
 </script>
 <template>
   <div
-    class="player bg-primary flex-row justify-start align-center rounded-lg"
-    style="width: 40%"
+    class="player bg-primary flex-row justify-start align-center rounded-lg mt-2"
+    style="width: 60%"
   >
     <div class="player-circle player-circle my-2">
       <v-icon icon="mdi mdi-account"></v-icon>

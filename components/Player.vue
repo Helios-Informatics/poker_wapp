@@ -1,5 +1,5 @@
 <script setup>
-import { defineProps, onMounted, ref, watch } from "vue";
+import { defineProps, onMounted, onUnmounted, ref, watch } from "vue";
 
 const props = defineProps({
   name: String,
@@ -78,6 +78,10 @@ onMounted(() => {
   if (!turnCountdownActive.value && isAtTurn.value) {
     startTurnCountdown();
   }
+});
+
+onUnmounted(() => {
+  clearInterval(timerIntervalID.value);
 });
 
 function startTurnCountdown() {

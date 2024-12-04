@@ -75,7 +75,7 @@ onMounted(async () => {
   }
 
   .responsive-button {
-    width: 70px;
+    width: 110px;
     height: 35px;
   }
 
@@ -169,7 +169,7 @@ onMounted(async () => {
   }
 
   .responsive-button {
-    width: 70px;
+    width: 110px;
     height: 35px;
   }
 
@@ -263,7 +263,7 @@ onMounted(async () => {
   }
 
   .responsive-button {
-    width: 100px;
+    width: 110px;
     height: 40px;
   }
 
