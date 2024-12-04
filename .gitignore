@@ -160,3 +160,5 @@ pnpm-lock.yaml
 # Vue local settings
 local.settings.json
 
+node_modules/@rollup/rollup-win32-x64-msvc/rollup.win32-x64-msvc.node
+lib/poker_3-1.0.1.jar
