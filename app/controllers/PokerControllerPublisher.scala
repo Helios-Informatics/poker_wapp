@@ -38,12 +38,9 @@ class PokerControllerPublisher(val controller: Controller) extends Publisher {
     }) // Publish an event for all-in action
   }
 
-  var i = 0;
 
   def fold(): Unit = {
     controller.fold
-    println("publishing fold event" + i)
-    i = i + 1
     publish(new Event {
       override def toString: String = "Folded"
     }) // Publish an event for fold action

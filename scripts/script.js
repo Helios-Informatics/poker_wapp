@@ -38,7 +38,6 @@ export function generatePlayerID() {
 
 //Get and Post Requests
 export function sendActionToServer(action) {
-
   if (
     !(
       action == "call" ||
@@ -76,6 +75,23 @@ export function sendActionToServer(action) {
         );
       });
   }
+}
+
+export function reconnect() {
+  axios
+    .get(`${serverAdress}/get`, {
+      headers: {
+        Accept: "application/json",
+        "Access-Control-Allow-Origin": "*",
+      },
+    })
+    .then((response) => {
+      console.log(response.data);
+      return response.data;
+    })
+    .catch((error) => {
+      console.error("Error:", error);
+    });
 }
 
 export function newGame(smallBlindValue, bigBlindValue, players) {

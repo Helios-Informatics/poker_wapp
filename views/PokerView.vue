@@ -1,10 +1,11 @@
 <script setup>
-import { computed, ref, watch } from "vue";
+import { computed, onMounted, ref, watch } from "vue";
 import Player from "../components/Player.vue";
 import PlayerCards from "../components/PlayerCards.vue";
 import Coins from "../components/Coins.vue";
 import Card from "../components/Card.vue";
 import { sendActionToServer, getCookie } from "../scripts/script.js";
+import { pl } from "vuetify/locale";
 
 const props = defineProps({
   gameState: Object,
@@ -12,7 +13,20 @@ const props = defineProps({
 
 const sliderValue = ref(0);
 const gamestate = ref(props.gameState);
+const playerOffline = ref(false);
 
+onMounted(() => {
+  window.addEventListener("offline", () => {
+    playerOffline.value = true;
+    console.log("Offline event detected. Showing message.");
+  });
+
+  window.addEventListener("online", () => {
+    playerOffline.value = false;
+    handleAction("reconnect");
+    console.log("Back online. Hiding message.");
+  });
+});
 watch(
   () => props.gameState,
   (newGameState) => {
@@ -74,16 +88,20 @@ function handleAction(action) {
   }
 
   try {
-    let response;
     if (action === "callCheck") {
       const actionType = callCheckButtonText.value.toLowerCase();
-      response = sendActionToServer(actionType);
+      sendActionToServer(actionType);
     } else if (action === "fold") {
-      response = sendActionToServer("fold");
+      sendActionToServer("fold");
     } else if (action === "raise") {
-      response = sendActionToServer(`bet/${sliderValue.value}`);
+      sendActionToServer(`bet/${sliderValue.value}`);
     } else if (action === "leave") {
-      response = sendActionToServer("leave");
+      sendActionToServer("leave");
+    } else if (action === "reconnect") {
+      response = reconnect();
+      const { isLobby, lobbyPlayers, smallBlind, bigBlind, ...gameData } =
+        response;
+      gamestate.value = gameData;
     }
   } catch (error) {
     console.error("Error handling action:", error);
@@ -130,6 +148,11 @@ function handleExpiredTurn() {
             </v-btn>
           </div>
         </div>
+      </div>
+
+      <!-- Offline-message -->
+      <div v-if="playerOffline" class="offline-banner">
+        You are offline! Reconnecting...
       </div>
 
       <!-- Players and Board Layout -->
@@ -366,3 +389,17 @@ function handleExpiredTurn() {
     </div>
   </div>
 </template>
+
+<style scoped>
+.offline-banner {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  background: transparent;
+  color: #f44336;
+  text-align: center;
+  padding: 10px;
+  z-index: 1000;
+}
+</style>
