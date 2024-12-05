@@ -74,25 +74,7 @@ watch(
         { 'opacity-50': folded },
       ]"
     >
-      <v-progress-circular
-        :model-value="turnCountdown"
-        :size="100"
-        color="white"
-        bg-color="transparent"
-        :width="2"
-        v-if="isAtTurn"
-      >
-        <div
-          :class="[
-            'mdi mdi-account',
-            'player-icon',
-            'responsive-player-icon',
-            { 'opacity-50': folded },
-          ]"
-        ></div>
-      </v-progress-circular>
       <div
-        v-else
         :class="[
           'mdi mdi-account',
           'player-icon',
