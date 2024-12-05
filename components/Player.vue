@@ -17,8 +17,6 @@ const balance = ref(props.balance);
 const folded = ref(props.folded);
 const position = ref(props.position);
 const isAtTurn = ref(props.isAtTurn);
-const turnCountdown = ref(100);
-const turnCountdownActive = ref(false);
 
 watch(
   () => props.name,
@@ -50,11 +48,6 @@ watch(
   () => props.isAtTurn,
   (newIsAtTurn) => {
     isAtTurn.value = newIsAtTurn;
-    if (!turnCountdownActive.value && newIsAtTurn) {
-      startTurnCountdown();
-    } else {
-      turnCountdownActive.value = false;
-    }
   }
 );
 </script>
