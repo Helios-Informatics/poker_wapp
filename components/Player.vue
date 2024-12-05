@@ -19,9 +19,6 @@ const position = ref(props.position);
 const isAtTurn = ref(props.isAtTurn);
 const turnCountdown = ref(100);
 const turnCountdownActive = ref(false);
-const newRoundStarted = ref(props.newRoundStarted);
-
-const timerIntervalID = ref(null);
 
 watch(
   () => props.name,
@@ -60,49 +57,6 @@ watch(
     }
   }
 );
-watch(
-  () => props.newRoundStarted,
-  (newRoundStartedValue) => {
-    newRoundStarted.value = newRoundStartedValue;
-    //setTimeout
-    setTimeout(() => {
-      if (newRoundStartedValue && isAtTurn.value) {
-        clearInterval(timerIntervalID.value);
-        startTurnCountdown();
-      }
-    }, 200);
-  }
-);
-
-onMounted(() => {
-  if (!turnCountdownActive.value && isAtTurn.value) {
-    startTurnCountdown();
-  }
-});
-
-onUnmounted(() => {
-  clearInterval(timerIntervalID.value);
-});
-
-function startTurnCountdown() {
-  turnCountdownActive.value = true;
-  let duration = 13;
-  let time = duration;
-  turnCountdown.value = 100;
-  timerIntervalID.value = setInterval(() => {
-    if (!turnCountdownActive.value) {
-      clearInterval(timerIntervalID.value);
-      return;
-    }
-    time--;
-    turnCountdown.value = (time / duration) * 100;
-    if (time === -1) {
-      turnCountdownActive.value = false;
-      emit("turnCountdownExpired");
-      clearInterval(timerIntervalID.value);
-    }
-  }, 1000);
-}
 </script>
 
 <template>
