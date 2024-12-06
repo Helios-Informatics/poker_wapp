@@ -24,7 +24,7 @@ services:
     deploy:
       resources:
         limits:
-          memory: 512M # Limit backend to 256MB of memory
+          memory: 500M # Limit backend to 256MB of memory
     networks:
       - poker-network
 
