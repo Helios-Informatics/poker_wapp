@@ -14,7 +14,7 @@ services:
           memory: 50M # Limit frontend to 50MB of memory
 
   backend:
-    image: backend:latest # Use the pre-built Docker image
+    image: julian9901/backend:latest # Use the pre-built Docker image
     ports:
       - "9000:9000"
     environment:
