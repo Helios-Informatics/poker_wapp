@@ -77,23 +77,6 @@ export function sendActionToServer(action) {
   }
 }
 
-export function reconnect() {
-  axios
-    .get(`${serverAdress}/get`, {
-      headers: {
-        Accept: "application/json",
-        "Access-Control-Allow-Origin": "*",
-      },
-    })
-    .then((response) => {
-      console.log(response.data);
-      return response.data;
-    })
-    .catch((error) => {
-      console.error("Error:", error);
-    });
-}
-
 export function newGame(smallBlindValue, bigBlindValue, players) {
   console.log("newGame() Called");
 
@@ -144,6 +127,23 @@ function join(playerID) {
     });
 }
 
+export function fetch() {
+  axios
+    .get(`${serverAdress}/get`, {
+      headers: {
+        Accept: "application/json",
+        "Access-Control-Allow-Origin": "*",
+      },
+    })
+    .then((response) => {
+      console.log(response.data);
+      return response.data;
+    })
+    .catch((error) => {
+      console.error("Error:", error);
+    });
+}
+
 function updateView(json) {
   if (json.isLobby) {
     if (!currentViewIsLobby) {
@@ -158,23 +158,21 @@ function updateView(json) {
   }
 }
 
-//update Lobby View
-function updateLobby(json) {
-  console.log("updateLobby() Called");
-  updateLobbyPlayers(json.lobbyPlayers);
-}
-
-//update Game View
-function updateGame(json) {
-  console.log("updateGame() Called");
-}
+let socket;
+let onUpdateFunction;
+let reconnectInterval;
+var playerOffline = false;
 
 export async function connectWebSocket(newPlayerID, onUpdate) {
+  onUpdateFunction = onUpdate;
+
   playerID = newPlayerID;
   console.log("connectWebSocket() Called", newPlayerID);
 
   return new Promise((resolve, reject) => {
-    const socket = new WebSocket("ws://" + window.location.host + "/websocket");
+    socket = new WebSocket(
+      "ws://" + window.location.host + `/websocket?playerID=${playerID}`
+    );
 
     socket.onopen = function (e) {
       console.log("[open] Connection established");
@@ -193,10 +191,18 @@ export async function connectWebSocket(newPlayerID, onUpdate) {
     };
 
     socket.onmessage = function (event) {
-      console.log(`[message] Data received from server: ${event.data}`);
-      var json = JSON.parse(event.data);
-      onUpdate(json);
-      //updateView(json);
+      if (playerOffline) {
+        return;
+      }
+      if (event.data === "ping") {
+        console.log("Ping received from server");
+        socket.send("pong");
+        console.log("Pong sent to server");
+      } else {
+        console.log(`[message] Data received from server: ${event.data}`);
+        var json = JSON.parse(event.data);
+        onUpdate(json);
+      }
     };
 
     socket.onclose = function (event) {
@@ -204,9 +210,49 @@ export async function connectWebSocket(newPlayerID, onUpdate) {
         console.log(
           `[close] Connection closed cleanly, code=${event.code} reason=${event.reason}`
         );
+        socket.close();
       } else {
         console.log("[close] Connection died");
       }
     };
   });
 }
+
+// Funktion zum Schließen des Sockets
+function closeWebSocket() {
+  if (socket) {
+    console.log("Closing WebSocket connection");
+    //close WebSocket here when internet connection is actually gone
+    playerOffline = true;
+  }
+}
+
+// Funktion zur Verwaltung der Wiederverbindung
+function scheduleReconnect(onUpdate) {
+  console.log("scheduleReconnect() Called");
+  if (!reconnectInterval) {
+    console.log("Scheduling WebSocket reconnect...");
+    reconnectInterval = setInterval(() => {
+      if (navigator.onLine) {
+        console.log("Reconnecting WebSocket...");
+        clearInterval(reconnectInterval);
+        reconnectInterval = null;
+        //reconnect WebSocket here when internet connection is actually gone
+        playerOffline = false;
+        fetch();
+      }
+    }, 5000); // Versuche alle 5 Sekunden eine Wiederverbindung
+  }
+}
+
+window.addEventListener("offline", () => {
+  console.log("Offline detected");
+  closeWebSocket();
+});
+
+window.addEventListener("online", () => {
+  console.log("Online detected");
+  if (playerOffline) {
+    scheduleReconnect(onUpdateFunction);
+  }
+});

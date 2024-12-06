@@ -15,6 +15,7 @@ import scala.collection.immutable.VectorMap
 import scala.swing.event.Event
 import scala.swing.Reactor
 import scala.collection.immutable.ListMap
+import scala.concurrent.duration._
 
 /** This controller creates an Action to handle HTTP requests to the
   * application's home page.
@@ -33,7 +34,13 @@ class PokerController @Inject() (
   val pokerControllerPublisher = new PokerControllerPublisher(gameController)
 
   // lobby
+
+  //maps names to playerIDs
   var players: ListMap[String, String] = ListMap()
+
+  //list of playerIDs of players that are currently offline
+  var offlinePlayers: List[String] = List()
+
   var smallBlind: Int = 10
   var bigBlind: Int = 20
 
@@ -57,13 +64,23 @@ class PokerController @Inject() (
   }
 
   def bet(amount: Int) = Action { implicit request: Request[AnyContent] =>
+    println("PokerController.bet() function called")
     pokerControllerPublisher.bet(amount)
+    while(offlinePlayerIsAtTurn) {
+      Thread.sleep(1000)
+      pokerControllerPublisher.fold()
+    }
     val updatedPokerJson = pokerToJson()
     Ok(updatedPokerJson).as("application/json")
   }
 
   def allIn() = Action { implicit request: Request[AnyContent] =>
+    println("PokerController.allIn() function called")
     pokerControllerPublisher.allIn()
+    while(offlinePlayerIsAtTurn) {
+      Thread.sleep(1000)
+      pokerControllerPublisher.fold()
+    }
     val updatedPokerJson = pokerToJson()
     Ok(updatedPokerJson).as("application/json")
   }
@@ -71,6 +88,10 @@ class PokerController @Inject() (
   def fold() = Action { implicit request: Request[AnyContent] =>
     println("PokerController.fold() function called")
     pokerControllerPublisher.fold()
+    while(offlinePlayerIsAtTurn) {
+      Thread.sleep(1000)
+      pokerControllerPublisher.fold()
+    }
     val updatedPokerJson = pokerToJson()
     Ok(updatedPokerJson).as("application/json")
   }
@@ -78,12 +99,23 @@ class PokerController @Inject() (
   def call() = Action { implicit request: Request[AnyContent] =>
     println("PokerController.call() function called")
     pokerControllerPublisher.call()
+    
+    while(offlinePlayerIsAtTurn) {
+      Thread.sleep(1000)
+      pokerControllerPublisher.fold()
+    }
     Ok(pokerToJson()).as("application/json")
   }
 
   def check() = Action { implicit request: Request[AnyContent] =>
+    println("PokerController.check() function called")
     pokerControllerPublisher.check()
     val updatedPokerJson = pokerToJson()
+    
+    while(offlinePlayerIsAtTurn) {
+      Thread.sleep(1000)
+      pokerControllerPublisher.fold()
+    }
     Ok(updatedPokerJson).as("application/json")
   }
 
@@ -118,7 +150,6 @@ class PokerController @Inject() (
       val newPlayerName = "Player" + (playersLength + 1)
       players = players + (newPlayerName -> playerID)
 
-
       pokerControllerPublisher.lobby()
 
       println("New Player: " + playerID + " " + newPlayerName)
@@ -135,6 +166,27 @@ class PokerController @Inject() (
     val updatedPokerJson = pokerToJson()
     Ok(updatedPokerJson).as("application/json")
   }
+
+  def disconnected(playerID: String) = {
+    offlinePlayers = playerID :: offlinePlayers
+    pokerControllerPublisher.connectionEvent()
+  }
+
+  def reconnected(playerID: String) = {
+    offlinePlayers = offlinePlayers.filter(_ != playerID)
+    pokerControllerPublisher.connectionEvent()
+  }
+
+  def offlinePlayerIsAtTurn = {
+    val playerAtTurn = gameState.getPlayers(gameState.getPlayerAtTurn)
+    println("OFFLINEPLAYERISATTURN: Player at turn: " + playerAtTurn)
+    val playerID = players.getOrElse(playerAtTurn.playername, "")
+    println("OFFLINEPLAYERISATTURN: Player ID: " + playerID)
+    println("OFFLINEPLAYERISATTURN:" + offlinePlayers.contains(playerID))
+    offlinePlayers.contains(playerID)
+  }
+    
+    
 
   case class GameConfig(
       players: List[String],
@@ -168,7 +220,8 @@ class PokerController @Inject() (
             "balance" -> player.balance,
             "currentAmountBetted" -> player.currentAmountBetted,
             "folded" -> player.folded,
-            "handEval" -> gameState.getHandEval(index)
+            "handEval" -> gameState.getHandEval(index),
+            "offline" -> offlinePlayers.contains(players.getOrElse(player.playername, ""))
           )
         )
       },
@@ -187,21 +240,63 @@ class PokerController @Inject() (
   }
 
   def socket(): WebSocket = WebSocket.accept[String, String] { request =>
+
+    val playerID = request.queryString("playerID").headOption.getOrElse("")
+
     ActorFlow.actorRef { out =>
-      println("Connect received")
-      PokerWebSocketActorFactory.create(out)
+      println("Connect received with playerID: " + playerID)
+      PokerWebSocketActorFactory.create(out, playerID)
+
     }
   }
+
   object PokerWebSocketActorFactory {
-    def create(out: ActorRef) =
-      Props(new PokerWebSocketActor(out))
+    def create(out: ActorRef, playerID: String) =
+      Props(new PokerWebSocketActor(out, playerID))
   }
 
-  class PokerWebSocketActor(out: ActorRef) extends Actor with Reactor {
+  class PokerWebSocketActor(out: ActorRef, id: String) extends Actor with Reactor {
+    import context.dispatcher
+
+    val playerID = id
 
     listenTo(pokerControllerPublisher)
 
-    def receive: Receive = { case msg: String =>
+    // Scheduler für Pings
+    val pingScheduler = context.system.scheduler.scheduleAtFixedRate(
+      initialDelay = 5.seconds,
+      interval = 5.seconds,
+      receiver = self,
+      message = "sendPing"
+    )
+
+    // Zeitstempel der letzten Pong-Antwort
+    var lastPongReceived: Long = System.currentTimeMillis()
+
+    def receive: Receive = { 
+
+      case "sendPing" =>
+      out ! "ping" // Sende Ping an den Client
+      // Prüfe, ob der Client innerhalb des Zeitlimits geantwortet hat
+      if (System.currentTimeMillis() - lastPongReceived > 10000) { // Timeout: 5 Sekunden
+        println(s"No pong received from $playerID, closing connection")
+        if (!offlinePlayers.contains(playerID)) {
+            disconnected(playerID);
+            if (offlinePlayerIsAtTurn) {
+              println("triggering fold because player offline")
+              pokerControllerPublisher.fold()
+            }
+        }
+      }
+
+    case "pong" =>
+      println(s"Pong received from $playerID")
+      lastPongReceived = System.currentTimeMillis() // Zeitstempel aktualisieren
+      if (offlinePlayers.contains(playerID)) {
+            reconnected(playerID);
+        }
+
+    case msg: String =>
       out ! pokerToJson().toString()
     }
 
@@ -213,5 +308,8 @@ class PokerController @Inject() (
       out ! pokerToJson().toString()
     }
 
+    override def postStop(): Unit = {
+    println(s"Player $playerID disconnected.")
+  }
   }
 }

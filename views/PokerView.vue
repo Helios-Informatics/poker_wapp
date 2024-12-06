@@ -23,7 +23,7 @@ onMounted(() => {
 
   window.addEventListener("online", () => {
     playerOffline.value = false;
-    handleAction("reconnect");
+    handleAction("fetch");
     console.log("Back online. Hiding message.");
   });
 });
@@ -97,8 +97,8 @@ function handleAction(action) {
       sendActionToServer(`bet/${sliderValue.value}`);
     } else if (action === "leave") {
       sendActionToServer("leave");
-    } else if (action === "reconnect") {
-      response = reconnect();
+    } else if (action === "fetch") {
+      response = fetch();
       const { isLobby, lobbyPlayers, smallBlind, bigBlind, ...gameData } =
         response;
       gamestate.value = gameData;
@@ -151,7 +151,7 @@ function handleExpiredTurn() {
       </div>
 
       <!-- Offline-message -->
-      <div v-if="playerOffline" class="offline-banner">
+      <div v-if="playerOffline" class="offline-banner font-weight-bold">
         You are offline! Reconnecting...
       </div>
 
@@ -169,6 +169,7 @@ function handleExpiredTurn() {
                 player.index === 0 ? 'top-left-player' : 'top-right-player'
               "
               :newRoundStarted="newRoundStarted"
+              :offline="player.player.offline"
               @turnCountdownExpired="handleExpiredTurn"
             />
           </div>
@@ -188,6 +189,7 @@ function handleExpiredTurn() {
               position="left-player"
               :isAtTurn="playerAtTurn === player.index"
               :newRoundStarted="newRoundStarted"
+              :offline="player.player.offline"
               @turnCountdownExpired="handleExpiredTurn"
             />
           </div>
@@ -205,7 +207,7 @@ function handleExpiredTurn() {
                     :showCards="player.player.id === getCookie('playerID')"
                     :playerIndex="player.index"
                     :folded="player.player.folded"
-                    :playerAtTurn="false"
+                    :playerAtTurn="playerAtTurn"
                     :gameState="gameState"
                   />
                 </div>
@@ -298,6 +300,7 @@ function handleExpiredTurn() {
               position="right-player"
               :isAtTurn="playerAtTurn === indexedPlayers[2].index"
               :newRoundStarted="newRoundStarted"
+              :offline="indexedPlayers[2].offline"
               @turnCountdownExpired="handleExpiredTurn"
             />
           </div>
@@ -316,6 +319,7 @@ function handleExpiredTurn() {
                 player.index === 4 ? 'top-left-player' : 'top-right-player'
               "
               :newRoundStarted="newRoundStarted"
+              :offline="player.player.offline"
               @turnCountdownExpired="handleExpiredTurn"
             />
           </div>

@@ -40,6 +40,7 @@ class PokerControllerPublisher(val controller: Controller) extends Publisher {
 
 
   def fold(): Unit = {
+    println("fold Event")
     controller.fold
     publish(new Event {
       override def toString: String = "Folded"
@@ -76,6 +77,12 @@ class PokerControllerPublisher(val controller: Controller) extends Publisher {
   def lobby(): Unit = {
     publish(new Event {
       override def toString: String = "Lobby"
+    })
+  }
+
+  def connectionEvent(): Unit = {
+    publish(new Event {
+      override def toString: String = "ConnectionEvent"
     })
   }
 

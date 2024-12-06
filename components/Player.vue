@@ -8,15 +8,15 @@ const props = defineProps({
   position: String,
   isAtTurn: Boolean,
   newRoundStarted: Boolean,
+  offline: Boolean,
 });
-
-const emit = defineEmits(["turnCountdownExpired"]);
 
 const name = ref(props.name);
 const balance = ref(props.balance);
 const folded = ref(props.folded);
 const position = ref(props.position);
 const isAtTurn = ref(props.isAtTurn);
+const offline = ref(props.offline);
 
 watch(
   () => props.name,
@@ -35,7 +35,6 @@ watch(
   (newFolded) => {
     console.log("PLAYER NEW FOLDED", name.value, newFolded);
     folded.value = newFolded;
-    turnCountdownActive.value = false;
   }
 );
 watch(
@@ -50,14 +49,26 @@ watch(
     isAtTurn.value = newIsAtTurn;
   }
 );
+watch(
+  () => props.offline,
+  (newOffline) => {
+    offline.value = newOffline;
+  }
+);
 </script>
 
 <template>
   <div :class="['player', position]">
-    <div
-      :class="[isAtTurn ? 'text-white' : 'text-grey', { 'opacity-50': folded }]"
-    >
-      {{ name }}
+    <div class="d-flex">
+      <div
+        :class="[
+          isAtTurn ? 'text-blue-accent-4' : 'text-grey',
+          { 'opacity-50': folded },
+        ]"
+      >
+        {{ name }}
+      </div>
+      <v-icon v-if="offline" class="text-red">mdi-power-plug-off</v-icon>
     </div>
     <div
       :class="[
