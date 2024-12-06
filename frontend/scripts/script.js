@@ -152,7 +152,7 @@ export async function connectWebSocket(newPlayerID, onUpdate) {
     console.log("connectWebSocket() Called", newPlayerID);
 
     return new Promise((resolve, reject) => {
-        const socket = new WebSocket("ws://" + window.location.host + "/websocket/websocket");
+        const socket = new WebSocket("wss://" + window.location.host + "/websocket/websocket");
 
         socket.onopen = function (e) {
             console.log("[open] Connection established");
