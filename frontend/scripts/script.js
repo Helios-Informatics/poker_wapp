@@ -4,7 +4,7 @@ import { pl } from 'vuetify/locale';
 
 var playerID = "";
 var currentViewIsLobby = true;
-const serverAdress = "http://"+ window.location.host + "/websocket";
+const serverAdress = "https://"+ window.location.host + "/websocket";
 console.log("Server Adress: ", serverAdress);
 
 //Cookie stuff
