@@ -1,20 +1,22 @@
-FROM hseeberger/scala-sbt:17.0.2_1.6.2_3.1.1
+# Use OpenJDK as the base image
+FROM openjdk:17-jdk-slim
+
 WORKDIR /app
 
-# Set JVM memory options for sbt during build
-ENV SBT_OPTS="-Xms256M -Xmx512M -XX:+UseG1GC"
+# Copy the pre-built ZIP from sbt dist
+ADD target/universal/poker-1.0-SNAPSHOT.zip /app/
 
-# Copy build definition files
-COPY build.sbt .
-COPY project ./project
-COPY conf ./conf
-COPY lib ./lib
+# Extract the ZIP file
+RUN apt-get update && apt-get install -y unzip && \
+    unzip poker-1.0-SNAPSHOT.zip && \
+    rm poker-1.0-SNAPSHOT.zip && \
+    apt-get remove -y unzip && apt-get autoremove -y
 
+# Set the working directory to the extracted app
+WORKDIR /app/poker-1.0-SNAPSHOT
 
-# Copy the rest of the application code
-COPY . .
-
+# Expose the backend port
 EXPOSE 9000
 
-# Set the default command to run the backend
-CMD ["sbt", "run"]
+# Run the Play app
+CMD ["bin/poker", "-Dplay.http.secret.key=8Z9yVMO7gJHSeZle3VsXUEJuzUk5LFne", "-Dhttp.port=9000"]

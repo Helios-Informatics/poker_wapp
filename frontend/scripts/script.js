@@ -4,7 +4,8 @@ import { pl } from 'vuetify/locale';
 
 var playerID = "";
 var currentViewIsLobby = true;
-const serverAdress = "http://localhost:9000";
+const serverAdress = "http://"+ window.location.host + ":9000";
+console.log("Server Adress: ", serverAdress);
 
 //Cookie stuff
 export function setCookie(name, value, days) {

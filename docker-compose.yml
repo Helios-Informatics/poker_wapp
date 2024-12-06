@@ -11,11 +11,10 @@ services:
     deploy:
       resources:
         limits:
-          memory: 50M # Limit frontend to 256MB of memory
+          memory: 50M # Limit frontend to 50MB of memory
 
   backend:
-    build:
-      context: ./backend
+    image: backend:latest # Use the pre-built Docker image
     ports:
       - "9000:9000"
     environment:
@@ -24,7 +23,7 @@ services:
     deploy:
       resources:
         limits:
-          memory: 450M # Limit backend to 256MB of memory
+          memory: 450M # Limit backend to 450MB of memory
     networks:
       - poker-network
 
