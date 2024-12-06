@@ -4,7 +4,7 @@ import { pl } from 'vuetify/locale';
 
 var playerID = "";
 var currentViewIsLobby = true;
-const serverAdress = "http://"+ window.location.host + ":9000";
+const serverAdress = "http://"+ window.location.host + "/websocket";
 console.log("Server Adress: ", serverAdress);
 
 //Cookie stuff
@@ -152,7 +152,7 @@ export async function connectWebSocket(newPlayerID, onUpdate) {
     console.log("connectWebSocket() Called", newPlayerID);
 
     return new Promise((resolve, reject) => {
-        const socket = new WebSocket("ws://" + window.location.host + ":9000/websocket");
+        const socket = new WebSocket("ws://" + window.location.host + "/websocket/websocket");
 
         socket.onopen = function (e) {
             console.log("[open] Connection established");
