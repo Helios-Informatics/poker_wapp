@@ -10,11 +10,11 @@ COPY project ./project
 COPY conf ./conf
 COPY lib ./lib
 
-# Resolve dependencies with limited memory
-RUN sbt update
 
 # Copy the rest of the application code
 COPY . .
+
+EXPOSE 9000
 
 # Set the default command to run the backend
 CMD ["sbt", "run"]
