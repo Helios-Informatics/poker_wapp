@@ -3,6 +3,7 @@ import { onMounted, ref, watch } from "vue";
 import LobbyPlayer from "../components/LobbyPlayer.vue";
 import { newGame } from "../scripts/script.js";
 import { pl } from "vuetify/locale";
+import ProfilePopup from "../components/ProfilePopup.vue";
 
 const props = defineProps({
   lobbyState: Object,
@@ -25,7 +26,6 @@ watch(
     smallBlind.value = lobbyState.value.smallBlind;
 
     playerKeys.value = Object.keys(players.value);
-
   },
   { immediate: true, deep: true }
 );
@@ -49,13 +49,22 @@ function copyLobbyLink() {
       class="d-flex flex-column align-center mt-5"
       style="height: 90vh; width: 100vw"
     >
+      <!-- Profile Component -->
+      <div style="position: absolute; top: 10px; right: 10px">
+        <ProfilePopup />
+      </div>
+
+      <!-- Lobby Content -->
       <div class="d-flex flex-row justify-space-between w-100 px-5">
         <div class="d-flex flex-column" style="width: 45%">
           <div class="d-flex flex-row">
             <h2 class="text-white mb-5">Players</h2>
           </div>
           <div>
-            <div v-for="(key, index) in playerKeys" :key="index">
+            <div
+              v-for="(key, index) in Object.keys(props.lobbyState.lobbyPlayers)"
+              :key="index"
+            >
               <LobbyPlayer :name="key" />
             </div>
           </div>
@@ -63,7 +72,7 @@ function copyLobbyLink() {
         <div class="d-flex flex-column text-white" style="width: 45%">
           <h2 class="text-white mb-5">Settings</h2>
           <v-text-field
-            v-model="bigBlind"
+            v-model="props.lobbyState.bigBlind"
             label="Big Blind"
             type="number"
             outlined
@@ -72,7 +81,7 @@ function copyLobbyLink() {
             placeholder="Enter big blind amount"
           ></v-text-field>
           <v-text-field
-            v-model="smallBlind"
+            v-model="props.lobbyState.smallBlind"
             label="Small Blind"
             type="number"
             outlined
@@ -82,10 +91,18 @@ function copyLobbyLink() {
         </div>
       </div>
       <div class="d-flex justify-end align-end mt-auto w-100 px-5 mb-5">
-        <v-btn color="primary" class="mr-2" @click="copyLobbyLink">
-          Copy Invite Link
-        </v-btn>
-        <v-btn color="success" @click="newGame(smallBlind, bigBlind, players)"
+        <v-btn color="primary" class="mr-2" @click="copyLobbyLink"
+          >Copy Invite Link</v-btn
+        >
+        <v-btn
+          color="success"
+          @click="
+            newGame(
+              props.lobbyState.smallBlind,
+              props.lobbyState.bigBlind,
+              props.lobbyState.lobbyPlayers
+            )
+          "
           >Start Game</v-btn
         >
       </div>
