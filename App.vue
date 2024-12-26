@@ -25,52 +25,46 @@ onMounted(() => {
     if (user) {
       console.log("User is authenticated:", user);
       isAuthenticated.value = true;
-
-      // Load Lobby or Poker View only if authenticated
-      initializeGame();
+      initializeGame(); // Immediately initialize the game
     } else {
       console.log("User is not authenticated");
       isAuthenticated.value = false;
-      isLoading.value = false; // Stop loading once auth state is resolved
+      isLoading.value = false;
     }
   });
 });
 
-// Initialize game (for authenticated users)
+// Initialize game for authenticated users
 async function initializeGame() {
-  console.log("Initializing game...");
+  isLoading.value = true; // Set loading while initializing
   playerID.value = getCookie("playerID");
-  if (playerID.value === "") {
+  if (!playerID.value) {
     playerID.value = generatePlayerID();
     setCookie("playerID", playerID.value, 1);
   }
-  console.log("PlayerID:", playerID.value);
 
   const onUpdate = (data) => {
     console.log("Data received:", data);
-    lobbyState.value.lobbyPlayers = data.lobbyPlayers;
-    lobbyState.value.smallBlind = data.smallBlind;
-    lobbyState.value.bigBlind = data.bigBlind;
+    lobbyState.value = { ...data };
     currentViewIsLobby.value = data.isLobby;
 
-    const { isLobby, lobbyPlayers, smallBlind, bigBlind, ...gameData } = data;
+    const { isLobby, ...gameData } = data;
     gameState.value = gameData;
   };
 
   try {
     const response = await connectWebSocket(playerID.value, onUpdate);
-
     console.log("Initial response:", response);
-    lobbyState.value.lobbyPlayers = response.lobbyPlayers;
-    lobbyState.value.smallBlind = response.smallBlind;
-    lobbyState.value.bigBlind = response.bigBlind;
 
-    const { isLobby, lobbyPlayers, smallBlind, bigBlind, ...gameData } =
-      response;
+    lobbyState.value = { ...response };
+    currentViewIsLobby.value = response.isLobby;
+
+    const { isLobby, ...gameData } = response;
     gameState.value = gameData;
-    isLoading.value = false;
   } catch (error) {
-    console.error("Error in WebSocket connection:", error);
+    console.error("WebSocket connection error:", error);
+  } finally {
+    isLoading.value = false;
   }
 }
 </script>
