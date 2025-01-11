@@ -21,3 +21,4 @@ hs_err_pid13396.log
 project/.bloop/poker_wapp-build.json
 project/project/.bloop/poker_wapp-build-build.json
 /project/.bloop
+/node_modules
