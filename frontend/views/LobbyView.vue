@@ -58,9 +58,9 @@ function copyLobbyLink() {
             <div
               v-for="(key, index) in playerKeys"
               :key="index"
-              class="d-flex justify-center mb-1"
+              class="d-flex justify-center"
             >
-              <LobbyPlayer :name="key" />
+              <LobbyPlayer :name="key" class="mb-1" />
             </div>
           </div>
         </div>
