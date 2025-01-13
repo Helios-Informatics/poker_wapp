@@ -44,12 +44,12 @@ watch(
   (newIsAtTurn) => {
     isAtTurn.value = newIsAtTurn;
   }
-);  
+);
 </script>
 
 <template>
   <div :class="['player', position]">
-    <div :class="isAtTurn ? 'text-secondary' : 'text-grey'">{{ name }}</div>
+    <div :class="isAtTurn ? 'text-blue-accent-4' : 'text-grey'">{{ name }}</div>
     <div
       :class="[
         'player-circle',

@@ -25,7 +25,6 @@ watch(
     smallBlind.value = lobbyState.value.smallBlind;
 
     playerKeys.value = Object.keys(players.value);
-
   },
   { immediate: true, deep: true }
 );
@@ -49,39 +48,24 @@ function copyLobbyLink() {
       class="d-flex flex-column align-center mt-5"
       style="height: 90vh; width: 100vw"
     >
-      <div class="d-flex flex-row justify-space-between w-100 px-5">
-        <div class="d-flex flex-column" style="width: 45%">
-          <div class="d-flex flex-row">
+      <h1 class="d-flex justify-center mb-10 text-white">Welcome to Poker!</h1>
+      <div class="d-flex justify-center w-100 mt-10">
+        <div class="d-flex flex-column" style="width: 50%">
+          <div class="d-flex flex-row justify-center">
             <h2 class="text-white mb-5">Players</h2>
           </div>
           <div>
-            <div v-for="(key, index) in playerKeys" :key="index">
+            <div
+              v-for="(key, index) in playerKeys"
+              :key="index"
+              class="d-flex justify-center"
+            >
               <LobbyPlayer :name="key" />
             </div>
           </div>
         </div>
-        <div class="d-flex flex-column text-white" style="width: 45%">
-          <h2 class="text-white mb-5">Settings</h2>
-          <v-text-field
-            v-model="bigBlind"
-            label="Big Blind"
-            type="number"
-            outlined
-            color="white"
-            class="mb-3"
-            placeholder="Enter big blind amount"
-          ></v-text-field>
-          <v-text-field
-            v-model="smallBlind"
-            label="Small Blind"
-            type="number"
-            outlined
-            color="white"
-            placeholder="Enter small blind amount"
-          ></v-text-field>
-        </div>
       </div>
-      <div class="d-flex justify-end align-end mt-auto w-100 px-5 mb-5">
+      <div class="d-flex justify-end align-end mt-auto w-100 px-10 mb-5">
         <v-btn color="primary" class="mr-2" @click="copyLobbyLink">
           Copy Invite Link
         </v-btn>
