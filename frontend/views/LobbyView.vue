@@ -60,7 +60,7 @@ function copyLobbyLink() {
               :key="index"
               class="d-flex justify-center"
             >
-              <LobbyPlayer :name="key" />
+              <LobbyPlayer :name="key" class="mb-1" />
             </div>
           </div>
         </div>
