@@ -23,6 +23,7 @@ POST /leave controllers.PokerController.leave()
 
 GET /join controllers.PokerController.join()
 
+
 # POST /changeName/:x controllers.PokerController.changeName(x: String)
 
 # POST /changeSmallBlind/:x controllers.PokerController.changeSmallBlind(x: Int)

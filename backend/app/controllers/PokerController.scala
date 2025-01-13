@@ -16,6 +16,8 @@ import scala.swing.event.Event
 import scala.swing.Reactor
 import scala.collection.immutable.ListMap
 
+import scala.concurrent.duration._
+
 /** This controller creates an Action to handle HTTP requests to the
   * application's home page.
   */
@@ -134,6 +136,34 @@ class PokerController @Inject() (
     Ok(updatedPokerJson).as("application/json")
   }
 
+  def leaveLobby() = Action { implicit request: Request[AnyContent] =>
+    println("Leaving lobby")
+    val playerID = request.headers.get("playerID").getOrElse("")
+    
+    println("players: " + players)
+    println("playerID: " + playerID)
+    
+    if (playerID == "") {
+      BadRequest("Error: playerID is missing")
+    } else if (!players.values.toList.contains(playerID)) {
+      println("Player not in lobby")
+      BadRequest("Error: Player not in lobby")
+    } else {
+      players = players.filterNot { case (_, id) => id == playerID }
+    
+      if (players.isEmpty) {
+        isLobby = false
+      }
+    
+      pokerControllerPublisher.lobby()
+    
+      println("Player removed: " + playerID)
+    
+      val updatedPokerJson = pokerToJson()
+      Ok(updatedPokerJson).as("application/json")
+  }
+}
+
   case class GameConfig(
       players: List[String],
       smallBlind: String,
@@ -185,7 +215,7 @@ class PokerController @Inject() (
 
   def socket(): WebSocket = WebSocket.accept[String, String] { request =>
     ActorFlow.actorRef { out =>
-      println("Connect received")
+      println("Connect received NEW")
       PokerWebSocketActorFactory.create(out)
     }
   }
@@ -195,20 +225,46 @@ class PokerController @Inject() (
   }
 
   class PokerWebSocketActor(out: ActorRef) extends Actor with Reactor {
+    import context.dispatcher
 
-    listenTo(pokerControllerPublisher)
+  listenTo(pokerControllerPublisher)
 
-    def receive: Receive = { case msg: String =>
-      out ! pokerToJson().toString()
-    }
+  // Timeout settings for ping-pong mechanism
+  val pingInterval: FiniteDuration = 2.seconds
+  val pongTimeout: FiniteDuration = 5.seconds
+  var pongReceived: Boolean = true
 
-    reactions += { case _ =>
-      sendJsonToClient()
-    }
-
-    def sendJsonToClient() = {
-      out ! pokerToJson().toString()
-    }
-
+  
+  context.system.scheduler.scheduleAtFixedRate(0.seconds, pingInterval) { () =>
+    self ! "ping"
   }
+
+  def receive: Receive = {
+    case "ping" =>
+      if (!pongReceived) {
+        println(s"Player disconnected: Removing player from lobby")
+        context.stop(self) 
+        PokerController.this.leaveLobby().apply(null) 
+      } else {
+        pongReceived = false 
+        println("Sending ping")
+        out ! "ping"
+      }
+
+    case "pong" =>
+      println("Received pong")
+      pongReceived = true 
+
+    case msg: String =>
+      out ! pokerToJson().toString()
+  }
+
+  reactions += { case _ =>
+    sendJsonToClient()
+  }
+
+  def sendJsonToClient() = {
+    out ! pokerToJson().toString()
+  }
+}
 }
