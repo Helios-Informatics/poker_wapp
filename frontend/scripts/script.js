@@ -4,7 +4,7 @@ import { pl } from 'vuetify/locale';
 
 var playerID = "";
 var currentViewIsLobby = true;
-const serverAdress = "https://"+ window.location.host + "/websocket";
+const serverAdress = "https://" + window.location.host + "/websocket";
 console.log("Server Adress: ", serverAdress);
 
 //Cookie stuff
@@ -118,6 +118,7 @@ function join(playerID) {
         });
 }
 
+
 function updateView(json) {
     if (json.isLobby) {
         if (!currentViewIsLobby) {
@@ -171,9 +172,18 @@ export async function connectWebSocket(newPlayerID, onUpdate) {
         };
 
         socket.onmessage = function (event) {
-            console.log(`[message] Data received from server: ${event.data}`);
-            var json = JSON.parse(event.data);
-            onUpdate(json);
+            console.log(`[message] Data received from server NEW: ${event.data}`);
+            if (event.data === "ping") {
+                console.log("Received ping");
+                socket.send("pong"); // Respond to the server's ping
+                console.log("Sent pong");
+                return;
+            } else {
+                console.log("Received data");
+                var json = JSON.parse(event.data);
+                onUpdate(json);
+            }
+
             //updateView(json);
         }
 
