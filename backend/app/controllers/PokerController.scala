@@ -229,35 +229,43 @@ class PokerController @Inject() (
 
   listenTo(pokerControllerPublisher)
 
-  // Timeout settings for ping-pong mechanism
-  val pingInterval: FiniteDuration = 2.seconds
-  val pongTimeout: FiniteDuration = 5.seconds
-  var pongReceived: Boolean = true
+  // Scheduler für Pings
+    val pingScheduler = context.system.scheduler.scheduleAtFixedRate(
+      initialDelay = 5.seconds,
+      interval = 5.seconds,
+      receiver = self,
+      message = "sendPing"
+    )
 
-  
-  context.system.scheduler.scheduleAtFixedRate(0.seconds, pingInterval) { () =>
-    self ! "ping"
-  }
+    // Zeitstempel der letzten Pong-Antwort
+    var lastPongReceived: Long = System.currentTimeMillis()
 
-  def receive: Receive = {
-    case "ping" =>
-      if (!pongReceived) {
-        println(s"Player disconnected: Removing player from lobby")
-        context.stop(self) 
-        PokerController.this.leaveLobby().apply(null) 
-      } else {
-        pongReceived = false 
-        println("Sending ping")
-        out ! "ping"
+  def receive: Receive = { 
+
+      case "sendPing" =>
+      out ! "ping" // Sende Ping an den Client
+      // Prüfe, ob der Client innerhalb des Zeitlimits geantwortet hat
+      if (System.currentTimeMillis() - lastPongReceived > 10000) { // Timeout: 5 Sekunden
+        println(s"No pong received from $playerID, closing connection")
+        if (!offlinePlayers.contains(playerID)) {
+            disconnected(playerID);
+            if (offlinePlayerIsAtTurn) {
+              println("triggering fold because player offline")
+              pokerControllerPublisher.fold()
+            }
+        }
       }
 
     case "pong" =>
-      println("Received pong")
-      pongReceived = true 
+      println(s"Pong received from $playerID")
+      lastPongReceived = System.currentTimeMillis() // Zeitstempel aktualisieren
+      if (offlinePlayers.contains(playerID)) {
+            reconnected(playerID);
+        }
 
     case msg: String =>
       out ! pokerToJson().toString()
-  }
+    }
 
   reactions += { case _ =>
     sendJsonToClient()
