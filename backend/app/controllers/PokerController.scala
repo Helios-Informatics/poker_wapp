@@ -41,6 +41,7 @@ class PokerController @Inject() (
 
   var isLobby = false
 
+
   def pokerAsText = pokerControllerPublisher.toString()
   def gameState = pokerControllerPublisher.gameState
 
@@ -244,24 +245,16 @@ class PokerController @Inject() (
 
       case "sendPing" =>
       out ! "ping" // Sende Ping an den Client
-      // Prüfe, ob der Client innerhalb des Zeitlimits geantwortet hat
+      
       if (System.currentTimeMillis() - lastPongReceived > 10000) { // Timeout: 5 Sekunden
-        println(s"No pong received from $playerID, closing connection")
-        if (!offlinePlayers.contains(playerID)) {
-            disconnected(playerID);
-            if (offlinePlayerIsAtTurn) {
-              println("triggering fold because player offline")
-              pokerControllerPublisher.fold()
-            }
-        }
+        println(s"No pong received from player, closing connection")
+           PokerController.this.leaveLobby().apply(null) 
+        
       }
 
     case "pong" =>
-      println(s"Pong received from $playerID")
+      println(s"Pong received from player")
       lastPongReceived = System.currentTimeMillis() // Zeitstempel aktualisieren
-      if (offlinePlayers.contains(playerID)) {
-            reconnected(playerID);
-        }
 
     case msg: String =>
       out ! pokerToJson().toString()
