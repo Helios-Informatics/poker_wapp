@@ -7,6 +7,12 @@ var currentViewIsLobby = true;
 const serverAdress = "https://" + window.location.host + "/websocket";
 console.log("Server Adress: ", serverAdress);
 
+//when the player closes browers or tab
+window.onbeforeunload = function () {
+    console.log("onbeforeunload() Called");
+    leaveLobby(playerID);
+};
+
 //Cookie stuff
 export function setCookie(name, value, days) {
     const date = new Date();
@@ -118,6 +124,24 @@ function join(playerID) {
         });
 }
 
+function leaveLobby(playerID) {
+    console.log("leaveLobby() Called");
+
+    return axios.get(`${serverAdress}/leaveLobby`, {
+        headers: {
+            playerID: playerID,
+            'Accept': 'application/json',
+            'Access-Control-Allow-Origin': '*'
+        }
+    })
+        .then(response => {
+            console.log(response.data);
+            return response.data;
+        })
+        .catch(error => {
+            console.error("Error:", error);
+        });
+}
 
 function updateView(json) {
     if (json.isLobby) {
@@ -134,6 +158,8 @@ function updateView(json) {
         return json;
     }
 }
+
+
 
 //update Lobby View
 function updateLobby(json) {

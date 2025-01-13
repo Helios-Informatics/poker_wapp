@@ -16,8 +16,6 @@ import scala.swing.event.Event
 import scala.swing.Reactor
 import scala.collection.immutable.ListMap
 
-import scala.concurrent.duration._
-
 /** This controller creates an Action to handle HTTP requests to the
   * application's home page.
   */
@@ -40,7 +38,6 @@ class PokerController @Inject() (
   var bigBlind: Int = 20
 
   var isLobby = false
-
 
   def pokerAsText = pokerControllerPublisher.toString()
   def gameState = pokerControllerPublisher.gameState
@@ -216,7 +213,7 @@ class PokerController @Inject() (
 
   def socket(): WebSocket = WebSocket.accept[String, String] { request =>
     ActorFlow.actorRef { out =>
-      println("Connect received NEW")
+      println("Connect received")
       PokerWebSocketActorFactory.create(out)
     }
   }
@@ -226,46 +223,20 @@ class PokerController @Inject() (
   }
 
   class PokerWebSocketActor(out: ActorRef) extends Actor with Reactor {
-    import context.dispatcher
 
-  listenTo(pokerControllerPublisher)
+    listenTo(pokerControllerPublisher)
 
-  // Scheduler für Pings
-    val pingScheduler = context.system.scheduler.scheduleAtFixedRate(
-      initialDelay = 5.seconds,
-      interval = 5.seconds,
-      receiver = self,
-      message = "sendPing"
-    )
-
-    // Zeitstempel der letzten Pong-Antwort
-    var lastPongReceived: Long = System.currentTimeMillis()
-
-  def receive: Receive = { 
-
-      case "sendPing" =>
-      out ! "ping" // Sende Ping an den Client
-      
-      if (System.currentTimeMillis() - lastPongReceived > 10000) { // Timeout: 5 Sekunden
-        println(s"No pong received from player, closing connection")
-           PokerController.this.leaveLobby().apply(null) 
-        
-      }
-
-    case "pong" =>
-      println(s"Pong received from player")
-      lastPongReceived = System.currentTimeMillis() // Zeitstempel aktualisieren
-
-    case msg: String =>
+    def receive: Receive = { case msg: String =>
       out ! pokerToJson().toString()
     }
 
-  reactions += { case _ =>
-    sendJsonToClient()
-  }
+    reactions += { case _ =>
+      sendJsonToClient()
+    }
 
-  def sendJsonToClient() = {
-    out ! pokerToJson().toString()
+    def sendJsonToClient() = {
+      out ! pokerToJson().toString()
+    }
+
   }
-}
 }
