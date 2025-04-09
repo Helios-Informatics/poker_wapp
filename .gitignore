@@ -18,3 +18,4 @@ project/project/project/metals.sbt
 .scalafmt.conf
 /project/.bloop
 hs_err_pid13396.log
+/node_modules
