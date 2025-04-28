@@ -19,3 +19,4 @@ project/project/project/metals.sbt
 /project/.bloop
 hs_err_pid13396.log
 /node_modules
+lib/poker_3-1.0.1.jar
