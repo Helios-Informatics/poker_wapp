@@ -15,5 +15,13 @@
   <body>
     <div id="app"></div>
     <script type="module" src="main.js"></script>
+    <script>
+      console.log("Plain script executed");
+      if (window.Vue) {
+        console.log("Vue is loaded");
+      } else {
+        console.log("Vue NOT loaded");
+      }
+    </script>
   </body>
 </html>

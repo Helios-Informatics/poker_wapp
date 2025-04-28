@@ -3,7 +3,7 @@ import { pl } from "vuetify/locale";
 
 var playerID = "";
 var currentViewIsLobby = true;
-const serverAdress = "http://127.0.0.1:8080";
+const serverAdress = "http://127.0.0.1:8080/core";
 
 //Cookie stuff
 export function setCookie(name, value, days) {
@@ -164,6 +164,7 @@ let reconnectInterval;
 var playerOffline = false;
 
 export async function connectWebSocket(newPlayerID, onUpdate) {
+  console.log("connectWebSocket() Called", newPlayerID);
   onUpdateFunction = onUpdate;
 
   playerID = newPlayerID;
@@ -171,7 +172,7 @@ export async function connectWebSocket(newPlayerID, onUpdate) {
 
   return new Promise((resolve, reject) => {
     socket = new WebSocket(
-      "ws://" + window.location.host + `/websocket?playerID=${playerID}`
+      "ws://" + "127.0.0.1:8080" + `/core/websocket?playerID=${playerID}`
     );
 
     socket.onopen = function (e) {
