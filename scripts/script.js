@@ -3,7 +3,7 @@ import { pl } from "vuetify/locale";
 
 var playerID = "";
 var currentViewIsLobby = true;
-const serverAdress = "http://localhost:9000";
+const serverAdress = "http://127.0.0.1:8080";
 
 //Cookie stuff
 export function setCookie(name, value, days) {
