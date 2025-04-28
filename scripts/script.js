@@ -61,7 +61,6 @@ export function sendActionToServer(action) {
           headers: {
             "Content-Type": "application/json",
             Accept: "application/json",
-            "Access-Control-Allow-Origin": "*",
           },
         }
       )
@@ -92,7 +91,6 @@ export function newGame(smallBlindValue, bigBlindValue, players) {
         headers: {
           "Content-Type": "application/json",
           Accept: "application/json",
-          "Access-Control-Allow-Origin": "*",
         },
       }
     )
@@ -114,7 +112,6 @@ function join(playerID) {
       headers: {
         playerID: playerID,
         Accept: "application/json",
-        "Access-Control-Allow-Origin": "*",
       },
     })
     .then((response) => {
@@ -132,7 +129,6 @@ export function fetch() {
     .get(`${serverAdress}/get`, {
       headers: {
         Accept: "application/json",
-        "Access-Control-Allow-Origin": "*",
       },
     })
     .then((response) => {
