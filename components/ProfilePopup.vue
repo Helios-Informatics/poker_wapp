@@ -18,9 +18,12 @@ function togglePopup() {
 
 async function getBalance() {
   try {
-    const response = await axios.get("https://your-api-endpoint.com/balance", {
-      params: { uid: user.value.uid },
-    });
+    const response = await axios.post(
+      "https://127.0.0.1:8084/db/fetchBalance",
+      {
+        playerID: user.value.uid,
+      }
+    );
     return response.data.balance;
   } catch (error) {
     console.error("Failed to fetch balance:", error);

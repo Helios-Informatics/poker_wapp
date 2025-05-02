@@ -37,24 +37,43 @@ function handleLogin() {
     .catch((error) => {
       errorMessage.value = error.message;
     });
+
+    const uid = user.value.uid;
+
+    const response = await axios.post(
+      "https://127.0.0.1:8084/db/insertPlayer",
+      {
+        playerID: uid,
+      }
+    );
+
+    console.log(response.data.status);
 }
 
 async function handleSignup() {
   errorMessage.value = "";
-  createUserWithEmailAndPassword(auth, email.value, password.value)
-    .then((userCredential) => {
-      user.value = userCredential.user;
-      isAuthenticated.value = true; // Set authenticated immediately
-    })
-    .catch((error) => {
-      errorMessage.value = error.message;
-    });
+  try {
+    const userCredential = await createUserWithEmailAndPassword(
+      auth,
+      email.value,
+      password.value
+    );
+    user.value = userCredential.user;
+    isAuthenticated.value = true;
 
-  let uid = user.value.uid;
+    const uid = user.value.uid;
 
-  await axios.post("https://your-api-endpoint.com/signup", {
-    uid: uid,
-  });
+    const response = await axios.post(
+      "https://127.0.0.1:8084/db/insertPlayer",
+      {
+        playerID: uid,
+      }
+    );
+
+    console.log(response.data.status);
+  } catch (error) {
+    errorMessage.value = error.message;
+  }
 }
 
 // Handle Logout
