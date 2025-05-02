@@ -3,6 +3,7 @@ import { onMounted, ref, watch } from "vue";
 import LobbyPlayer from "../components/LobbyPlayer.vue";
 import { newGame } from "../scripts/script.js";
 import { pl } from "vuetify/locale";
+import ProfilePopup from "../components/ProfilePopup.vue";
 
 const props = defineProps({
   lobbyState: Object,
@@ -25,7 +26,6 @@ watch(
     smallBlind.value = lobbyState.value.smallBlind;
 
     playerKeys.value = Object.keys(players.value);
-
   },
   { immediate: true, deep: true }
 );
@@ -49,6 +49,10 @@ function copyLobbyLink() {
       class="d-flex flex-column align-center mt-5"
       style="height: 90vh; width: 100vw"
     >
+      <div style="position: absolute; top: 10px; right: 10px">
+        <ProfilePopup />
+      </div>
+
       <div class="d-flex flex-row justify-space-between w-100 px-5">
         <div class="d-flex flex-column" style="width: 45%">
           <div class="d-flex flex-row">

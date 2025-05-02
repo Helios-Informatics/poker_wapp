@@ -2,21 +2,39 @@
 import { ref, onMounted } from "vue";
 import LobbyView from "./views/LobbyView.vue";
 import PokerView from "./views/PokerView.vue";
+import LoginView from "./views/LoginView.vue";
 import {
   connectWebSocket,
   getCookie,
   setCookie,
   generatePlayerID,
 } from "./scripts/script.js";
+import { getAuth, onAuthStateChanged } from "firebase/auth";
 
 const currentViewIsLobby = ref(true);
 const playerID = ref("");
 const gameState = ref({});
 const lobbyState = ref({});
-
+const isAuthenticated = ref(false);
 const isLoading = ref(true);
 
-onMounted(async () => {
+const auth = getAuth();
+
+onMounted(() => {
+  onAuthStateChanged(auth, (user) => {
+    if (user) {
+      console.log("User is authenticated:", user);
+      isAuthenticated.value = true;
+      initializeGame();
+    } else {
+      console.log("User is not authenticated");
+      isAuthenticated.value = false;
+      isLoading.value = false;
+    }
+  });
+});
+
+async function initializeGame() {
   console.log("Lobby view mounted");
   playerID.value = getCookie("playerID");
   if (playerID.value === "") {
@@ -51,11 +69,17 @@ onMounted(async () => {
   } catch (error) {
     console.error("Error in WebSocket connection:", error);
   }
-});
+}
 </script>
 
 <template>
-  <div v-if="!isLoading">
+  <div v-if="isLoading">
+    <p>Loading...</p>
+  </div>
+
+  <LoginView v-else-if="!isAuthenticated" />
+
+  <div v-else>
     <LobbyView v-if="currentViewIsLobby" :lobbyState="lobbyState" />
     <PokerView v-else :gameState="gameState" />
   </div>
