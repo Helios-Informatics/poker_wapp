@@ -27,7 +27,7 @@ auth.onAuthStateChanged((currentUser) => {
 });
 
 // Handle Login
-function handleLogin() {
+async function handleLogin() {
   errorMessage.value = "";
   signInWithEmailAndPassword(auth, email.value, password.value)
     .then((userCredential) => {
@@ -38,16 +38,16 @@ function handleLogin() {
       errorMessage.value = error.message;
     });
 
-    const uid = user.value.uid;
+  const uid = user.value.uid;
 
-    const response = await axios.post(
-      "https://127.0.0.1:8084/db/insertPlayer",
-      {
-        playerID: uid,
-      }
-    );
+  const response = await axios.post(
+    "https://127.0.0.1:8084/core/insertPlayer",
+    {
+      playerID: uid,
+    }
+  );
 
-    console.log(response.data.status);
+  console.log(response.data.status);
 }
 
 async function handleSignup() {

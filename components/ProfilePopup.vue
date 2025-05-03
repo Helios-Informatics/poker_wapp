@@ -19,7 +19,7 @@ function togglePopup() {
 async function getBalance() {
   try {
     const response = await axios.post(
-      "https://127.0.0.1:8084/db/fetchBalance",
+      "https://127.0.0.1:8084/core/fetchBalance",
       {
         playerID: user.value.uid,
       }
