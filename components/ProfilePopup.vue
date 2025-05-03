@@ -2,28 +2,29 @@
 import { ref } from "vue";
 import { getAuth, sendPasswordResetEmail, signOut } from "firebase/auth";
 import axios from "axios";
+import { onMounted } from "vue";
 
 const showPopup = ref(false);
 const user = ref(null);
 const feedbackMessage = ref("");
-
-const auth = getAuth();
-auth.onAuthStateChanged((currentUser) => {
-  user.value = currentUser;
-});
+const balance = ref(0);
 
 function togglePopup() {
   showPopup.value = !showPopup.value;
 }
 
 async function getBalance() {
+  console.log("Fetching balance for user:", user.value.uid);
   try {
     const response = await axios.post(
-      "https://127.0.0.1:8084/core/fetchBalance",
+      "http://127.0.0.1:8080/core/fetchBalance",
       {
         playerID: user.value.uid,
       }
     );
+    let responseData = response.data;
+    console.log("Response data:");
+    console.log("PlayerID response:", responseData.playerID);
     return response.data.balance;
   } catch (error) {
     console.error("Failed to fetch balance:", error);
@@ -55,6 +56,24 @@ async function logout() {
     feedbackMessage.value = "Logout failed. Please try again.";
   }
 }
+
+onMounted(() => {
+  const auth = getAuth();
+
+  auth.onAuthStateChanged(async (currentUser) => {
+    user.value = currentUser;
+    console.log("User state changed:", currentUser);
+
+    if (user.value) {
+      try {
+        balance.value = await getBalance();
+        console.log("User balance:", balance.value);
+      } catch (error) {
+        console.error("Error fetching balance:", error);
+      }
+    }
+  });
+});
 </script>
 
 <template>
@@ -77,7 +96,7 @@ async function logout() {
           <p class="feedback-message">{{ feedbackMessage }}</p>
         </v-card-text>
         <v-card-text>
-          <p><strong>Balance:</strong> {{ getBalance() }}</p>
+          <p><strong>Balance:</strong> {{ balance }}</p>
         </v-card-text>
         <v-card-actions>
           <v-btn color="primary" @click="sendPasswordReset">

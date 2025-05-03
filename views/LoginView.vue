@@ -55,7 +55,7 @@ async function handleSignup() {
     const uid = user.value.uid;
 
     const response = await axios.post(
-      "https://127.0.0.1:8084/db/insertPlayer",
+      "http://127.0.0.1:8080/core/insertPlayer",
       {
         playerID: uid,
       }
