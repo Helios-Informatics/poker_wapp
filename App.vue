@@ -25,7 +25,8 @@ onMounted(() => {
     if (user) {
       console.log("User is authenticated:", user);
       isAuthenticated.value = true;
-      initializeGame();
+      const authID = user.uid;
+      initializeGame(authID);
     } else {
       console.log("User is not authenticated");
       isAuthenticated.value = false;
@@ -34,7 +35,7 @@ onMounted(() => {
   });
 });
 
-async function initializeGame() {
+async function initializeGame(authID) {
   console.log("Lobby view mounted");
   playerID.value = getCookie("playerID");
   if (playerID.value === "") {
