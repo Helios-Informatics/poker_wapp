@@ -56,7 +56,7 @@ async function initializeGame(authID) {
   };
 
   try {
-    const response = await connectWebSocket(playerID.value, onUpdate);
+    const response = await connectWebSocket(playerID.value, onUpdate, authID);
 
     console.log("Initial response:", response);
     lobbyState.value.lobbyPlayers = response.lobbyPlayers;

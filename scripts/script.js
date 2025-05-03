@@ -104,13 +104,14 @@ export function newGame(smallBlindValue, bigBlindValue, players) {
     });
 }
 
-function join(playerID) {
+function join(playerID,authID) {
   console.log("joining Lobby", playerID);
 
   return axios
     .get(`${serverAdress}/join`, {
       headers: {
         playerID: playerID,
+        authID: authID,
         Accept: "application/json",
       },
     })
@@ -159,7 +160,7 @@ let onUpdateFunction;
 let reconnectInterval;
 var playerOffline = false;
 
-export async function connectWebSocket(newPlayerID, onUpdate) {
+export async function connectWebSocket(newPlayerID, onUpdate,authID) {
   console.log("connectWebSocket() Called", newPlayerID);
   onUpdateFunction = onUpdate;
 
@@ -173,7 +174,7 @@ export async function connectWebSocket(newPlayerID, onUpdate) {
 
     socket.onopen = function (e) {
       console.log("[open] Connection established");
-      join(playerID)
+      join(playerID,authID)
         .then((response) => {
           resolve(response); // Resolve promise with the response after joining
         })
