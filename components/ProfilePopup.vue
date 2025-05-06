@@ -25,12 +25,6 @@ function openEditUsername() {
   editUsernameDialog.value = true;
 }
 
-function saveUsername() {
-  username.value = editableUsername.value;
-  editUsernameDialog.value = false;
-  // Optional: hier API-Call zum Speichern senden
-}
-
 async function getBalance() {
   try {
     const response = await axios.post(
@@ -42,6 +36,20 @@ async function getBalance() {
     return response.data.balance;
   } catch (error) {
     console.error("Failed to fetch balance:", error);
+    return -1;
+  }
+}
+
+async function updateName() {
+  username.value = editableUsername.value;
+  editUsernameDialog.value = false;
+  try {
+    const response = await axios.post("http://127.0.0.1:8080/core/updateName", {
+      playerID: user.value.uid,
+      name: username.value,
+    });
+  } catch (error) {
+    console.error("Failed to update name:", error);
     return -1;
   }
 }
@@ -137,7 +145,7 @@ onMounted(() => {
           <v-text-field v-model="editableUsername" label="New Username" dense />
         </v-card-text>
         <v-card-actions>
-          <v-btn color="primary" @click="saveUsername">Save</v-btn>
+          <v-btn color="primary" @click="updateName">Save</v-btn>
           <v-btn text @click="editUsernameDialog = false">Cancel</v-btn>
         </v-card-actions>
       </v-card>
