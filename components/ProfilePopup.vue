@@ -1,20 +1,37 @@
 <script setup>
-import { ref } from "vue";
+import { ref, onMounted } from "vue";
 import { getAuth, sendPasswordResetEmail, signOut } from "firebase/auth";
 import axios from "axios";
-import { onMounted } from "vue";
 
+// States
 const showPopup = ref(false);
+const editUsernameDialog = ref(false);
+
 const user = ref(null);
 const feedbackMessage = ref("");
 const balance = ref(0);
+const username = ref("");
 
+// Temporärer Username für Bearbeitung
+const editableUsername = ref("");
+
+// Funktionen
 function togglePopup() {
   showPopup.value = !showPopup.value;
 }
 
+function openEditUsername() {
+  editableUsername.value = username.value;
+  editUsernameDialog.value = true;
+}
+
+function saveUsername() {
+  username.value = editableUsername.value;
+  editUsernameDialog.value = false;
+  // Optional: hier API-Call zum Speichern senden
+}
+
 async function getBalance() {
-  console.log("Fetching balance for user:", user.value.uid);
   try {
     const response = await axios.post(
       "http://127.0.0.1:8080/core/fetchBalance",
@@ -22,9 +39,6 @@ async function getBalance() {
         playerID: user.value.uid,
       }
     );
-    let responseData = response.data;
-    console.log("Response data:");
-    console.log("PlayerID response:", responseData.playerID);
     return response.data.balance;
   } catch (error) {
     console.error("Failed to fetch balance:", error);
@@ -33,14 +47,13 @@ async function getBalance() {
 }
 
 async function sendPasswordReset() {
-  let auth = getAuth();
+  const auth = getAuth();
   if (user.value?.email) {
     try {
       await sendPasswordResetEmail(auth, user.value.email);
       feedbackMessage.value = "Password reset email sent! Check your inbox.";
     } catch (error) {
-      feedbackMessage.value =
-        "Failed to send password reset email. Please try again.";
+      feedbackMessage.value = "Failed to send password reset email.";
     }
   } else {
     feedbackMessage.value = "No user email found.";
@@ -49,31 +62,25 @@ async function sendPasswordReset() {
 
 async function logout() {
   try {
-    let auth = getAuth();
+    const auth = getAuth();
     await signOut(auth);
     feedbackMessage.value = "Successfully logged out.";
-    user.value = null; // Reset the user state after logout
-    togglePopup(); // Close the popup
+    user.value = null;
+    togglePopup();
   } catch (error) {
-    feedbackMessage.value = "Logout failed. Please try again.";
+    feedbackMessage.value = "Logout failed.";
     console.error("Logout error:", error);
   }
 }
 
+// Initiale Daten holen
 onMounted(() => {
   const auth = getAuth();
-
   auth.onAuthStateChanged(async (currentUser) => {
     user.value = currentUser;
-    console.log("User state changed:", currentUser);
-
     if (user.value) {
-      try {
-        balance.value = await getBalance();
-        console.log("User balance:", balance.value);
-      } catch (error) {
-        console.error("Error fetching balance:", error);
-      }
+      balance.value = await getBalance();
+      username.value = "Player_" + user.value.uid.slice(0, 5); // Beispielname
     }
   });
 });
@@ -90,23 +97,48 @@ onMounted(() => {
     >
     </v-avatar>
 
+    <!-- Profil-Dialog -->
     <v-dialog v-model="showPopup" persistent max-width="400">
-      <template #activator="{ props }"> </template>
       <v-card>
         <v-card-title>Profile</v-card-title>
+
         <v-card-text>
-          <p><strong>Email:</strong> {{ user?.email }}</p>
-          <p class="feedback-message">{{ feedbackMessage }}</p>
+          <div class="info-block">
+            <p><strong>Email:</strong> {{ user?.email }}</p>
+
+            <div class="d-flex align-center justify-space-between">
+              <span><strong>Username:</strong> {{ username }}</span>
+              <v-btn icon @click="openEditUsername" variant="text">
+                <v-icon>mdi-pencil</v-icon>
+              </v-btn>
+            </div>
+
+            <p><strong>Balance:</strong> {{ balance }}</p>
+
+            <p class="feedback-message">{{ feedbackMessage }}</p>
+          </div>
         </v-card-text>
+
+        <v-card-actions>
+          <v-btn color="primary" @click="sendPasswordReset"
+            >Change Password</v-btn
+          >
+          <v-btn color="error" @click="logout">Logout</v-btn>
+          <v-btn color="secondary" @click="togglePopup">Close</v-btn>
+        </v-card-actions>
+      </v-card>
+    </v-dialog>
+
+    <!-- Edit Username Dialog -->
+    <v-dialog v-model="editUsernameDialog" max-width="300">
+      <v-card>
+        <v-card-title>Edit Username</v-card-title>
         <v-card-text>
-          <p><strong>Balance:</strong> {{ balance }}</p>
+          <v-text-field v-model="editableUsername" label="New Username" dense />
         </v-card-text>
         <v-card-actions>
-          <v-btn color="primary" @click="sendPasswordReset">
-            Change Password
-          </v-btn>
-          <v-btn color="error" @click="logout"> Logout </v-btn>
-          <v-btn color="secondary" @click="togglePopup">Close</v-btn>
+          <v-btn color="primary" @click="saveUsername">Save</v-btn>
+          <v-btn text @click="editUsernameDialog = false">Cancel</v-btn>
         </v-card-actions>
       </v-card>
     </v-dialog>
@@ -118,12 +150,16 @@ onMounted(() => {
   cursor: pointer;
 }
 
+.info-block > * {
+  margin-bottom: 10px;
+}
+
 .feedback-message {
-  color: #4caf50; /* Success color */
+  color: #4caf50;
   margin-top: 10px;
 }
 
 .feedback-message.error {
-  color: #f44336; /* Error color */
+  color: #f44336;
 }
 </style>

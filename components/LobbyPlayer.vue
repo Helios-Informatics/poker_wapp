@@ -16,15 +16,7 @@ const name = ref(props.name);
       <v-icon icon="mdi mdi-account"></v-icon>
     </div>
 
-    <v-text-field
-      hide-details
-      class="player-name"
-      v-model="name"
-      color="white"
-      variant=""
-      dense
-      outlined
-    ></v-text-field>
+    <div class="ml-4">{{ name }}</div>
   </div>
 </template>
 <style scoped>

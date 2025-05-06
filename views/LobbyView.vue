@@ -54,7 +54,7 @@ function copyLobbyLink() {
       </div>
 
       <div class="d-flex flex-row justify-space-between w-100 px-5">
-        <div class="d-flex flex-column" style="width: 45%">
+        <div class="d-flex flex-column" style="width: 70%">
           <div class="d-flex flex-row">
             <h2 class="text-white mb-5">Players</h2>
           </div>
@@ -63,26 +63,6 @@ function copyLobbyLink() {
               <LobbyPlayer :name="key" />
             </div>
           </div>
-        </div>
-        <div class="d-flex flex-column text-white" style="width: 45%">
-          <h2 class="text-white mb-5">Settings</h2>
-          <v-text-field
-            v-model="bigBlind"
-            label="Big Blind"
-            type="number"
-            outlined
-            color="white"
-            class="mb-3"
-            placeholder="Enter big blind amount"
-          ></v-text-field>
-          <v-text-field
-            v-model="smallBlind"
-            label="Small Blind"
-            type="number"
-            outlined
-            color="white"
-            placeholder="Enter small blind amount"
-          ></v-text-field>
         </div>
       </div>
       <div class="d-flex justify-end align-end mt-auto w-100 px-5 mb-5">
