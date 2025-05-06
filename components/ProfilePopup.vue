@@ -3,6 +3,16 @@ import { ref, onMounted } from "vue";
 import { getAuth, sendPasswordResetEmail, signOut } from "firebase/auth";
 import axios from "axios";
 
+// Props
+const props = defineProps({
+  name: String,
+});
+
+console.log("ProfilePopup props:", props);
+
+// Emits
+const emit = defineEmits(["usernameUpdated"]);
+
 // States
 const showPopup = ref(false);
 const editUsernameDialog = ref(false);
@@ -10,10 +20,10 @@ const editUsernameDialog = ref(false);
 const user = ref(null);
 const feedbackMessage = ref("");
 const balance = ref(0);
-const username = ref("");
+const username = ref(props.name);
 
 // Temporärer Username für Bearbeitung
-const editableUsername = ref("");
+const editableUsername = ref(props.name);
 
 // Funktionen
 function togglePopup() {
@@ -41,6 +51,7 @@ async function getBalance() {
 }
 
 async function updateName() {
+  console.log("Updating name to:", editableUsername.value);
   username.value = editableUsername.value;
   editUsernameDialog.value = false;
   try {
@@ -48,6 +59,8 @@ async function updateName() {
       playerID: user.value.uid,
       name: username.value,
     });
+    emit("usernameUpdated", { newName: username.value });
+    console.log("Name update response:", response.data);
   } catch (error) {
     console.error("Failed to update name:", error);
     return -1;
@@ -88,7 +101,6 @@ onMounted(() => {
     user.value = currentUser;
     if (user.value) {
       balance.value = await getBalance();
-      username.value = "Player_" + user.value.uid.slice(0, 5); // Beispielname
     }
   });
 });

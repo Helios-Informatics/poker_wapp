@@ -1,7 +1,7 @@
 <script setup>
-import { onMounted, ref, watch } from "vue";
+import { computed, onMounted, ref, watch } from "vue";
 import LobbyPlayer from "../components/LobbyPlayer.vue";
-import { newGame } from "../scripts/script.js";
+import { getCookie, newGame } from "../scripts/script.js";
 import { pl } from "vuetify/locale";
 import ProfilePopup from "../components/ProfilePopup.vue";
 
@@ -30,6 +30,13 @@ watch(
   { immediate: true, deep: true }
 );
 
+const currentPlayerName = computed(() => {
+  for (const [playername, [id]] of Object.entries(players.value)) {
+    if (id === getCookie("playerID")) return playername;
+  }
+  return "Unbekannter Spieler";
+});
+
 function copyLobbyLink() {
   const lobbyUrl = window.location.origin;
   navigator.clipboard
@@ -42,6 +49,11 @@ function copyLobbyLink() {
       console.error("Error copying lobby link:", err);
     });
 }
+
+function handleUsernameUpdated({ newName }) {
+  currentPlayerName.value = newName;
+  console.log("Username updated:", newName);
+}
 </script>
 <template>
   <div class="body">
@@ -50,7 +62,10 @@ function copyLobbyLink() {
       style="height: 90vh; width: 100vw"
     >
       <div style="position: absolute; top: 10px; right: 10px">
-        <ProfilePopup />
+        <ProfilePopup
+          :name="currentPlayerName"
+          @usernameUpdated="handleUsernameUpdated"
+        />
       </div>
 
       <div class="d-flex flex-row justify-space-between w-100 px-5">
