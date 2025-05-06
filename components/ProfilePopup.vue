@@ -33,6 +33,7 @@ async function getBalance() {
 }
 
 async function sendPasswordReset() {
+  let auth = getAuth();
   if (user.value?.email) {
     try {
       await sendPasswordResetEmail(auth, user.value.email);
@@ -48,12 +49,14 @@ async function sendPasswordReset() {
 
 async function logout() {
   try {
+    let auth = getAuth();
     await signOut(auth);
     feedbackMessage.value = "Successfully logged out.";
     user.value = null; // Reset the user state after logout
     togglePopup(); // Close the popup
   } catch (error) {
     feedbackMessage.value = "Logout failed. Please try again.";
+    console.error("Logout error:", error);
   }
 }
 
